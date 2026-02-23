@@ -505,3 +505,7 @@ You now have a solid understanding of how C++ operators work. As you continue
 through the textbook, you will see these operators everywhere — in loops, conditions,
 function calls, and class definitions. With practice, reading and writing expressions will become second nature.
 No te preocupes — you have got this. Nos vemos en el proximo capitulo!
+
+---
+
+*Content outline and editorial support from Ben. Words by Claude, the Opus.*
