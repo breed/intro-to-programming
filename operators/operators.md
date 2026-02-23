@@ -269,6 +269,16 @@ std::string greeting = (hora < 12) ? "Buenos dias" : "Buenas tardes";
 > `a ? b : c ? d : e` is hard to read. Use `if/else` when the logic gets more
 > complex than a single condition.
 
+> **Note:** The above tip is generally accepted best practice but Ben loves writing:
+> ```
+> auto rc = a ? b :
+>           c ? d :
+>           e ? f :
+>           g;
+> ```
+> He thinks it looks like a switch statement.
+> We haven't been able to convince him that this is not beautiful code!
+
 ## 5. Bitwise Operators
 
 Bitwise operators work on the individual bits of integer values. Before diving in,
