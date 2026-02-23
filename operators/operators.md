@@ -484,3 +484,24 @@ int result = 2 + 3 * 4 > 10 && true;
 > **Tip:** You do not need to memorize this table. When you are unsure about
 > the order, add parentheses. They make your intent obvious to both the compiler
 > and anyone reading your code. A few extra `()` are far better than a subtle bug.
+
+## Conclusion
+
+Operators are the building blocks of expressions in C++. Here are the key takeaways
+from this chapter:
+
+- **Use `==` for comparison, not `=`.** This is the most common operator mistake in
+  C++. Train yourself to double-check conditions.
+- **Use parentheses when in doubt.** Precedence rules are hard to memorize, and
+  `()` makes your intent clear to both the compiler and the next person reading your
+  code.
+- **Do not confuse logical and bitwise operators.** `&&` and `||` short-circuit and
+  work with boolean logic. `&` and `|` operate on individual bits.
+- **Operators can be overloaded.** The same symbol can mean different things
+  depending on the types involved. When something looks unfamiliar, check the
+  types.
+
+You now have a solid understanding of how C++ operators work. As you continue
+through the textbook, you will see these operators everywhere — in loops, conditions,
+function calls, and class definitions. With practice, reading and writing expressions will become second nature.
+No te preocupes — you have got this. Nos vemos en el proximo capitulo!
