@@ -2,7 +2,19 @@
 title: "C++ Operators"
 ---
 
-# Operators
+Operators are symbols that take operands and produce a result.
+That definition isn't very satifying though.
+The best way to understand operators is to look at ones you have already seen: =, +, <.
+All of these operators are **in-fix** operators: they occur between the things they are operating on.
+`a = 3` assigns the value 3 to `a`.
+`b+c` represents the sum of `b` and `c`.
+`a<b` returns true if `a` is less than `b`.
+You have also seen the **unary** operators: ++ --.
+There is also the negation unary operator: `-a`, which returns the negation of `a`.
+We will see more, but you can think of operators as functions that are invoked with symbols rather than a function name like `sum(b,c)`.
+In fact, C++ often refers to operators and operator functions.
+
+
 
 You have already used several operators without thinking much about them. In
 Chapter 1, you used `::` (the scope resolution operator) to call `std::println`. In
