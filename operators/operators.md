@@ -172,6 +172,11 @@ least once.
 > so the compiler may not warn you. Always double-check that you used `==` in
 > conditions.
 
+> **Tip:** C++20 introduced the **three-way comparison operator** `<=>`, sometimes
+> called the "spaceship operator." It compares two values and tells you whether the
+> left side is less than, equal to, or greater than the right side — all in one operation.
+> You can safely ignore it for now, but you may see it in modern C++ code.
+
 ## 3. Logical Operators
 
 Logical operators combine or invert `bool` values. You use them to build more
