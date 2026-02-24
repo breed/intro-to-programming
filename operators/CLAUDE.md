@@ -17,10 +17,16 @@ Write a chapter about operators in C++ 23.
 ## Format and Style
 
 - Use Pandoc markdown
-- Use Correct grammar and capitalizations
-- Use tip callouts to highlight idioms, best practices, or warn of bad practices
-- Keep the tone professional but light.
+- Use correct grammar and capitalizations
+- Use tip callouts (`::: {.tip}` divs) to highlight idioms, best practices, or warn of bad practices
+- Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` — do not use `wrapfigure`
+- Keep the tone professional but light
 - Refer to the reader as `you`
+
+## Build
+
+- Build with: `pandoc operators.md -o operators.pdf --lua-filter=callout.lua`
+- Requires `header-includes` for `\usepackage[most]{tcolorbox}` (already in frontmatter)
 
 ## Content
 

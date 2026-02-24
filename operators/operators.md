@@ -1,5 +1,7 @@
 ---
 title: "C++ Operators"
+header-includes:
+  - \usepackage[most]{tcolorbox}
 ---
 
 Operators are symbols that take operands and produce a result.
@@ -33,10 +35,12 @@ You have used `=` since Chapter 2 to give values to variables:
 int score = 100;
 ```
 
-> **Tip:** Technically, `int score = 100;` is **initialization**, not assignment. You
-> learned about initialization with `{}` in Chapter 2. Assignment happens when you
-> change a variable that already exists, like `score = 200;`. The distinction matters
-> more as you get deeper into C++, but for now just know they are not the same thing.
+::: {.tip}
+**Tip:** Technically, `int score = 100;` is **initialization**, not assignment. You
+learned about initialization with `{}` in Chapter 2. Assignment happens when you
+change a variable that already exists, like `score = 200;`. The distinction matters
+more as you get deeper into C++, but for now just know they are not the same thing.
+:::
 
 One useful property of `=` is that it returns the value it assigned. This lets you chain
 assignments together:
@@ -122,9 +126,11 @@ int y = x++;  // y is 5, x is now 6
 
 The decrement operator `--` works the same way but subtracts one.
 
-> **Tip:** In loops and standalone statements, prefer prefix (`++i`) over postfix
-> (`i++`). For integers the difference is negligible, but with iterators and other
-> types, prefix can be more efficient because it avoids creating a temporary copy.
+::: {.tip}
+**Tip:** In loops and standalone statements, prefer prefix (`++i`) over postfix
+(`i++`). For integers the difference is negligible, but with iterators and other
+types, prefix can be more efficient because it avoids creating a temporary copy.
+:::
 
 ### Compound Assignment: `+=`, `-=`, `*=`, `/=`, `%=`
 
@@ -178,16 +184,20 @@ bool ge = (a >= b);   // false  — greater than or equal to
 These are straightforward, but there is one trap that catches nearly everyone at
 least once.
 
-> **Tip:** Do not confuse `=` (assignment) with `==` (comparison). The expression
-> `if (x = 5)` does not check whether `x` equals `5`. It *assigns* `5` to `x`, and since
-> `5` is nonzero (truthy), the condition is always true. This is a legal C++ statement,
-> so the compiler may not warn you. Always double-check that you used `==` in
-> conditions.
+::: {.tip}
+**Tip:** Do not confuse `=` (assignment) with `==` (comparison). The expression
+`if (x = 5)` does not check whether `x` equals `5`. It *assigns* `5` to `x`, and since
+`5` is nonzero (truthy), the condition is always true. This is a legal C++ statement,
+so the compiler may not warn you. Always double-check that you used `==` in
+conditions.
+:::
 
-> **Tip:** C++20 introduced the **three-way comparison operator** `<=>`, sometimes
-> called the "spaceship operator." It compares two values and tells you whether the
-> left side is less than, equal to, or greater than the right side — all in one operation.
-> You can safely ignore it for now, but you may see it in modern C++ code.
+::: {.tip}
+**Tip:** C++20 introduced the **three-way comparison operator** `<=>`, sometimes
+called the "spaceship operator." It compares two values and tells you whether the
+left side is less than, equal to, or greater than the right side — all in one operation.
+You can safely ignore it for now, but you may see it in modern C++ code.
+:::
 
 ## 3. Logical Operators
 
@@ -237,9 +247,11 @@ if (index < size && data[index] > 0) {
 }
 ```
 
-> **Tip:** Do not confuse `&&` and `||` (logical) with `&` and `|` (bitwise). The
-> bitwise versions operate on individual bits and do *not* short-circuit. Using `&`
-> when you meant `&&` can cause subtle bugs and unexpected behavior.
+::: {.tip}
+**Tip:** Do not confuse `&&` and `||` (logical) with `&` and `|` (bitwise). The
+bitwise versions operate on individual bits and do *not* short-circuit. Using `&`
+when you meant `&&` can cause subtle bugs and unexpected behavior.
+:::
 
 ### Precedence
 
@@ -277,19 +289,25 @@ It is handy for quick assignments:
 std::string greeting = (hora < 12) ? "Buenos dias" : "Buenas tardes";
 ```
 
-> **Tip:** Avoid nesting ternary operators. An expression like
-> `a ? b : c ? d : e` is hard to read. Use `if/else` when the logic gets more
-> complex than a single condition.
+::: {.tip}
+**Tip:** Avoid nesting ternary operators. An expression like
+`a ? b : c ? d : e` is hard to read. Use `if/else` when the logic gets more
+complex than a single condition.
+:::
 
-> **Note:** The above tip is generally accepted best practice but Ben loves writing:
-> ```
-> auto rc = a ? b :
->           c ? d :
->           e ? f :
->           g;
-> ```
-> He thinks it looks like a switch statement.
-> We haven't been able to convince him that this is not beautiful code!
+::: {.tip}
+**Note:** The above tip is generally accepted best practice but Ben loves writing:
+
+```
+auto rc = a ? b :
+          c ? d :
+          e ? f :
+          g;
+```
+
+He thinks it looks like a switch statement.
+We haven't been able to convince him that this is not beautiful code!
+:::
 
 ## 5. Bitwise Operators
 
@@ -360,9 +378,11 @@ Inverts every bit. A `0` becomes `1` and a `1` becomes `0`.
 unsigned char flipped = ~0;  // 255
 ```
 
-> **Tip:** Be careful with `~` on signed types. The result depends on the size
-> of the type and can produce negative values due to two's complement
-> representation.
+::: {.tip}
+**Tip:** Be careful with `~` on signed types. The result depends on the size
+of the type and can produce negative values due to two's complement
+representation.
+:::
 
 ### Left Shift: `<<` and Right Shift: `>>`
 
@@ -393,10 +413,12 @@ flags <<= 2;            // shift left by 2
 flags >>= 1;            // shift right by 1
 ```
 
-> **Tip:** Bitwise operators have surprisingly low precedence — lower than `==`.
-> The expression `x & 0xFF == 0` is parsed as `x & (0xFF == 0)`, which is almost
-> certainly not what you want. Always use parentheses with bitwise operators:
-> `(x & 0xFF) == 0`.
+::: {.tip}
+**Tip:** Bitwise operators have surprisingly low precedence — lower than `==`.
+The expression `x & 0xFF == 0` is parsed as `x & (0xFF == 0)`, which is almost
+certainly not what you want. Always use parentheses with bitwise operators:
+`(x & 0xFF) == 0`.
+:::
 
 ## 6. Other Operators
 
@@ -446,8 +468,10 @@ std::cin >> number;        // stream extraction
 In Chapter 15, you will see how to define `operator==` for your own custom types.
 For now, just be aware that an operator's meaning depends on what it is applied to.
 
-> **Tip:** When you see an unfamiliar use of an operator, check what types the
-> operands are. The type determines which version of the operator is called.
+::: {.tip}
+**Tip:** When you see an unfamiliar use of an operator, check what types the
+operands are. The type determines which version of the operator is called.
+:::
 
 ## 8. Precedence
 
@@ -503,9 +527,11 @@ int result = 2 + 3 * 4 > 10 && true;
 // result = 1 (true)
 ```
 
-> **Tip:** You do not need to memorize this table. When you are unsure about
-> the order, add parentheses. They make your intent obvious to both the compiler
-> and anyone reading your code. A few extra `()` are far better than a subtle bug.
+::: {.tip}
+**Tip:** You do not need to memorize this table. When you are unsure about
+the order, add parentheses. They make your intent obvious to both the compiler
+and anyone reading your code. A few extra `()` are far better than a subtle bug.
+:::
 
 ## Conclusion
 
