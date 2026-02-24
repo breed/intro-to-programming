@@ -3,10 +3,6 @@ Quiz description: This is a graded quiz that must be done on your own. You are a
 
 shuffle answers: true
 
-GROUP
-points per question: 10
-pick: 10
-
 1. What does the "base" (radix) of a number system refer to?
 a) The largest digit you can use
 *b) The number of distinct digits used in the system
@@ -43,18 +39,6 @@ a) 52
 c) 40
 d) 82
 
-7. What prefix is used to write a binary literal in C++?
-a) `0`
-*b) `0b`
-c) `0x`
-d) `b`
-
-8. What prefix is used to write a hexadecimal literal in C++?
-a) `0`
-b) `0b`
-*c) `0x`
-d) `h`
-
 9. Why is `052` a potential source of confusion in C++?
 a) It is not a valid literal
 b) It is the same as decimal 52
@@ -67,18 +51,6 @@ a) It separates the integer and decimal parts of a number
 c) It marks the end of a literal
 d) It specifies the base of the number
 
-11. Which format specifier prints a number in binary using `std::println`?
-*a) `{:b}`
-b) `{:d}`
-c) `{:x}`
-d) `{:o}`
-
-12. What does the `#` flag do in a format specifier like `{:#x}`?
-*a) Includes the base prefix in the output (e.g., `0x`)
-b) Pads the number with zeros
-c) Converts the number to uppercase
-d) Prints the number in decimal
-
 13. To convert the hex string `"2A"` to an integer using `std::stoi`, what do you pass as the base?
 a) 2
 b) 8
@@ -90,12 +62,6 @@ a) `std::stoi("101010")`
 *b) `std::stoi("101010", nullptr, 2)`
 c) `std::stoi("101010", nullptr, 10)`
 d) `std::stoi("0b101010")`
-
-15. What is the main problem with one's complement representation?
-a) It cannot represent positive numbers
-*b) It has two different representations of zero
-c) It requires extra hardware for addition
-d) It can only represent 127 values
 
 16. To find the two's complement of a number, you:
 a) Flip all the bits
@@ -175,4 +141,3 @@ a) 0s
 c) Alternating 0s and 1s
 d) The result is undefined
 
-END_GROUP

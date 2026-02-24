@@ -3,10 +3,6 @@ Quiz description: This is a graded quiz that must be done on your own. You are a
 
 shuffle answers: true
 
-GROUP
-points per question: 10
-pick: 10
-
 1. What is the result of `10 / 3` when both operands are integers?
 a) 3.333
 *b) 3
@@ -79,12 +75,6 @@ a) It is evaluated and the result is combined with the left side
 c) It is evaluated but the result is ignored
 d) It always returns false
 
-13. Among the logical operators, which has the highest precedence?
-*a) `!`
-b) `&&`
-c) `||`
-d) They all have the same precedence
-
 14. What does the ternary operator `?:` do?
 a) Compares three values and returns the largest
 *b) Returns one of two values based on a condition
@@ -96,12 +86,6 @@ d) Checks three conditions at once
 b) "Failed"
 c) true
 d) 85
-
-16. What does the bitwise AND operator `&` do?
-a) Returns 1 for each bit where either operand is 1
-*b) Returns 1 for each bit where both operands are 1
-c) Returns 1 for each bit where the operands differ
-d) Inverts every bit
 
 17. What is `42 & 0x0F`?
 a) 42
@@ -145,12 +129,6 @@ b) `0xFF` is not a valid literal
 *c) `==` has higher precedence than `&`, so it is parsed as `x & (0xFF == 0)`
 d) Bitwise AND always returns 0
 
-24. What is operator overloading?
-a) Using too many operators in a single expression
-b) Defining new operators that do not exist in C++
-*c) The same operator symbol performing different actions depending on the types involved
-d) Assigning multiple values with a single operator
-
 25. What does the `+` operator do when applied to `std::string` values?
 a) Adds the lengths of the strings
 *b) Concatenates (joins) the strings together
@@ -175,4 +153,3 @@ a) Only `a` gets the value 3
 c) It causes a compilation error
 d) Only `b` gets the value 3
 
-END_GROUP
