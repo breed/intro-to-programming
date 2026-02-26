@@ -1190,6 +1190,8 @@ int main(void) {
 - `strcpy` and `strcat` do not check buffer bounds. Prefer `strncpy` and
   `strncat`.
 - `strdup` allocates memory with `malloc` — you must `free` the result.
+- `strtok` splits strings into tokens but modifies the original string and is
+  not thread-safe. Use `strtok_r` or `strtok_s` instead.
 - `strlen` returns the number of characters *before* the `'\0'`, not the buffer
   size.
 
@@ -1262,7 +1264,8 @@ Notice the `&` before `year`. Since C is pass by value, `scanf` needs the
 is a classic bug — the program compiles but crashes or produces garbage at
 runtime.
 
-`scanf` uses the same format specifiers as `printf`:
+`scanf` uses similar format specifiers to `printf`, but not identical ones.
+Notably, `scanf` uses `%lf` for `double` while `printf` uses `%f`:
 
 ```c
 char name[50];
@@ -2004,7 +2007,11 @@ int main(void) {
     for (int i = 0; i < n; i++) {
         printf("%s\n", songs[i]);
     }
-    // Output: Fame, Flashdance, Footloose, Maniac
+    // Output:
+    // Fame
+    // Flashdance
+    // Footloose
+    // Maniac
     return 0;
 }
 ```

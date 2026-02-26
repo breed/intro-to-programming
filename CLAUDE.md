@@ -12,9 +12,15 @@ extra content that isn't covered in the book.
 - fix any grammar or spelling errors
 - check for awkward phrasing
 - check any code examples for errors
-- check that everything is explained accurates
+- check that everything is explained accurately
 - are there any missing concepts that should be covered?
 - does the chapter have all the required elements
+- does each chapter have exercises with a mix of:
+    - thought provoking questions
+    - what does this do type questions with code snippets
+    - calculation questions
+    - where is the bug type questions with code snippets
+    - propose a short test program they should write
 
 ## quizzes
 
