@@ -7,6 +7,15 @@ extra content that isn't covered in the book.
 - operators
 - c4c++ (C for C++ programmers)
 
+## validating chapters
+
+- fix any grammar or spelling errors
+- check for awkward phrasing
+- check any code examples for errors
+- check that everything is explained accurates
+- are there any missing concepts that should be covered?
+- does the chapter have all the required elements
+
 ## quizzes
 
 - stored in the quizzes directory

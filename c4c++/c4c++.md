@@ -1043,6 +1043,60 @@ C23. It is available on virtually every system you will use, but compiling with
 `-std=c99 -pedantic` or `-std=c11 -pedantic` will produce a warning.
 :::
 
+**`strtok` — Tokenize a String**
+
+`strtok` splits a string into tokens separated by any character in a delimiter
+set. In C++, you might use `std::istringstream` with `>>` or
+`std::string::find` — in C, `strtok` is the standard approach:
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char line[] = "Girls Just Want to Have Fun";
+
+    char *tok = strtok(line, " ");
+    while (tok != NULL) {
+        printf("'%s'\n", tok);
+        tok = strtok(NULL, " ");
+    }
+    return 0;
+}
+// Output:
+// 'Girls'
+// 'Just'
+// 'Want'
+// 'to'
+// 'Have'
+// 'Fun'
+```
+
+The first call passes the string to tokenize. Each subsequent call passes
+`NULL` to continue tokenizing the same string. `strtok` returns `NULL` when
+there are no more tokens.
+
+There are two important gotchas. First, `strtok` **modifies the original
+string** by replacing delimiter characters with `'\0'`. If you need the
+original string preserved, make a copy with `strdup` before tokenizing.
+Second, `strtok` stores its state in a hidden static variable, which means it
+is **not thread-safe** and you cannot tokenize two strings at the same time.
+
+::: {.tip}
+**Tip:** Use `strtok_r` (POSIX) or `strtok_s` (C11 Annex K / Windows) instead
+of `strtok`. These reentrant versions take an extra `char **saveptr` parameter
+to store the tokenizer state, making them safe to use in multi-threaded
+programs and allowing nested tokenization:
+
+```c
+char *saveptr;
+char *tok = strtok_r(line, " ", &saveptr);
+while (tok != NULL) {
+    tok = strtok_r(NULL, " ", &saveptr);
+}
+```
+:::
+
 ## The Dangers of `strcat`
 
 Let's look at a concrete example of why `strcat` is dangerous:
@@ -1781,6 +1835,191 @@ look at the source code. Getting ownership wrong leads to either memory leaks
 (never freeing) or double-free bugs (freeing what you do not own).
 :::
 
+## Error Handling Without Exceptions
+
+In C++, you can `throw` an exception and let a `catch` block handle it several
+call levels up. C has no exceptions. Error handling is done through return
+codes, and cleanup is your responsibility.
+
+The simplest pattern is to check return values and bail out:
+
+```c
+FILE *f = fopen("La Isla Bonita.txt", "r");
+if (!f) {
+    perror("fopen");
+    return -1;
+}
+```
+
+But what happens when a function acquires multiple resources? You need to
+release them in the correct order when something goes wrong. The idiomatic
+C pattern uses `goto` to jump to cleanup labels:
+
+```c
+int process(const char *path) {
+    int status = -1;
+
+    FILE *f = fopen(path, "r");
+    if (!f) return -1;
+
+    char *buf = malloc(1024);
+    if (!buf) goto close_file;
+
+    char *line = malloc(256);
+    if (!line) goto free_buf;
+
+    /* do work with f, buf, and line ... */
+    status = 0;
+
+    free(line);
+free_buf:
+    free(buf);
+close_file:
+    fclose(f);
+    return status;
+}
+```
+
+Each resource acquired gets a corresponding cleanup label below it. If any
+allocation fails, control jumps to the label that releases everything acquired
+so far, in reverse order. This pattern is used extensively in real C code
+including the Linux kernel.
+
+::: {.tip}
+**Tip:** C++ programmers are taught "never use `goto`." In C, `goto` for
+cleanup is an accepted and widely used idiom. It is the closest thing C has
+to RAII — a structured way to ensure resources are always released.
+:::
+
+The other common strategy is to return an error code (often `-1` or `NULL`)
+and let the caller decide what to do. Many C library functions set the global
+variable `errno` to indicate what went wrong, and you can use `perror` or
+`strerror(errno)` to get a human-readable message:
+
+```c
+FILE *f = fopen("No Existe.txt", "r");
+if (!f) {
+    perror("fopen");    // prints: fopen: No such file or directory
+}
+```
+
+## Function Pointers and `qsort`
+
+In C++, you pass behavior to functions using lambdas, `std::function`, or
+template parameters. C has none of those — instead, you use **function
+pointers**. A function pointer holds the address of a function, and you can
+call it just like a regular function.
+
+Here is a simple example:
+
+```c
+#include <stdio.h>
+
+int add(int a, int b) { return a + b; }
+int mul(int a, int b) { return a * b; }
+
+int main(void) {
+    int (*op)(int, int);   // declare a function pointer
+
+    op = add;
+    printf("%d\n", op(3, 4));   // 7
+
+    op = mul;
+    printf("%d\n", op(3, 4));   // 12
+    return 0;
+}
+```
+
+The declaration `int (*op)(int, int)` reads: `op` is a pointer to a function
+that takes two `int` parameters and returns an `int`. The parentheses around
+`*op` are required — without them, `int *op(int, int)` would declare a
+function that returns an `int *`.
+
+::: {.tip}
+**Tip:** Function pointer declarations are notoriously hard to read. A
+`typedef` makes them much clearer:
+
+```c
+typedef int (*binop_fn)(int, int);
+binop_fn op = add;
+printf("%d\n", op(3, 4));
+```
+:::
+
+The most common place you will encounter function pointers is the standard
+library function `qsort` from `<stdlib.h>`. In C++, you would use
+`std::sort` with a lambda or comparator. In C, `qsort` takes a comparison
+function pointer:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int compare_ints(const void *a, const void *b) {
+    int ia = *(const int *)a;
+    int ib = *(const int *)b;
+    return (ia > ib) - (ia < ib);
+}
+
+int main(void) {
+    int years[] = {1989, 1982, 1985, 1980, 1987};
+    int n = sizeof(years) / sizeof(years[0]);
+
+    qsort(years, n, sizeof(int), compare_ints);
+
+    for (int i = 0; i < n; i++) {
+        printf("%d ", years[i]);
+    }
+    printf("\n");
+    // Output: 1980 1982 1985 1987 1989
+    return 0;
+}
+```
+
+`qsort` takes four arguments: the array, the number of elements, the size of
+each element, and a pointer to a comparison function. The comparison function
+receives `const void *` pointers — you must cast them to the correct type
+inside the function. It returns a negative value if the first argument is less
+than the second, zero if equal, and a positive value if greater.
+
+You can sort anything with `qsort` by writing different comparison functions.
+Here is one that sorts strings:
+
+```c
+int compare_strings(const void *a, const void *b) {
+    const char *sa = *(const char **)a;
+    const char *sb = *(const char **)b;
+    return strcmp(sa, sb);
+}
+
+int main(void) {
+    const char *songs[] = {
+        "Maniac", "Footloose", "Flashdance", "Fame"
+    };
+    int n = sizeof(songs) / sizeof(songs[0]);
+
+    qsort(songs, n, sizeof(char *), compare_strings);
+
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", songs[i]);
+    }
+    // Output: Fame, Flashdance, Footloose, Maniac
+    return 0;
+}
+```
+
+Notice the double cast in `compare_strings`: `qsort` passes a pointer *to*
+each array element, and each element is already a `char *`, so you receive a
+`char **` disguised as `const void *`.
+
+::: {.tip}
+**Tip:** A common mistake is to write `return a - b` in integer comparison
+functions. This can overflow when `a` and `b` have very different signs (e.g.,
+`INT_MAX - (-1)` overflows). The pattern `(a > b) - (a < b)` is safe and
+returns -1, 0, or 1.
+:::
+
 ## Key Points
 
 - `exit` terminates the program from any function. Use it for unrecoverable
@@ -1793,6 +2032,10 @@ look at the source code. Getting ownership wrong leads to either memory leaks
   `extern "C"` automatically.
 - When you receive a pointer from a function, always determine who owns the
   memory: you, the function, or a library.
+- C has no exceptions. Use return codes for errors and `goto` cleanup for
+  releasing resources in the correct order.
+- Function pointers let you pass behavior to functions. `qsort` is the most
+  common example — it takes a comparison function pointer to sort any type.
 
 ## Exercises
 
@@ -1840,7 +2083,28 @@ look at the source code. Getting ownership wrong leads to either memory leaks
     printf("%s\n", alias);
     ```
 
-6. **Write a program** in C++ that uses `extern "C"` to call the C function
+6. **What does this print?**
+
+    ```c
+    int compare_desc(const void *a, const void *b) {
+        int ia = *(const int *)a;
+        int ib = *(const int *)b;
+        return (ib > ia) - (ib < ia);
+    }
+
+    int main(void) {
+        int vals[] = {3, 1, 4, 1, 5};
+        qsort(vals, 5, sizeof(int), compare_desc);
+        printf("%d %d %d %d %d\n", vals[0], vals[1], vals[2], vals[3], vals[4]);
+        return 0;
+    }
+    ```
+
+7. **Write a program** that uses `qsort` to sort an array of strings in
+   reverse alphabetical order. Write a custom comparison function that calls
+   `strcmp` with the arguments swapped.
+
+8. **Write a program** in C++ that uses `extern "C"` to call the C function
    `strlen` from `<string.h>`, passes it a string, and prints the result.
    Compile it with `c++` to verify it works.
 
@@ -1866,6 +2130,10 @@ descriptors to pointer ownership. Here are the key takeaways:
   `strcat` instead of `std::string` methods.
 - **`stdio` provides buffered I/O** through `FILE *` pointers. Low-level I/O
   uses file descriptors and system calls like `read`, `write`, and `open`.
+- **C has no exceptions.** Use return codes for errors and `goto` cleanup to
+  release resources in reverse order.
+- **Function pointers replace lambdas.** `qsort` is the classic example —
+  pass a comparison function to sort any type.
 - **`exit` terminates from anywhere.** Use it for fatal errors. `extern "C"`
   bridges C and C++. Always know who owns a pointer.
 

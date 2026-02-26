@@ -51,7 +51,8 @@ do not repeat these in new or modified examples:
 - Totally, Radical, Tubular, Karma Chameleon
 - Under Pressure, 99 Luftballons, Blue Monday
 - Everybody Wants to Rule the World, Walking on Sunshine
-- Ghostbusters, Livin' on a Prayer
+- Ghostbusters, Livin' on a Prayer, La Isla Bonita, Girls Just Want to Have Fun
+- Maniac, Footloose, Flashdance, Fame
 
 ## Content
 
@@ -80,7 +81,8 @@ do not repeat these in new or modified examples:
 4. Strings
     - there is no std::string in C++. everything revolves around arrays of characters that end with a null '\0'
     - using strings, you always have to careful have the right amount of memory allocated. (remember to include space for the null!)
-    - string manipulation routines: strlen(), strchr(), strrchr(), strstr(), strcat(), strdup() (include any additional ones that students should know)
+    - string manipulation routines: strlen(), strchr(), strrchr(), strstr(), strcat(), strdup(), strtok() (include any additional ones that students should know)
+    - recommend strtok_r (POSIX) or strtok_s (C11/Windows) over strtok for thread safety
     - review the problems that can arise using strcat()
     - point out that there are convenient ways to manipulate strings with sprintf() and sscanf that will be shown later in I/O
 5. stdio
@@ -103,3 +105,5 @@ do not repeat these in new or modified examples:
     - explain exit() and when it might be more useful than return
     - explain using extern "C" to use c functions from c++
     - explain why they should always wonder about ownership when the receive a pointer from the function they just called (should they free it?)
+    - explain error handling without exceptions: return codes, errno/perror, and goto cleanup pattern for releasing multiple resources
+    - explain function pointers and qsort as C's replacement for lambdas and std::sort
