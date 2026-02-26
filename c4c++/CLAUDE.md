@@ -1,16 +1,29 @@
 # Project Description
 
-Write chapters to help beginning C++ programmers become beginning C programmers
+Write chapters to help beginning C++ programmers become beginning C programmers.
 
 ## Textbook
 
-- This chapter augments the book text found in ../s26/text/
+- These chapter augments the book text found in ../s26/text/
+
+## Chapters
+
+- each numbered element in `Content` represents a chapter
+- each chapter starts with a brief overview
+- each chapter ends with a brief highlight of key points
+- each chapter has some exercises to test reader's comprehesion. there should be a mix of the following types of questions:
+    - though provoking questions to make them think a little deeper about what they have read
+    - what does this do type questions, where they get a snippet of code and predict what it will do
+    - calculation questions to quickly and objectively test comprehension, like `what is the sizeof ilist for int ilist[4] on a system where int is 32-bit?`
+    - where is the bug type questions, where you show some code and ask what the problem is
+    - propose a short test program they should write to test their knowledge
 
 ## Examples
 
 - For strings, use 80s references, lyrics from 80s songs, and Spanish occasionally. Keep it short.
+- avoid repeating lyrics in examples even across chapters
 - Validate examples to make sure syntax and result is correct
-- Compile examples with `gcc -Wall -Wextra -pedantic` to verify correctness
+- Compile examples with `cc -Wall -Wextra -pedantic` to verify correctness
 - Create short example programs to illustrate the concepts covered
 - Use `%zu` for `size_t` (e.g., `strlen` return) and `%td` for `ptrdiff_t` (e.g., pointer subtraction)
 
@@ -28,26 +41,65 @@ Write chapters to help beginning C++ programmers become beginning C programmers
 - Build with: `pandoc c4c++.md -o c4c++.pdf --lua-filter=callout.lua`
 - Requires `header-includes` for `\usepackage[most]{tcolorbox}` (already in frontmatter)
 
+## 80s References Already Used
+
+do not repeat these in new or modified examples:
+
+- Take On Me, Tainted Love, Enjoy the Silence, Don't You Forget About Me
+- Video Killed the Radio Star, Never Gonna Give You Up, Sweet Dreams
+- Blade Runner 1982, I'll be back, Depeche Mode, Rush
+- Totally, Radical, Tubular, Karma Chameleon
+- Under Pressure, 99 Luftballons, Blue Monday
+- Everybody Wants to Rule the World, Walking on Sunshine
+- Ghostbusters, Livin' on a Prayer
+
 ## Content
 
 1. Introduction:
     - in the begin know C++ automatically meant you know C, but modern C++ has dramatically different idioms and standard libraries than C, so the modern C++ programmer has some things to learn in order to program in C.
     - `The C Programming Language (Second Edition)` my go to textbook.
-    - introduce this intro section quoted verbatim from the book and then quote the section for the first section `the-c-programming-language-intro.txt` 
+    - introduce this intro section quoted verbatim from the book and then quote the section for the first section `the-c-programming-language-intro.txt`
+    - cover printf: format specifiers (%d, %x/%X, %f, %e, %c, %s, %p, %zu), width/precision, zero-fill, \n for newlines, %% for literal percent
 2. Pointers
     - modern C++ programmers rarely see pointers and thus can get away with not fully understanding them, but C programmers must be very comfortable with pointers
     - a type that ends in * represents a pointer. the type information before the * represents the type of the memory that the pointer points to
     - all pointers are an address to a location in memory
     - you can get the address of a variable using & (including addresses of a pointer variable)
     - create a figure of a small program with a couple of variables and pointers to those variables and one pointer to one of the pointers and then show a memory diagram and label addresses of those variable
+    - explain that a pointer can point to a single value stored in memory or the first element of an array of elements
+    - explain that a[i] is much more convenient to write than *(a+i)
+    - show pointers with structures
+    - explain that s->f is much more convenient to write than (*a).f since . has precendence over *
     - all function parameters are `pass by value` (no `pass by reference`) but we can pass pointers to memory we want to change by value
 3. Allocating memory
     - global variables get started at the beginning of a program and stay around until the program finishes
     - local variables are declared inside of functions and go away when the function goes away
+    - static local variables have the scope of a local but the lifetime of a global
     - if we want to allocate memory, use it for a while and release it, we can use malloc() and free()
+    - memcpy and memset for working with raw memory (memmove for overlapping regions)
 4. Strings
     - there is no std::string in C++. everything revolves around arrays of characters that end with a null '\0'
     - using strings, you always have to careful have the right amount of memory allocated. (remember to include space for the null!)
     - string manipulation routines: strlen(), strchr(), strrchr(), strstr(), strcat(), strdup() (include any additional ones that students should know)
     - review the problems that can arise using strcat()
     - point out that there are convenient ways to manipulate strings with sprintf() and sscanf that will be shown later in I/O
+5. stdio
+    - printf for output and scanf for input
+    - show examples of reading input explain why & is needed
+    - explain stdin, stdout, stderr
+    - show fprintf and fscanf
+    - open/create files with fopen/fclose. explain binary modes. show how to use with fprintf and fscanf
+    - fwrite and fread
+    - sprintf, sscanf, and snprintf for string formatting
+    - explain buffering and fflush
+    - add tip explaining \n and flush behavior when output going to terminal vs file
+6. I/O
+    - explain file descriptors starting with 0, 1, and 2
+    - show read() and write() with file descriptors
+    - explain open() and create() and how to do create with open()
+    - explain seek() and tell()
+    - explain pread() and pwrite()
+7. Misc
+    - explain exit() and when it might be more useful than return
+    - explain using extern "C" to use c functions from c++
+    - explain why they should always wonder about ownership when the receive a pointer from the function they just called (should they free it?)
