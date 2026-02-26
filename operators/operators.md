@@ -5,16 +5,16 @@ header-includes:
 ---
 
 Operators are symbols that take operands and produce a result.
-That definition isn't very satifying though.
+That definition isn't very satisfying though.
 The best way to understand operators is to look at ones you have already seen: =, +, <.
 All of these operators are **in-fix** operators: they occur between the things they are operating on.
 `a = 3` assigns the value 3 to `a`.
 `b+c` represents the sum of `b` and `c`.
 `a<b` returns true if `a` is less than `b`.
-You have also seen the **unary** operators: ++ --.
+You have also seen the **unary** operators: `++` `--`.
 There is also the negation unary operator: `-a`, which returns the negation of `a`.
-We will see more, but you can think of operators as functions that are invoked with symbols rather than a function name like `sum(b,c)`.
-In fact, C++ often refers to operators and operator functions.
+You will see more, but you can think of operators as functions that are invoked with symbols rather than a function name like `sum(b,c)`.
+In fact, C++ often refers to operators as operator functions.
 
 
 
@@ -234,6 +234,29 @@ if (!game_over) {
 }
 ```
 
+Because `!` is a unary operator at precedence level 3, it binds tighter than
+almost every other operator. This means `!` applies to the very next value, not
+to a larger expression. Watch out for this when negating comparisons:
+
+```cpp
+int score = 100;
+
+// Bug: !score evaluates first (0), then 0 > 80 is false
+if (!score > 80) {
+    std::println("You failed");  // never prints — even with score 0
+}
+
+// Correct: negate the whole comparison
+if (!(score > 80)) {
+    std::println("You failed");
+}
+```
+
+In the buggy version, `!score` converts `score` to `bool` (`true` for any
+non-zero value), negates it to `false` (which is `0`), and then compares `0 > 80`.
+The result is always `false` regardless of `score`. Parentheses fix this by
+letting `>` evaluate first.
+
 ### Short-Circuit Evaluation
 
 C++ evaluates logical expressions left-to-right and stops as soon as the result is
@@ -265,6 +288,13 @@ if (is_vip || age >= 21 && has_id) { ... }
 // Clearer with parentheses
 if (is_vip || (age >= 21 && has_id)) { ... }
 ```
+
+::: {.tip}
+**Tip:** Some safety-critical coding standards, such as MISRA C++, require
+parentheses around every non-trivial sub-expression rather than relying on
+operator precedence. This eliminates an entire class of bugs caused by
+misremembering precedence rules.
+:::
 
 ## 4. The Ternary Operator: `?:`
 
@@ -396,7 +426,7 @@ Note that `~` promotes its operand to `int` before flipping the bits. The
 result is then truncated back when stored in an `unsigned char`.
 
 ::: {.tip}
-**Tip:** Be careful with `~` on signed types. The result depends on the size
+**Tip:** Avoid `~` with signed types. The result depends on the size
 of the type and can produce negative values due to two's complement
 representation.
 :::
@@ -411,8 +441,8 @@ int shifted_left  = val << 3;  // 8  (1 * 2^3)
 int shifted_right = 8 >> 2;    // 2  (8 / 2^2)
 ```
 
-Left shifting by `n` is equivalent to multiplying by `2^n`. Right shifting by `n` is
-equivalent to dividing by `2^n` (for unsigned values).
+Left shifting by `n` is equivalent to multiplying by $2^n$. Right shifting by `n` is
+equivalent to dividing by $2^n$ (for unsigned values).
 
 **Common use:** efficient multiplication/division by powers of two, and
 positioning bits in flags or registers.
@@ -508,10 +538,10 @@ earlier. Here is the full table:
 | 9 | `==` `!=` | Equality and inequality | Left-to-right |
 | 10 | `&` | Bitwise AND | Left-to-right |
 | 11 | `^` | Bitwise XOR | Left-to-right |
-| 12 | `\|` | Bitwise OR | Left-to-right |
+| 12 | `|` | Bitwise OR | Left-to-right |
 | 13 | `&&` | Logical AND | Left-to-right |
-| 14 | `\|\|` | Logical OR | Left-to-right |
-| 15 | `?:` `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` | Ternary, assignment, compound assignment | Right-to-left |
+| 14 | `||` | Logical OR | Left-to-right |
+| 15 | `?:` `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `|=` | Ternary, assignment, compound assignment | Right-to-left |
 | 16 | `,` | Comma operator | Left-to-right |
 
 ### How to Read the Table
@@ -569,8 +599,8 @@ from this chapter:
 You now have a solid understanding of how C++ operators work. As you continue
 through the textbook, you will see these operators everywhere — in loops, conditions,
 function calls, and class definitions. With practice, reading and writing expressions will become second nature.
-No te preocupes — you have got this. Nos vemos en el proximo capitulo!
+No te preocupes — you have got this. Nos vemos en el próximo capítulo!
 
 ---
 
-*Content outline and editorial support from Ben. Words by Claude, the Opus.*
+*Content outline and editorial support from Ben. Words by Claude, the Opus. Special thanks to Khalil Estell for thorough review and suggestions!*
