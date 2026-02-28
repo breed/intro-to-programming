@@ -1032,3 +1032,190 @@ Output:
 Note: In practice, C++ standard headers like `<cstring>` already handle the
 `extern "C"` linkage for you. This exercise demonstrates the mechanism
 explicitly.
+
+# Appendix A: Macros
+
+**1. Think about it:** C++ uses `constexpr` and `inline` functions to replace
+many uses of macros. What specific problems do macros have that these C++
+features solve? Why does C still rely on macros despite these problems?
+
+**Answer:** Macros have several problems that C++ features solve:
+
+- **No type safety.** Macros operate on text, not types. `constexpr` and
+  `inline` functions are type-checked by the compiler, catching mismatches at
+  compile time.
+- **Double evaluation.** `SQUARE(i++)` evaluates `i++` twice. A real `inline`
+  function evaluates its argument once.
+- **No scope.** A `#define` is visible from its point of definition to the end
+  of the file (or until `#undef`). `constexpr` variables and `inline` functions
+  respect block scope and namespaces.
+- **Hard to debug.** Debuggers step through source code, but macros are expanded
+  before the compiler sees the code, so you cannot step into a macro.
+- **No recursion.** Macros cannot call themselves recursively.
+
+C still relies on macros because it lacks alternatives. C has no `constexpr`
+(until C23's limited version), no templates, and `inline` is only a hint — the
+compiler may ignore it. Macros remain the only way to do conditional
+compilation (`#ifdef`), include guards, and compile-time code generation like
+X-macros.
+
+---
+
+**2. What does this produce?**
+
+```c
+#define DOUBLE(x) ((x) + (x))
+
+int i = 5;
+printf("%d\n", DOUBLE(i++));
+```
+
+**Answer:** **Undefined behavior.** `DOUBLE(i++)` expands to `((i++) + (i++))`.
+This modifies `i` twice without a sequence point between the modifications,
+which is undefined behavior in C. The compiler is free to produce any result.
+In practice, many compilers will produce `11` (5 + 6) or `10` (5 + 5), but you
+cannot rely on any particular output. This is the classic double-evaluation
+trap — never pass expressions with side effects to function-like macros.
+
+---
+
+**3. Calculation:** Given the macro `#define BUFSIZE 256`, how many bytes does
+`char buf[BUFSIZE + 1]` allocate? Why is the `+ 1` a common pattern?
+
+**Answer:** **257 bytes.** The preprocessor substitutes `BUFSIZE` with `256`,
+giving `char buf[256 + 1]`, which is `char buf[257]`. The `+ 1` is a common
+pattern because C strings need a null terminator `'\0'`. If you want to store
+strings of up to 256 characters, you need 257 bytes — 256 for the characters
+plus 1 for the null terminator.
+
+---
+
+**4. Where is the bug?**
+
+```c
+#define MUL(a, b)  a * b
+
+int result = MUL(2 + 3, 4 + 5);
+printf("%d\n", result);
+```
+
+**Answer:** Missing parentheses in the macro. `MUL(2 + 3, 4 + 5)` expands to
+`2 + 3 * 4 + 5`. Due to operator precedence, `3 * 4` is evaluated first,
+giving `2 + 12 + 5 = 19` instead of the intended `5 * 9 = 45`. The fix is to
+parenthesize each parameter use and the entire body:
+
+```c
+#define MUL(a, b)  ((a) * (b))
+```
+
+Now `MUL(2 + 3, 4 + 5)` expands to `((2 + 3) * (4 + 5))` = `5 * 9` = `45`.
+
+---
+
+**5. What does this produce?**
+
+```c
+#define STRINGIFY(x)  #x
+#define XSTRINGIFY(x) STRINGIFY(x)
+#define VERSION 3
+
+printf("[%s] [%s]\n", STRINGIFY(VERSION), XSTRINGIFY(VERSION));
+```
+
+**Answer:**
+
+```
+[VERSION] [3]
+```
+
+`STRINGIFY(VERSION)` stringifies its argument *before* expansion, producing the
+literal string `"VERSION"`. `XSTRINGIFY(VERSION)` first expands `VERSION` to
+`3` (because the outer macro does not use `#`), then passes `3` to `STRINGIFY`,
+producing `"3"`. This is why the two-level indirect pattern is needed when you
+want the expanded value as a string.
+
+---
+
+**6. Where is the bug?**
+
+```c
+#define LOG_IF(cond, msg) \
+    if (cond) \
+        printf("[WARN] %s\n", msg);
+
+if (x > 100)
+    LOG_IF(x > 200, "very high");
+else
+    printf("normal\n");
+```
+
+**Answer:** The macro creates a **dangling else** problem. After expansion, the
+code becomes:
+
+```c
+if (x > 100)
+    if (x > 200)
+        printf("[WARN] %s\n", "very high");
+;
+else
+    printf("normal\n");
+```
+
+The `else` binds to the inner `if` (from the macro), not the outer `if`. Also,
+the semicolon after `LOG_IF(...)` becomes a separate empty statement, which
+terminates the outer `if` before the `else` — causing a syntax error. The fix
+is to wrap the macro body in `do { ... } while (0)`:
+
+```c
+#define LOG_IF(cond, msg) do { \
+    if (cond)                  \
+        printf("[WARN] %s\n", msg); \
+} while (0)
+```
+
+---
+
+**7. Write a program** that defines an X-macro list of at least four colors,
+then uses it to generate both an `enum` and a function that returns the string
+name for a given enum value. Print each color's enum value and name.
+
+**Answer:**
+
+```c
+#include <stdio.h>
+
+#define COLORS(X) \
+    X(RED)        \
+    X(GREEN)      \
+    X(BLUE)       \
+    X(YELLOW)
+
+#define AS_ENUM(name) name,
+enum color { COLORS(AS_ENUM) COLOR_COUNT };
+
+#define AS_STRING(name) #name,
+const char *color_names[] = { COLORS(AS_STRING) };
+
+const char *color_name(enum color c) {
+    if (c >= 0 && c < COLOR_COUNT) {
+        return color_names[c];
+    }
+    return "UNKNOWN";
+}
+
+int main(void) {
+    for (int i = 0; i < COLOR_COUNT; i++) {
+        printf("%d = %s\n", i, color_name(i));
+    }
+    return 0;
+}
+```
+
+Output:
+
+```
+0 = RED
+1 = GREEN
+2 = BLUE
+3 = YELLOW
+```
