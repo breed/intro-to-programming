@@ -1345,10 +1345,49 @@ Note that `name` does not need `&` because an array name already points to the b
 But `gpa` does need a `&`, because `scanf` needs to know where `gpa` is stored to fill it in.
 
 ::: {.tip}
-**Trap:** `scanf("%s", ...)` reads a single word (stopping at whitespace). To
-read a whole line, use `fgets(buf, sizeof(buf), stdin)` instead. `scanf` with
-`%s` also has no bounds checking — it will happily overflow your buffer. Use a
+**Trap:** `scanf("%s", ...)` reads a single word (stopping at whitespace). It
+also has no bounds checking — it will happily overflow your buffer. Use a
 width specifier like `%49s` to limit input to 49 characters (plus `'\0'`).
+:::
+
+## Scan Sets
+
+`scanf` supports **scan set specifiers** with `%[...]`, which let you define
+exactly which characters to accept. The scan set reads characters as long as
+they are in the set, and stops at the first character that is not:
+
+```c
+char vowels[20];
+scanf("%19[aeiouAEIOU]", vowels);  // reads only vowels, stops at first non-vowel
+```
+
+A caret `^` at the start of the set **negates** it — read everything *except*
+the listed characters. This gives you a way to read an entire line with `scanf`,
+since `%[^\n]` reads everything up to (but not including) the newline:
+
+```c
+char line[80];
+scanf("%79[^\n]", line);   // reads a full line (up to 79 chars)
+printf("You said: %s\n", line);
+```
+
+Always include a width limit to prevent buffer overflow, just like with `%s`.
+
+You already saw a scan set used with `sscanf` earlier in the strings chapter
+preview. Here it is again to parse a structured string:
+
+```c
+char buf[] = "Track 03: 99 Luftballons";
+int track;
+char title[50];
+sscanf(buf, "Track %d: %49[^\n]", &track, title);
+// track is 3, title is "99 Luftballons"
+```
+
+::: {.tip}
+**Tip:** `%[^\n]` is the `scanf` way to read a line, but `fgets` is generally
+safer and simpler for line-oriented input. Use scan sets when you need to parse
+structured input where only certain characters are valid.
 :::
 
 ## `stdin`, `stdout`, and `stderr`
