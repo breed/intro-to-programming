@@ -921,7 +921,17 @@ free(alias);
 
 ---
 
-**6. What does this print?**
+**6. Calculation:** Given `int nums[] = {5, 10, 15, 20};`, what is the value of
+`sizeof(nums) / sizeof(nums[0])`?
+
+**Answer:** **4.** The array contains 4 `int` elements. `sizeof(nums)` is
+`4 * sizeof(int)` (typically 16 bytes), and `sizeof(nums[0])` is `sizeof(int)`
+(typically 4 bytes). Dividing gives the number of elements: 4. This is a
+common C idiom for computing array length at compile time.
+
+---
+
+**7. What does this print?**
 
 ```c
 int compare_desc(const void *a, const void *b) {
@@ -950,7 +960,7 @@ reverses the sort order. `qsort` sorts the array in **descending** order:
 
 ---
 
-**7. Write a program** that uses `qsort` to sort an array of strings in
+**8. Write a program** that uses `qsort` to sort an array of strings in
 reverse alphabetical order. Write a custom comparison function that calls
 `strcmp` with the arguments swapped.
 
@@ -992,7 +1002,7 @@ alpha
 
 ---
 
-**8. Write a program** in C++ that uses `extern "C"` to call the C function
+**9. Write a program** in C++ that uses `extern "C"` to call the C function
 `strlen` from `<string.h>`, passes it a string, and prints the result. Compile
 it with `c++` to verify it works.
 

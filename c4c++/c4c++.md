@@ -4,6 +4,38 @@ header-includes:
   - \usepackage[most]{tcolorbox}
 ---
 
+# 0. How to read this booklet
+
+This is a short booklet to help a C++ programmer get up to speed with C.
+As a side benefit, you will probably find that you understand C++ better at the end of it.
+
+Each chapter is meant to help you understand a topic, but you will still want to reference API descriptions for more specifics of the parameters and operating conditions.
+Hopefully, you'll have the context you need to understand API documentation.
+
+## Tips
+
+**Tips** callout details that you need to pay special attention to.
+**Traps** warn you of common mistakes made.
+**Wut** calls out a detail that is counter-intuitive, so make sure you pay attention.
+
+## Starters
+
+As the intro to the most amazing programming language book ever written starts out
+
+> The only way to learn a new programming language is by writing programs in it.
+
+You need to write some code.
+Make sure you try writing some programs from scratch.
+At the end of most sections is a **Starter** program that you can type in and modify to play with.
+Don't use it as an excuse to avoid writing some of your own starter programs.
+It's the only way to master a language.
+
+## Exercises
+
+Don't skip the exercises at the end of the chapters.
+You can get the answer key, but don't look at the answer key before you find the answer yourself.
+If you look at the answer key first, the concepts will not sink in.
+
 # 1. Introduction
 
 In the beginning, knowing C++ automatically meant you knew C. The original C++
@@ -110,10 +142,10 @@ Here are the format specifiers you will use most:
 | `%zu` | `size_t` | `printf("%zu", sizeof(int))` | `4` |
 
 ::: {.tip}
-**Trap:** The first argument of printf must be a literal! "something".
-Never, never pass a variable.
-It may work, but it is a potential security error.
-If you only want to print a string variable, don't do ~~`printf(str)`~~, do `printf("%s", s)`.
+**Trap:** The first argument to `printf` must always be a string literal.
+Never pass a variable as the first argument.
+It may work, but it is a potential security vulnerability (format string attack).
+If you only want to print a string variable, don't do ~~`printf(str)`~~, do `printf("%s", str)`.
 :::
 
 You can control the width and precision of output by placing numbers between the
@@ -152,7 +184,7 @@ printf("Score: %d%%\n", score);      // Score: 95%
 percent sign.**
 
 ::: {.tip}
-**Tip:** `printf` does not check that your format specifiers match the types of
+**Trap:** `printf` does not check that your format specifiers match the types of
 your arguments. If you write `printf("%d", 3.14)`, the compiler may warn you,
 but it will not stop you. The result is garbage. Always match specifiers to
 types: `%d` for `int`, `%f` for `double`, `%s` for `char *`, and so on.
@@ -223,7 +255,7 @@ double *d;      // d is a pointer to a double
 ```
 
 ::: {.tip}
-**Tip:** The `*` belongs to the variable, not the type. This declaration creates
+**Trap:** The `*` belongs to the variable, not the type. This declaration creates
 one pointer and one regular int:
 
 ```c
@@ -366,7 +398,7 @@ Both `p` and `q` are `int *`. The compiler does not know whether there are more
 keep track of how many elements a pointer refers to and to stay within bounds.
 
 In C, arrays and pointers are intimately connected. When you use an array name
-in most expressions, it **decays** to a pointer to the first element:
+in most expressions, it **decays** (that is the fancy technical term to mean it gets treated as) to a pointer to the first element:
 
 ```c
 int nums[] = {10, 20, 30, 40, 50};
@@ -375,6 +407,13 @@ int *p = nums;       // p points to nums[0]; no & needed
 printf("%d\n", *p);       // 10 (same as nums[0])
 printf("%d\n", *(p + 1)); // 20 (same as nums[1])
 printf("%d\n", p[2]);     // 30 — yes, you can use [] on pointers!
+```
+
+Another way to see the decay in action is to notice that the expressions `nums` and `&nums` produce the same address.
+
+```c
+int nums[] = {10, 20, 30, 40, 50};
+printf("%p %p\n", nums, &nums);  // the same address is printed twice
 ```
 
 **Pointer arithmetic** works in units of the pointed-to type. If `p` is an
@@ -412,6 +451,18 @@ struct song {
 
 struct song track = {"Karma Chameleon", 1983};
 struct song *p = &track;
+```
+
+When a structure is stored in memory, all of its members will be stored in the same chunk of memory.
+For example, if you look in the memory where `track` is stored, you will see 40 bytes reserved for the title and four bytes (on most systems) reserved for the year.
+The layout can include padding to make memory access more efficient.
+For example, if title was only 39 bytes there may still be a byte between the `title` and `year` to make `year`'s memory address 4-byte aligned.
+
+You can access members of a structure directly using the `.` operator:
+
+```c
+printf("Title: %s\n", track.title);
+printf("Year: %d\n", track.year);
 ```
 
 To access a field through a pointer, you must dereference the pointer first.
@@ -472,7 +523,7 @@ because it needs to access a block of memory (like an array)?" Often it is
 both.
 :::
 
-## Try It: Pointer Playground
+## Try It: Pointer Starter
 
 This program demonstrates the core pointer operations:
 
@@ -639,7 +690,7 @@ automatically as functions are called and return. You do not need to free stack
 memory; it is reclaimed automatically.
 
 ::: {.tip}
-**Tip:** Never return a pointer to a local variable. The memory is freed when the
+**Trap:** Never return a pointer to a local variable. The memory is freed when the
 function returns, and the pointer becomes a **dangling pointer** — it points to
 memory that no longer belongs to you:
 
@@ -714,6 +765,12 @@ int main(void) {
 `malloc` returns a `void *` — a generic pointer that can be assigned to any
 pointer type without a cast in C. It returns `NULL` if the allocation fails.
 Always check for `NULL` after calling `malloc`.
+Having said that, there is a school of thought held by some very good engineers that `NULL` checks just clutter the code.
+To handle `NULL` gracefully, there will be a check and logic every place where it could be `NULL`, so you end up with checks and logic that are rarely used and almost never tested.
+If you are out of memory, you'll probably need to shut down the program, so the reasoning goes that if you try to use a NULL pointer the CPU will do the check for you :).
+For safety-critical systems, the above argument does not hold.
+Although, often those systems forbid the use of dynamically allocated memory.
+
 
 ::: {.tip}
 **Tip:** There are no smart pointers in C. There is no RAII. There is no garbage
@@ -758,7 +815,7 @@ memcpy(dest, src, sizeof(src));  // copy all 12 bytes (3 ints × 4 bytes)
 ```
 
 ::: {.tip}
-**Tip:** `memcpy` requires that the source and destination do not overlap. If
+**Trap:** `memcpy` requires that the source and destination do not overlap. If
 they might overlap (e.g., shifting elements within the same array), use
 `memmove` instead, which handles overlapping regions correctly.
 :::
@@ -890,7 +947,7 @@ end. The array `greeting` is 12 bytes: 11 visible characters plus the null
 terminator.
 
 ::: {.tip}
-**Tip:** Always remember the null terminator when sizing your buffers. The
+**Trap:** Always remember the null terminator when sizing your buffers. The
 string `"hello"` needs 6 bytes, not 5. Off-by-one errors with null terminators
 are one of the most common bugs in C.
 :::
@@ -937,7 +994,7 @@ dest[9] = '\0';  // strncpy does NOT guarantee null termination!
 ```
 
 ::: {.tip}
-**Tip:** `strncpy` does not null-terminate the destination if the source is
+**Wut:** `strncpy` does not null-terminate the destination if the source is
 longer than `n`. Always set the last byte yourself:
 `dest[sizeof(dest) - 1] = '\0';`
 :::
@@ -966,7 +1023,7 @@ if (strcmp(a, b) == 0) {
 lexicographically less, and a positive value if it is greater.
 
 ::: {.tip}
-**Tip:** Yes, `strcmp` returns 0 for equal strings. It is a common source of
+**Trap:** Yes, `strcmp` returns 0 for equal strings. It is a common source of
 confusion. Think of it as returning the "difference" between the strings — zero
 means no difference.
 :::
@@ -1018,17 +1075,20 @@ does not check bounds — if you run out of space, it writes past the end of the
 array.
 
 ::: {.tip}
-**Tip:** `strcat` is one of the most dangerous functions in C. It has no way to
+**Trap:** `strcat` is one of the most dangerous functions in C. It has no way to
 know how large the destination buffer is, so it blindly appends bytes. If the
 combined strings exceed the buffer size, you get a **buffer overflow** — one of
 the most common security vulnerabilities in the history of software. Use
-`strncat` instead, which takes a maximum number of characters to append:
+`strncat` instead.
+:::
+
+`strncat` takes a maximum number of characters to append as the last argument.
+Make sure to leave space for the null terminator, so if there are three bytes left in a buffer, the maximum number of characters to append would be 2.
 
 ```c
 char buf[20] = "Hello";
 strncat(buf, ", World!", sizeof(buf) - strlen(buf) - 1);
 ```
-:::
 
 **`strdup` — Duplicate a String**
 
@@ -1144,7 +1204,7 @@ sprintf(result, "The year is %d. Que bueno!", year);
 // result is now "The year is 1985. Que bueno!"
 ```
 
-## Try It: String Playground
+## Try It: String Starter
 
 This program exercises several string functions so you can see them in action:
 
@@ -1274,17 +1334,18 @@ runtime.
 `scanf` uses similar format specifiers to `printf`, but not identical ones.
 Notably, `scanf` uses `%lf` for `double` while `printf` uses `%f`:
 
+
 ```c
 char name[50];
 double gpa;
 scanf("%s %lf", name, &gpa);
 ```
 
-Note that `name` does not need `&` because an array name already decays to a
-pointer. But `gpa` does, because it is a scalar variable.
+Note that `name` does not need `&` because an array name already points to the bytes we want to read into.
+But `gpa` does need a `&`, because `scanf` needs to know where `gpa` is stored to fill it in.
 
 ::: {.tip}
-**Tip:** `scanf("%s", ...)` reads a single word (stopping at whitespace). To
+**Trap:** `scanf("%s", ...)` reads a single word (stopping at whitespace). To
 read a whole line, use `fgets(buf, sizeof(buf), stdin)` instead. `scanf` with
 `%s` also has no bounds checking — it will happily overflow your buffer. Use a
 width specifier like `%49s` to limit input to 49 characters (plus `'\0'`).
@@ -1292,7 +1353,7 @@ width specifier like `%49s` to limit input to 49 characters (plus `'\0'`).
 
 ## `stdin`, `stdout`, and `stderr`
 
-When your C program starts, three streams are already open:
+When your C program starts, three streams (of type `FILE *`) are already open:
 
 | Stream | Purpose | C++ equivalent |
 |:---|:---|:---|
@@ -1310,6 +1371,7 @@ fprintf(stderr, "Error: file not found\n");
 Error messages sent to `stderr` are not affected by output redirection
 (`./program > output.txt` only redirects `stdout`), so error messages still
 appear on the screen.
+`./program 2> err.txt` will redirect errors to `err.txt` and `stdout` will appear on the screen.
 
 ## `fprintf` and `fscanf`
 
@@ -1394,7 +1456,7 @@ sscanf(buf, "Track %d: %49[^\n]", &track, title);
 ```
 
 ::: {.tip}
-**Tip:** `sprintf` has the same buffer overflow risk as `strcpy` — it does not
+**Trap:** `sprintf` has the same buffer overflow risk as `strcpy` — it does not
 check the size of the destination buffer. Use `snprintf` for safety:
 
 ```c
@@ -1464,7 +1526,7 @@ printf(" done!\n");
 ```
 
 ::: {.tip}
-**Tip:** When `stdout` is connected to a terminal, output is **line
+**Trap:** When `stdout` is connected to a terminal, output is **line
 buffered** — a `\n` triggers a flush. When `stdout` is redirected to a file or
 pipe, it is **fully buffered** — output may not appear until the buffer fills
 up or the program exits. If you need output to appear immediately (e.g.,
@@ -1624,7 +1686,7 @@ int fd = creat("output.txt", 0644);
 ```
 
 ::: {.tip}
-**Tip:** Yes, it is `creat` with no `e`. Ken Thompson was once asked what he
+**Wut:** Yes, it is `creat` with no `e`. Ken Thompson was once asked what he
 would do differently if he were redesigning Unix. His answer: "I'd spell creat
 with an e."
 :::
@@ -1848,7 +1910,7 @@ fgets(buf, sizeof(buf), stdin);
 ```
 
 ::: {.tip}
-**Tip:** Always read the documentation of a C function that returns a pointer.
+**Trap:** Always read the documentation of a C function that returns a pointer.
 Look for words like "the caller must free the returned pointer" or "the
 returned pointer points to a static buffer." If the documentation does not say,
 look at the source code. Getting ownership wrong leads to either memory leaks
@@ -1906,7 +1968,7 @@ so far, in reverse order. This pattern is used extensively in real C code
 including the Linux kernel.
 
 ::: {.tip}
-**Tip:** C++ programmers are taught "never use `goto`." In C, `goto` for
+**Wut:** C++ programmers are taught "never use `goto`." In C, `goto` for
 cleanup is an accepted and widely used idiom. It is the closest thing C has
 to RAII — a structured way to ensure resources are always released.
 :::
@@ -2038,7 +2100,7 @@ each array element, and each element is already a `char *`, so you receive a
 `char **` disguised as `const void *`.
 
 ::: {.tip}
-**Tip:** A common mistake is to write `return a - b` in integer comparison
+**Wut:** A common mistake is to write `return a - b` in integer comparison
 functions. This can overflow when `a` and `b` have very different signs (e.g.,
 `INT_MAX - (-1)` overflows). The pattern `(a > b) - (a < b)` is safe and
 returns -1, 0, or 1.
@@ -2107,7 +2169,10 @@ returns -1, 0, or 1.
     printf("%s\n", alias);
     ```
 
-6. **What does this print?**
+6. **Calculation:** Given `int nums[] = {5, 10, 15, 20};`, what is the value of
+   `sizeof(nums) / sizeof(nums[0])`?
+
+7. **What does this print?**
 
     ```c
     int compare_desc(const void *a, const void *b) {
@@ -2124,11 +2189,11 @@ returns -1, 0, or 1.
     }
     ```
 
-7. **Write a program** that uses `qsort` to sort an array of strings in
+8. **Write a program** that uses `qsort` to sort an array of strings in
    reverse alphabetical order. Write a custom comparison function that calls
    `strcmp` with the arguments swapped.
 
-8. **Write a program** in C++ that uses `extern "C"` to call the C function
+9. **Write a program** in C++ that uses `extern "C"` to call the C function
    `strlen` from `<string.h>`, passes it a string, and prints the result.
    Compile it with `c++` to verify it works.
 
