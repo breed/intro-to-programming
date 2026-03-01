@@ -20,7 +20,7 @@ Hopefully, you'll have the context you need to understand API documentation.
 
 ## Tips
 
-**Tips** callout details that you need to pay special attention to.
+**Tips** call out details that you need to pay special attention to.
 **Traps** warn you of common mistakes made.
 **Wut** calls out a detail that is counter-intuitive, so make sure you pay attention.
 
@@ -39,7 +39,7 @@ It's the only way to master a language.
 ## Exercises
 
 Don't skip the exercises at the end of the chapters.
-You can get the answer key, but don't look at the answer key before you find the answer yourself.
+You can get the answer key, but don't look at the answer key before you work out the answer yourself.
 If you look at the answer key first, the concepts will not sink in.
 
 \newpage
@@ -158,7 +158,7 @@ Here are the format specifiers you will use most:
 | `%zu` | `size_t` | `printf("%zu", sizeof(int))` | `4` |
 
 ::: {.tip}
-**Trap:** The first argument to `printf` must always be a string literal.
+**Trap:** The first argument to `printf` should always be a string literal.
 Never pass a variable as the first argument.
 It may work, but it is a potential security vulnerability (format string attack).
 If you only want to print a string variable, don't do ~~`printf(str)`~~, do `printf("%s", str)`.
@@ -205,6 +205,32 @@ your arguments. If you write `printf("%d", 3.14)`, the compiler may warn you,
 but it will not stop you. The result is garbage. Always match specifiers to
 types: `%d` for `int`, `%f` for `double`, `%s` for `char *`, and so on.
 :::
+
+## Try It: printf Starter
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    // Basic format specifiers
+    printf("Integer: %d\n", 1984);
+    printf("Hex:     %x (lowercase)  %X (uppercase)\n", 255, 255);
+    printf("Float:   %f\n", 3.14);
+    printf("Sci:     %e\n", 3.14);
+    printf("Char:    %c\n", 'A');
+    printf("String:  %s\n", "Hola");
+
+    // Width and precision
+    printf("\nFormatted output:\n");
+    for (int i = 1; i <= 3; i++)
+        printf("  Track %02d\n", i);
+
+    printf("  Pi: %.2f\n", 3.14159);
+    printf("  100%% complete\n");
+
+    return 0;
+}
+```
 
 ## Key Points
 
@@ -422,7 +448,7 @@ keep track of how many elements a pointer refers to and to stay within bounds.
 
 \index{array!decay to pointer}
 In C, arrays and pointers are intimately connected. When you use an array name
-in most expressions, it **decays** (that is the fancy technical term to mean it gets treated as) to a pointer to the first element:
+in most expressions, it **decays** to a pointer to the first element. ("Decays" is the technical term — the array loses its size information and becomes a plain pointer.)
 
 ```c
 int nums[] = {10, 20, 30, 40, 50};
@@ -437,7 +463,7 @@ Another way to see the decay in action is to notice that the expressions `nums` 
 
 ```c
 int nums[] = {10, 20, 30, 40, 50};
-printf("%p %p\n", nums, &nums);  // the same address is printed twice
+printf("%p %p\n", (void *)nums, (void *)&nums);  // same address printed twice
 ```
 
 \index{pointer!arithmetic}
@@ -809,9 +835,8 @@ pointer type without a cast in C. It returns `NULL` if the allocation fails.
 Always check for `NULL` after calling `malloc`.
 Having said that, there is a school of thought held by some very good engineers that `NULL` checks just clutter the code.
 To handle `NULL` gracefully, there will be a check and logic every place where it could be `NULL`, so you end up with checks and logic that are rarely used and almost never tested.
-If you are out of memory, you'll probably need to shut down the program, so the reasoning goes that if you try to use a NULL pointer the CPU will do the check for you :).
-For safety-critical systems, the above argument does not hold.
-Although, often those systems forbid the use of dynamically allocated memory.
+If you are out of memory, you'll probably need to shut down the program, so the reasoning goes that if you try to use a NULL pointer the CPU will do the check for you.
+For safety-critical systems, the above argument does not hold, although those systems often forbid the use of dynamically allocated memory entirely.
 
 
 ::: {.tip}
@@ -844,6 +869,22 @@ void *realloc(void *ptr, size_t size);
 ```c
 nums = realloc(nums, 10 * sizeof(int));  // grow to 10 ints
 ```
+
+::: {.tip}
+**Trap:** Never assign the result of `realloc` directly back to the same pointer.
+If `realloc` fails, it returns `NULL` and the original memory is not freed — so
+`nums = realloc(nums, ...)` loses your only pointer to the original block,
+causing a memory leak. Use a temporary pointer instead:
+
+```c
+int *tmp = realloc(nums, 10 * sizeof(int));
+if (tmp == NULL) {
+    // handle error — nums is still valid
+} else {
+    nums = tmp;
+}
+```
+:::
 
 \index{memcpy}
 \index{memset}
@@ -1282,6 +1323,7 @@ char *strtok_r(char *str, const char *delim, char **saveptr);
 char *saveptr;
 char *tok = strtok_r(line, " ", &saveptr);
 while (tok != NULL) {
+    printf("'%s'\n", tok);
     tok = strtok_r(NULL, " ", &saveptr);
 }
 ```
@@ -1927,8 +1969,8 @@ printf("You said: %s\n", line);
 
 Always include a width limit to prevent buffer overflow, just like with `%s`.
 
-You already saw a scan set used with `sscanf` earlier in the strings chapter
-preview. Here it is again to parse a structured string:
+Scan sets work with `sscanf` too. Here is an example that parses a structured
+string:
 
 ```c
 char buf[] = "Track 03: 99 Luftballons";
@@ -2195,9 +2237,9 @@ efficiency. There are three buffering modes:
   `stdout` when connected to a terminal).
 - **Unbuffered:** Output is written immediately (default for `stderr`).
 
-This means that `printf("Working...")` (no newline) might not appear on screen
-immediately when `stdout` goes to a terminal, and will almost certainly not
-appear immediately when redirected to a file. Use `fflush` to force the buffer
+This means that `printf("Working...")` (no newline) will not appear on screen
+immediately when `stdout` goes to a terminal, and will not
+appear when redirected to a file until the buffer fills or the program exits. Use `fflush` to force the buffer
 to be written:
 
 ```c
@@ -2219,6 +2261,49 @@ up or the program exits. If you need output to appear immediately (e.g.,
 progress indicators), call `fflush(stdout)` after printing. `stderr` is always
 unbuffered, which is why error messages appear immediately.
 :::
+
+## Try It: Standard I/O Starter
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    // sprintf: format into a string
+    char buf[100];
+    sprintf(buf, "Track %02d: %s", 7, "Hungry Like the Wolf");
+    printf("sprintf: %s\n", buf);
+
+    // snprintf: safe version with size limit
+    char small[15];
+    snprintf(small, sizeof(small), "Year: %d", 1984);
+    printf("snprintf: %s\n", small);
+
+    // sscanf: parse from a string
+    int track;
+    char title[50];
+    sscanf(buf, "Track %d: %49[^\n]", &track, title);
+    printf("sscanf: track=%d title='%s'\n", track, title);
+
+    // fprintf to stderr
+    fprintf(stderr, "This goes to stderr\n");
+
+    // fwrite/fread round-trip
+    int nums[] = {10, 20, 30};
+    FILE *f = fopen("/tmp/tryit_data.bin", "wb");
+    fwrite(nums, sizeof(int), 3, f);
+    fclose(f);
+
+    int result[3];
+    f = fopen("/tmp/tryit_data.bin", "rb");
+    fread(result, sizeof(int), 3, f);
+    fclose(f);
+
+    printf("fread: %d %d %d\n", result[0], result[1], result[2]);
+
+    return 0;
+}
+```
 
 ## Key Points
 
@@ -2461,6 +2546,47 @@ pwrite(fd, data, 50, 0);
 These are useful in multi-threaded programs where multiple threads share a file
 descriptor — since they do not modify the file position, there is no race
 condition.
+
+## Try It: Low-Level I/O Starter
+
+```c
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdio.h>
+
+int main(void) {
+    // write to stdout using file descriptor 1
+    const char *msg = "Low-level I/O starter\n";
+    write(STDOUT_FILENO, msg, strlen(msg));
+
+    // open, write, close
+    int fd = open("/tmp/tryit_lowio.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1) {
+        write(STDERR_FILENO, "open failed\n", 12);
+        return 1;
+    }
+
+    const char *lines[] = {"Twist of Cain\n", "Year: 1987\n"};
+    for (int i = 0; i < 2; i++)
+        write(fd, lines[i], strlen(lines[i]));
+    close(fd);
+
+    // open, read, print
+    fd = open("/tmp/tryit_lowio.txt", O_RDONLY);
+    char buf[256];
+    ssize_t n = read(fd, buf, sizeof(buf));
+    write(STDOUT_FILENO, buf, n);
+
+    // lseek: go back to start and read again
+    lseek(fd, 0, SEEK_SET);
+    n = read(fd, buf, sizeof(buf));
+    printf("Read %zd bytes on second pass\n", n);
+
+    close(fd);
+    return 0;
+}
+```
 
 ## Key Points
 
@@ -2864,6 +2990,67 @@ functions. This can overflow when `a` and `b` have very different signs (e.g.,
 `INT_MAX - (-1)` overflows). The pattern `(a > b) - (a < b)` is safe and
 returns -1, 0, or 1.
 :::
+
+## Try It: Odds and Ends Starter
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// A comparison function for qsort
+int compare_ints(const void *a, const void *b) {
+    int ia = *(const int *)a;
+    int ib = *(const int *)b;
+    return (ia > ib) - (ia < ib);
+}
+
+void goodbye(void) {
+    printf("atexit: Adios!\n");
+}
+
+int main(void) {
+    atexit(goodbye);
+
+    // Function pointer
+    int (*cmp)(const void *, const void *) = compare_ints;
+    int x = 10, y = 20;
+    printf("compare(10, 20) = %d\n", cmp(&x, &y));
+
+    // qsort
+    int years[] = {1987, 1983, 1989, 1980, 1985};
+    int n = sizeof(years) / sizeof(years[0]);
+    qsort(years, n, sizeof(int), compare_ints);
+
+    printf("Sorted: ");
+    for (int i = 0; i < n; i++)
+        printf("%d ", years[i]);
+    printf("\n");
+
+    // Pointer ownership: strdup allocates, you must free
+    char *copy = strdup("Master of Puppets");
+    printf("strdup: '%s'\n", copy);
+    free(copy);
+
+    // goto cleanup pattern
+    printf("Demonstrating goto cleanup...\n");
+    char *buf = malloc(100);
+    if (!buf) return 1;
+
+    char *msg = malloc(50);
+    if (!msg) goto free_buf;
+
+    snprintf(buf, 100, "Resource 1 OK");
+    snprintf(msg, 50, "Resource 2 OK");
+    printf("  %s, %s\n", buf, msg);
+
+    free(msg);
+free_buf:
+    free(buf);
+
+    return 0;
+}
+```
 
 ## Key Points
 
