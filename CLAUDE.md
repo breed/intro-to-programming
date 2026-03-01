@@ -38,3 +38,7 @@ extra content that isn't covered in the book.
 - the questions should be ordered according to the order their answers appear in the text
 - the study guide should only have questions to suggestions for experiments, it should not have notes or answers
 - writing style is concise with appropriate grammer and capitalization
+
+# making changes
+
+whenever you finish making changes automatically commit to git
