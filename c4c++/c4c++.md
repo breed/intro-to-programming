@@ -1,7 +1,11 @@
 ---
 title: "C for C++ Programmers"
+toc: true
+toc-depth: 2
 header-includes:
   - \usepackage[most]{tcolorbox}
+  - \usepackage{makeidx}
+  - \makeindex
 ---
 
 \newpage
@@ -89,6 +93,7 @@ influential programming books ever written, and it opens like this:
 
 ## Differences Summary
 
+\index{stdio.h}
 Notice the differences from C++. There is no `#include <iostream>`, no
 `std::println`, no `std::cout`. In C, you use `printf` from `<stdio.h>` for
 output. The file ends in `.c`, not `.cpp`. You compile with `cc` (the C
@@ -110,11 +115,13 @@ Here is a quick summary of the biggest differences you will encounter:
 | `// comments` | `/* comments */` (C89); `//` allowed since C99 |
 
 ::: {.tip}
+\index{cc (compiler)}
 **Tip:** C source files use the `.c` extension and are compiled with `cc`. If
 you accidentally compile a `.c` file with `c++`, it will be treated as C++ and
 may accept syntax that real C compilers reject. Always use `cc` when writing C.
 :::
 
+\index{printf}
 ## Printing with `printf`
 
 ```c
@@ -135,6 +142,7 @@ int year = 1984;
 printf("Year: %d\n", year);   // Year: 1984
 ```
 
+\index{format specifier}
 Here are the format specifiers you will use most:
 
 | Specifier | Type | Example | Output |
@@ -248,6 +256,7 @@ In C, none of that exists. Pointers are everywhere, and you must be comfortable
 with them. Every dynamic data structure, every function that needs to modify its
 arguments, every interaction with the operating system — all involve pointers.
 
+\index{pointer}
 ## What Is a Pointer?
 
 A pointer is a variable that holds a memory address. That's it. Instead of
@@ -275,6 +284,7 @@ int *p, q;    // p is a pointer to int; q is just an int
 To declare two pointers, you need two stars: `int *p, *q;`
 :::
 
+\index{address-of operator (\&)}
 ## The Address-Of Operator: `&`
 
 The `&` operator returns the address of a variable. You have seen `&` in C++ for
@@ -288,6 +298,7 @@ printf("score = %d\n", score);    // 100
 printf("address of score = %p\n", (void *)p);  // something like 0x7ffd5e8a3b2c
 ```
 
+\index{dereference operator (*)}
 ## Dereferencing: `*`
 
 The `*` operator on a pointer gives you the value at the address the pointer
@@ -306,6 +317,7 @@ printf("score is now: %d\n", score);  // 200
 Notice the dual use of `*`: in a declaration, it means "this is a pointer." In
 an expression, it means "follow the pointer to the value."
 
+\index{pointer!to pointer}
 ## Pointers to Pointers
 
 Since a pointer is just a variable, it has an address too. You can create a
@@ -365,6 +377,7 @@ address of a pointer variable. The expression `&p` gives you the address where
 `p` itself is stored, not the address `p` points to.
 :::
 
+\index{NULL}
 ## NULL Pointers
 
 A pointer that does not point to anything should be set to `NULL`:
@@ -407,6 +420,7 @@ Both `p` and `q` are `int *`. The compiler does not know whether there are more
 `int` values after the one being pointed to. It is up to you, the programmer, to
 keep track of how many elements a pointer refers to and to stay within bounds.
 
+\index{array!decay to pointer}
 In C, arrays and pointers are intimately connected. When you use an array name
 in most expressions, it **decays** (that is the fancy technical term to mean it gets treated as) to a pointer to the first element:
 
@@ -426,6 +440,7 @@ int nums[] = {10, 20, 30, 40, 50};
 printf("%p %p\n", nums, &nums);  // the same address is printed twice
 ```
 
+\index{pointer!arithmetic}
 **Pointer arithmetic** works in units of the pointed-to type. If `p` is an
 `int *` and `int` is 4 bytes, then `p + 1` advances the address by 4 bytes to
 the next `int`. You never have to think about byte sizes — the compiler handles
@@ -447,6 +462,7 @@ thing. Don't write code like that, but knowing this helps you understand how
 arrays and pointers relate.
 :::
 
+\index{struct}
 ## Pointers and Structures
 
 In C, you use `struct` to group related data — much like a class with only
@@ -483,6 +499,7 @@ printf("Title: %s\n", (*p).title);   // parentheses required
 printf("Year: %d\n", (*p).year);
 ```
 
+\index{arrow operator (->)}
 Writing `(*p).field` everywhere is tedious. C provides the `->` operator as a
 convenient shorthand:
 
@@ -497,6 +514,7 @@ will see `->` far more often than `(*p).` in real C code. If you have a
 pointer to a struct, reach for `->`.
 :::
 
+\index{pass by value}
 ## Pass by Value (and Pointers as a Workaround)
 
 In C++, you can pass arguments by reference using `&`:
@@ -651,6 +669,7 @@ Every variable in your program lives somewhere in memory, but not all memory is
 created equal. Understanding where variables live — and how long they last — is
 essential for writing correct C programs.
 
+\index{global variable}
 ## Global Variables
 
 A **global variable** is declared outside of any function. It is created when the
@@ -684,6 +703,7 @@ the same variable, bugs become harder to track down. Prefer passing data through
 function parameters.
 :::
 
+\index{local variable}
 ## Local Variables
 
 A **local variable** is declared inside a function (or block). It is created when
@@ -697,6 +717,7 @@ void greet(void) {
 // message is gone once greet() returns
 ```
 
+\index{stack}
 Local variables live on the **stack** — a region of memory that grows and shrinks
 automatically as functions are called and return. You do not need to free stack
 memory; it is reclaimed automatically.
@@ -714,6 +735,7 @@ int *bad(void) {
 ```
 :::
 
+\index{static}
 ## Static Local Variables
 
 A **static local variable** has the scope of a local variable but the lifetime
@@ -741,6 +763,8 @@ Without `static`, `count` would be reset to 0 on every call. With `static`, it
 lives in the data segment (like a global) but is only accessible inside
 `count_calls`.
 
+\index{malloc}
+\index{free}
 ## Dynamic Allocation: `malloc` and `free`
 
 ```c
@@ -752,6 +776,7 @@ Sometimes you need memory that outlives the function that created it, or memory
 whose size you do not know at compile time. For this, C provides `malloc` and
 `free` from `<stdlib.h>`.
 
+\index{heap}
 `malloc` allocates a block of memory on the **heap** and returns a pointer to it.
 The heap is a region of memory that persists until you explicitly release it:
 
@@ -790,6 +815,7 @@ Although, often those systems forbid the use of dynamically allocated memory.
 
 
 ::: {.tip}
+\index{memory leak}
 **Tip:** There are no smart pointers in C. There is no RAII. There is no garbage
 collector. If you call `malloc`, you *must* call `free` when you are done. If
 you forget, you leak memory. If you call `free` twice on the same pointer, you
@@ -797,6 +823,7 @@ get undefined behavior. If you use a pointer after freeing it, you get undefined
 behavior. Memory management in C is entirely your responsibility.
 :::
 
+\index{calloc}
 `calloc` is a variant that allocates memory and initializes it to zero:
 
 ```c
@@ -807,6 +834,7 @@ void *calloc(size_t count, size_t size);
 int *nums = calloc(5, sizeof(int));  // 5 ints, all initialized to 0
 ```
 
+\index{realloc}
 And `realloc` lets you resize a previously allocated block:
 
 ```c
@@ -817,6 +845,8 @@ void *realloc(void *ptr, size_t size);
 nums = realloc(nums, 10 * sizeof(int));  // grow to 10 ints
 ```
 
+\index{memcpy}
+\index{memset}
 ## Working with Raw Memory: `memcpy` and `memset`
 
 Two functions from `<string.h>` operate on raw bytes rather than strings. You
@@ -848,6 +878,7 @@ memcpy(dest, src, sizeof(src));  // copy all 12 bytes (3 ints × 4 bytes)
 ```
 
 ::: {.tip}
+\index{memmove}
 **Trap:** `memcpy` requires that the source and destination do not overlap. If
 they might overlap (e.g., shifting elements within the same array), use
 `memmove` instead, which handles overlapping regions correctly.
@@ -964,10 +995,11 @@ int main(void) {
 
 \newpage
 
+\index{string}
 # 4. Strings
 
 In C++, you use `std::string` and barely think about what is happening under the
-hood. In C, there is no string type at all. A "string" in C is just an array of
+hood. In C, there is no string type at all. \index{null terminator}A "string" in C is just an array of
 `char` that ends with a null character `'\0'`. Every string function in C depends
 on finding that null terminator to know where the string ends.
 
@@ -996,6 +1028,7 @@ are one of the most common bugs in C.
 C provides a library of string manipulation functions in `<string.h>`. These are
 the ones you will use most:
 
+\index{strlen}
 **`strlen` — Get the Length**
 
 ```c
@@ -1018,6 +1051,8 @@ int main(void) {
 Note that `strlen` does not count the `'\0'`. The array holding `"Take On Me"`
 is 11 bytes, but `strlen` returns 10.
 
+\index{strcpy}
+\index{strncpy}
 **`strcpy` / `strncpy` — Copy a String**
 
 ```c
@@ -1047,6 +1082,7 @@ longer than `n`. Always set the last byte yourself:
 `dest[sizeof(dest) - 1] = '\0';`
 :::
 
+\index{strcmp}
 **`strcmp` — Compare Strings**
 
 ```c
@@ -1080,6 +1116,8 @@ confusion. Think of it as returning the "difference" between the strings — zer
 means no difference.
 :::
 
+\index{strchr}
+\index{strrchr}
 **`strchr` / `strrchr` — Find a Character**
 
 ```c
@@ -1102,6 +1140,7 @@ if (first_o != NULL) {
 Both functions return a pointer to the found character, or `NULL` if the
 character is not in the string.
 
+\index{strstr}
 **`strstr` — Find a Substring**
 
 ```c
@@ -1121,6 +1160,8 @@ if (found != NULL) {
 Like `strchr`, it returns a pointer to the start of the match, or `NULL` if not
 found.
 
+\index{strcat}
+\index{strncat}
 **`strcat` / `strncat` — Concatenate Strings**
 
 ```c
@@ -1141,6 +1182,7 @@ does not check bounds — if you run out of space, it writes past the end of the
 array.
 
 ::: {.tip}
+\index{buffer overflow}
 **Trap:** `strcat` is one of the most dangerous functions in C. It has no way to
 know how large the destination buffer is, so it blindly appends bytes. If the
 combined strings exceed the buffer size, you get a **buffer overflow** — one of
@@ -1156,6 +1198,7 @@ char buf[20] = "Hello";
 strncat(buf, ", World!", sizeof(buf) - strlen(buf) - 1);
 ```
 
+\index{strdup}
 **`strdup` — Duplicate a String**
 
 ```c
@@ -1180,6 +1223,7 @@ C23. It is available on virtually every system you will use, but compiling with
 `-std=c99 -pedantic` or `-std=c11 -pedantic` will produce a warning.
 :::
 
+\index{strtok}
 **`strtok` — Tokenize a String**
 
 ```c
@@ -1224,6 +1268,7 @@ Second, `strtok` stores its state in a hidden static variable, which means it
 is **not thread-safe** and you cannot tokenize two strings at the same time.
 
 ::: {.tip}
+\index{strtok\_r}
 **Tip:** Use `strtok_r` (POSIX) or `strtok_s` (C11 Annex K / Windows) instead
 of `strtok`. These reentrant versions take an extra `char **saveptr` parameter
 to store the tokenizer state, making them safe to use in multi-threaded
@@ -1267,6 +1312,8 @@ a 12-byte buffer. The extra bytes overwrite whatever happens to be next to the
 buffer in memory, which can corrupt other variables, crash the program, or —
 worst of all — create a security exploit.
 
+\index{sprintf}
+\index{sscanf}
 ## A Preview: `sprintf` and `sscanf`
 
 ```c
@@ -1397,6 +1444,7 @@ Different numeric types provide different sizes (which determines the range of v
 
 ## Everything is a Number
 
+\index{char}
 A `char` is just a small integer (usually 8 bits). Assigning `'A'` is exactly the same as assigning the number `65` (in ASCII). You can perform math on characters just as you would on any integer:
 
 ```c
@@ -1457,6 +1505,7 @@ The five bytes are the ASCII values for `H`, `o`, `l`, `a`, and the null termina
 
 Because strings are really arrays of characters, the text `"1986"` is entirely different from the integer `1986`. Unsurprisingly, converting between the text representation of a number and its purely numeric form is a very common task.
 
+\index{strtol}
 To translate a string representation into an actual integer, use `strtol` (string to long) from `<stdlib.h>`:
 
 ```c
@@ -1480,10 +1529,12 @@ int main(void) {
 }
 ```
 
+\index{strtod}
 For floating-point conversions, use `strtod` (string to double) in the same way — it takes a string, an optional `endptr`, but no base argument since floating-point literals are always decimal.
 
 Later on when we discuss Standard I/O, we will cover `sprintf` and `sscanf`, which provide convenient formatting routines to convert back and forth between strings and numbers.
 
+\index{integer types}
 ## Integer Types
 
 Integers are the most common type of number you will use in C.
@@ -1512,6 +1563,8 @@ If the bit is set, the number is negative. If the bit is not set, the number is 
 For zero, the sign bit is not set, and thus is part of the positive range of numbers.
 While this may not make your math teacher happy, it gets worse when we talk about floating point numbers!
 
+\index{sizeof}
+\index{limits.h}
 You can explore the actual sizes and ranges on your machine using `<limits.h>`:
 
 ```c
@@ -1539,6 +1592,7 @@ int main(void) {
 Sadly, on different architectures `char` can be either signed or unsigned, and even more sadly, on x86_64 CPUs, `char` is signed by default, and on ARM CPUs, `char` is unsigned by default! Watch out!
 :::
 
+\index{integer promotion}
 ### Integer Promotion
 
 When you use an integer type in an expression that is equal to or less than the size of `int`, it is automatically promoted to `int` if `int` is large enough to hold all the values of the type. Otherwise, it is promoted to `unsigned int`. This is called integer promotion.
@@ -1546,6 +1600,7 @@ When you use an integer type in an expression that is equal to or less than the 
 For expressions that involve larger integer types, the rules generally promote to the signedness and the size of the larger type.
 
 ::: {.tip}
+\index{size\_t}
 **Trap:** One place where this can cause problems is when using `strlen`. `strlen` returns a `size_t` which is an unsigned integer type. If you subtract two `size_t` values, the result will be a `size_t`. If the first value is smaller than the second value, the result will be a large positive number. This can cause problems when using the result in other expressions.
 :::
 
@@ -1572,6 +1627,8 @@ int main(void) {
 // Signed difference:      -4
 ```
 
+\index{float}
+\index{double}
 ## Floating Point Types
 
 Floating point numbers are used for decimal numbers that may have fractional components.
@@ -1612,6 +1669,7 @@ The literal `1.2` is a `double`. When it is assigned to `f`, the value is rounde
 In the first `if`, `f` is promoted back to `double` for the comparison, but the precision lost during the assignment is not recovered, so `f` and `1.2` are not equal.
 In the second `if`, `1.2f` is a `float` literal, which was rounded the same way, so the comparison succeeds.
 
+\index{cast}
 ## Casting
 
 A **cast** is a way of forcing the compiler to treat a value of one type as another type. The syntax is `(type) value`. 
@@ -1630,7 +1688,7 @@ The following table summarizes the allowed casts:
 
 Casting from floating point to integer drops the decimal part (it does not round).
 As long as the numbers fit into the target type, the conversion works well.
-But if the number is too large, you get the dreaded "undefined behavior" — anything can happen.
+But if the number is too large, you get the dreaded \index{undefined behavior}"undefined behavior" — anything can happen.
 
 Casting from a floating point to a pointer doesn't make sense, but you can do it if you cast to an integer type first.
 Why would you ever want to do that though?
@@ -1656,6 +1714,7 @@ int bad_year = (int)movie_year; // THIS IS A BUG! not 1985!!
 Casting a `char *` string to an `int` does not convert the text `"1985"` into the number `1985`. It tells the compiler to take the *memory address* where the string is stored and chop or pad it to fit inside an `int`. On a 64-bit system, the pointer is 8 bytes and the `int` is 4 bytes, so compiling this code will actually result in a warning that you are casting a pointer to an integer of different size! Always use functions like `strtol` to parse strings into numbers.
 :::
 
+\index{void pointer}
 ### Casting pointers to other pointers
 
 `void *` is a pointer that can point to anything. It is a pointer to a generic memory location.
@@ -1794,9 +1853,11 @@ int main(void) {
 C's `<stdio.h>` library is your replacement for C++ `iostream`. It provides
 `printf` and `scanf` for formatted output and input, file operations with
 `fopen` and `fclose`, and binary I/O with `fread` and `fwrite`. Everything
+\index{FILE}
 flows through the `FILE *` type — an opaque pointer to a structure that tracks
 the state of an I/O stream.
 
+\index{scanf}
 ## `scanf` for Input
 
 ```c
@@ -1842,6 +1903,7 @@ also has no bounds checking — it will happily overflow your buffer. Use a
 width specifier like `%49s` to limit input to 49 characters (plus `'\0'`).
 :::
 
+\index{scan set}
 ## Scan Sets
 
 `scanf` supports **scan set specifiers** with `%[...]`, which let you define
@@ -1915,6 +1977,9 @@ Windows. When portability is not a concern, `%m` is an excellent way to avoid
 buffer sizing headaches.
 :::
 
+\index{stdin}
+\index{stdout}
+\index{stderr}
 ## `stdin`, `stdout`, and `stderr`
 
 When your C program starts, three streams (of type `FILE *`) are already open:
@@ -1937,6 +2002,8 @@ Error messages sent to `stderr` are not affected by output redirection
 appear on the screen.
 `./program 2> err.txt` will redirect errors to `err.txt` and `stdout` will appear on the screen.
 
+\index{fprintf}
+\index{fscanf}
 ## `fprintf` and `fscanf`
 
 ```c
@@ -1970,6 +2037,8 @@ if (f != NULL) {
 `fscanf` returns the number of items successfully read, so checking the return
 value tells you whether the read succeeded.
 
+\index{fopen}
+\index{fclose}
 ## Opening and Closing Files
 
 ```c
@@ -2030,6 +2099,7 @@ sscanf(buf, "Track %d: %49[^\n]", &track, title);
 ```
 
 ::: {.tip}
+\index{snprintf}
 **Trap:** `sprintf` has the same buffer overflow risk as `strcpy` — it does not
 check the size of the destination buffer. Use `snprintf` for safety:
 
@@ -2070,6 +2140,8 @@ available, it is the safest and most convenient way to build formatted strings �
 no buffer sizing, no truncation, no overflow.
 :::
 
+\index{fread}
+\index{fwrite}
 ## Binary I/O: `fread` and `fwrite`
 
 ```c
@@ -2109,6 +2181,8 @@ element, the number of elements, and the file stream. `fwrite` returns the
 number of elements successfully written; `fread` returns the number of elements
 successfully read.
 
+\index{buffering}
+\index{fflush}
 ## Buffering and `fflush`
 
 `stdio` does not write directly to the output device on every call. Instead, it
@@ -2209,6 +2283,7 @@ descriptors** rather than `FILE *` pointers. You will encounter them in systems
 programming, and understanding them helps you see what `stdio` is actually
 doing under the hood.
 
+\index{file descriptor}
 ## File Descriptors
 
 A file descriptor is a small non-negative integer that the operating system
@@ -2221,9 +2296,12 @@ program starts, three file descriptors are already open:
 | 1 | `STDOUT_FILENO` | Standard output |
 | 2 | `STDERR_FILENO` | Standard error |
 
+\index{unistd.h}
 These constants are defined in `<unistd.h>`. They correspond to `stdin`,
 `stdout`, and `stderr` from `<stdio.h>`, but at a lower level.
 
+\index{read}
+\index{write}
 ## `read` and `write`
 
 ```c
@@ -2254,6 +2332,8 @@ Unlike `printf` and `scanf`, these functions perform no formatting — they
 transfer raw bytes. There are no format specifiers, no newline handling, no
 buffering.
 
+\index{open}
+\index{close}
 ## `open` and `close`
 
 ```c
@@ -2261,6 +2341,7 @@ int open(const char *path, int flags, ... /* mode_t mode */);
 int close(int fd);
 ```
 
+\index{fcntl.h}
 To open a file at the system call level, use `open` from `<fcntl.h>`:
 
 ```c
@@ -2319,6 +2400,7 @@ would do differently if he were redesigning Unix. His answer: "I'd spell creat
 with an e."
 :::
 
+\index{lseek}
 ## Seeking: `lseek`
 
 ```c
@@ -2337,6 +2419,9 @@ lseek(fd, 100, SEEK_SET);   // go to byte 100
 off_t pos = lseek(fd, 0, SEEK_CUR);  // get current position (no move)
 ```
 
+\index{SEEK\_SET}
+\index{SEEK\_CUR}
+\index{SEEK\_END}
 The three `SEEK_` constants control where the offset is relative to:
 
 | Constant | Meaning |
@@ -2353,6 +2438,8 @@ low-level `lseek` combines both: calling `lseek(fd, 0, SEEK_CUR)` returns the
 current position without moving, just like `ftell`.
 :::
 
+\index{pread}
+\index{pwrite}
 ## `pread` and `pwrite`
 
 ```c
@@ -2427,6 +2514,7 @@ This chapter covers a few remaining topics that do not fit neatly into the
 previous chapters but are important for writing real C programs and for working
 with C code from C++.
 
+\index{exit}
 ## `exit` vs `return`
 
 ```c
@@ -2457,6 +2545,7 @@ there is no reasonable way to propagate the error back through multiple layers
 of callers. In C++, you would throw an exception; in C, `exit` is sometimes the
 pragmatic choice.
 
+\index{atexit}
 `exit` also flushes all open `stdio` streams and calls any functions registered
 with `atexit` before terminating the program.
 
@@ -2471,6 +2560,7 @@ reasonably propagate an error code back to `main` and let `main` return, prefer
 that approach. Reserve `exit` for truly fatal errors.
 :::
 
+\index{extern "C"}
 ## `extern "C"` — Calling C from C++
 
 If you are writing C++ code that needs to call functions from a C library, you
@@ -2521,6 +2611,7 @@ different names — for example, `abs` for `int`, `fabs` for `double`, and
 know exactly which function will be invoked — there is only one version.
 :::
 
+\index{pointer!ownership}
 ## Pointer Ownership
 
 In C++, smart pointers make ownership clear: a `std::unique_ptr` owns the
@@ -2557,6 +2648,9 @@ fgets(buf, sizeof(buf), stdin);
 ```
 
 ::: {.tip}
+\index{dangling pointer}
+\index{use-after-free}
+\index{double free}
 **Trap:** Always read the documentation of a C function that returns a pointer.
 Look for words like "the caller must free the returned pointer" or "the
 returned pointer points to a static buffer." If the documentation does not say,
@@ -2584,6 +2678,7 @@ if (!f) {
 }
 ```
 
+\index{goto}
 But what happens when a function acquires multiple resources? You need to
 release them in the correct order when something goes wrong. The idiomatic
 C pattern uses `goto` to jump to cleanup labels:
@@ -2624,6 +2719,8 @@ cleanup is an accepted and widely used idiom. It is the closest thing C has
 to RAII — a structured way to ensure resources are always released.
 :::
 
+\index{errno}
+\index{perror}
 The other common strategy is to return an error code (often `-1` or `NULL`)
 and let the caller decide what to do. Many C library functions set the global
 variable `errno` to indicate what went wrong, and you can use `perror` or
@@ -2640,6 +2737,8 @@ if (!f) {
 }
 ```
 
+\index{function pointer}
+\index{qsort}
 ## Function Pointers and `qsort`
 
 In C++, you pass behavior to functions using lambdas, `std::function`, or
@@ -2912,6 +3011,8 @@ Macros are pure textual substitution. The preprocessor does not know about
 types, scope, or expressions — it just replaces text. This makes macros
 powerful and flexible, but also a source of subtle bugs if you are not careful.
 
+\index{macro!object-like}
+\index{\#define}
 ## Object-Like Macros
 
 The simplest macros define named constants:
@@ -2931,6 +3032,7 @@ paste `1024;` everywhere, breaking expressions like `malloc(MAX_BUF * sizeof(int
 becomes part of the replacement text and will cause surprising errors.
 :::
 
+\index{conditional compilation}
 ### Conditional Compilation
 
 Macros also control which code the compiler sees:
@@ -2957,6 +3059,7 @@ complement `#ifndef` checks that a macro is *not* defined. You can also use
 #endif
 ```
 
+\index{include guard}
 ### Include Guards
 
 The most common use of `#ifndef` is protecting header files from being included
@@ -2986,6 +3089,7 @@ include guards. It is simpler to write but not portable to all compilers. When
 in doubt, use the `#ifndef` guard — it works everywhere.
 :::
 
+\index{macro!function-like}
 ## Function-Like Macros
 
 Macros can take parameters, making them look like functions:
@@ -3075,6 +3179,8 @@ looks odd at first, but it is the standard way to make multi-statement macros
 behave like ordinary statements.
 :::
 
+\index{stringification}
+\index{token pasting}
 ## Stringification and Token Pasting
 
 The preprocessor has two special operators for macro arguments.
@@ -3115,6 +3221,8 @@ DECLARE_PAIR(int)
 Token pasting is commonly used to generate families of related variables or
 functions from a single macro.
 
+\index{variadic macro}
+\index{\_\_VA\_ARGS\_\_}
 ## Variadic Macros
 
 Macros can accept a variable number of arguments using `...` and `__VA_ARGS__`:
@@ -3177,6 +3285,7 @@ two-level indirect pattern. It comes up often when embedding version numbers
 or configuration values in strings.
 :::
 
+\index{X-macro}
 ## X-Macros
 
 X-macros are a technique for defining a list of items once and expanding it in
@@ -3305,3 +3414,5 @@ machines. The key advantage: a single source of truth for a list of items.
 7. **Write a program** that defines an X-macro list of at least four colors,
    then uses it to generate both an `enum` and a function that returns the
    string name for a given enum value. Print each color's enum value and name.
+
+\printindex
