@@ -2999,7 +2999,10 @@ returns -1, 0, or 1.
 #include <string.h>
 
 // A comparison function for qsort
-// returns -1, 0, or 1 — overflow-safe alternative to (ia - ib)
+// Overflow-safe alternative to (ia - ib). The three cases:
+//   ia > ib  → (1) - (0) =  1
+//   ia == ib → (0) - (0) =  0
+//   ia < ib  → (0) - (1) = -1
 int compare_ints(const void *a, const void *b) {
     int ia = *(const int *)a;
     int ib = *(const int *)b;
