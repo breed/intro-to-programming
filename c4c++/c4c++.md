@@ -1480,12 +1480,14 @@ int main(void) {
 }
 ```
 
-Later on when we discuss Standard I/O, we will cover `sprintf` and `sscanf`, which provide convenient formatting routines to convert back and forth between strings and integers.
+For floating-point conversions, use `strtod` (string to double) in the same way — it takes a string, an optional `endptr`, but no base argument since floating-point literals are always decimal.
+
+Later on when we discuss Standard I/O, we will cover `sprintf` and `sscanf`, which provide convenient formatting routines to convert back and forth between strings and numbers.
 
 ## Integer Types
 
-Integer is the most common type of number you will use in C.
-The CPU can do arithmetic on integers very quickly and it can be used for pointer arithmetic and arrays.
+Integers are the most common type of number you will use in C.
+The CPU can do arithmetic on integers very quickly, and they are essential for pointer arithmetic and array indexing.
 Integers can be signed or unsigned and can be of different sizes.
 Here is a table of the common sizes, ranges, and literal suffixes of integers on most 64-bit systems:
 
@@ -1503,7 +1505,7 @@ Here is a table of the common sizes, ranges, and literal suffixes of integers on
 | `unsigned long long` | 8 | $0$ to $2^{64}-1$ | `ULL` |
 
 Note that the sizes and ranges specified here can vary.
-The C standards rules about sizes are so vague they aren't worth quoting here :'( .
+The C standard's rules about sizes are so vague they aren't worth quoting here :'(.
 Notice that the range is 1 number larger for negative numbers than for positive numbers.
 This is because signed integers use the top bit to store the sign of the number.
 If the bit is set, the number is negative. If the bit is not set, the number is positive.
@@ -1628,8 +1630,7 @@ The following table summarizes the allowed casts:
 
 Casting from floating point to integer drops the decimal part (it does not round).
 As long as the numbers fit into the target type, the conversion works well.
-But, if the number is too large, you will start getting the dreaded "undefined behavior"!
-Which means, anything can happen.
+But if the number is too large, you get the dreaded "undefined behavior" — anything can happen.
 
 Casting from a floating point to a pointer doesn't make sense, but you can do it if you cast to an integer type first.
 Why would you ever want to do that though?
@@ -1692,7 +1693,6 @@ This program exercises the key concepts from this chapter: characters as numbers
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <limits.h>
 
 int main(void) {
@@ -1742,12 +1742,12 @@ int main(void) {
     int *ip = (int *)vp;
     printf("\nvoid * round-trip: %d\n", *ip);
 
-    int bad = 0xbadd00d;
-    printf("%d %x\n", bad, bad);
-    // lets look at the bytes of bad (int has 4 bytes)
-    char *bad_bytes = (char *)&bad;
-    printf("little-endian: %x %x %x %x\n",
-           bad_bytes[0], bad_bytes[1], bad_bytes[2], bad_bytes[3]);
+    int hex_val = 0xbadd00d;
+    printf("%d %x\n", hex_val, hex_val);
+    // let's look at the bytes of hex_val (int has 4 bytes)
+    unsigned char *raw = (unsigned char *)&hex_val;
+    printf("little-endian: %02x %02x %02x %02x\n",
+           raw[0], raw[1], raw[2], raw[3]);
 
     return 0;
 }
