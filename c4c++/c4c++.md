@@ -26,7 +26,7 @@ Hopefully, you'll have the context you need to understand API documentation.
 
 ## Try It
 
-As the intro to the most amazing programming language book ever written starts out
+As the intro to the most amazing programming language book ever written starts out:
 
 > The only way to learn a new programming language is by writing programs in it.
 
@@ -154,7 +154,7 @@ Here are the format specifiers you will use most:
 | `%e` | `double` (scientific) | `printf("%e", 3.14)` | `3.140000e+00` |
 | `%c` | `char` | `printf("%c", 'A')` | `A` |
 | `%s` | `char *` (string) | `printf("%s", "hola")` | `hola` |
-| `%p` | pointer | `printf("%p", ptr)` | `0x7ffd...` |
+| `%p` | pointer | `printf("%p", (void *)ptr)` | `0x7ffd...` |
 | `%zu` | `size_t` | `printf("%zu", sizeof(int))` | `4` |
 
 ::: {.tip}
@@ -506,9 +506,9 @@ struct song *p = &track;
 ```
 
 When a structure is stored in memory, all of its members will be stored in the same chunk of memory.
-For example, if you look in the memory where `track` is stored, you will see 40 bytes reserved for the title and four bytes (on most systems) reserved for the year.
+For example, if you look at the memory where `track` is stored, you will see 40 bytes reserved for the title and four bytes (on most systems) reserved for the year.
 The layout can include padding to make memory access more efficient.
-For example, if title was only 39 bytes there may still be a byte between the `title` and `year` to make `year`'s memory address 4-byte aligned.
+For example, if title were only 39 bytes there may still be a byte between the `title` and `year` to make `year`'s memory address 4-byte aligned.
 
 You can access members of a structure directly using the `.` operator:
 
@@ -1598,11 +1598,12 @@ Here is a table of the common sizes, ranges, and literal suffixes of integers on
 | `unsigned long long` | 8 | $0$ to $2^{64}-1$ | `ULL` |
 
 Note that the sizes and ranges specified here can vary.
-The C standard's rules about sizes are so vague they aren't worth quoting here :'(.
+The C standard's rules about sizes are so vague they aren't worth quoting here.
 Notice that the range is 1 number larger for negative numbers than for positive numbers.
-This is because signed integers use the top bit to store the sign of the number.
-If the bit is set, the number is negative. If the bit is not set, the number is positive.
-For zero, the sign bit is not set, and thus is part of the positive range of numbers.
+This is because most systems use **two's complement** representation for signed integers.
+The top bit indicates the sign: if it is set, the number is negative.
+But the remaining bits are not a simple magnitude — two's complement encodes negative values so that addition and subtraction work the same way for signed and unsigned numbers.
+A consequence of this encoding is that there is one more negative value than positive values, and zero is represented only one way (with the sign bit clear).
 While this may not make your math teacher happy, it gets worse when we talk about floating point numbers!
 
 \index{sizeof}
@@ -2222,6 +2223,28 @@ Both functions take four arguments: a pointer to the data, the size of each
 element, the number of elements, and the file stream. `fwrite` returns the
 number of elements successfully written; `fread` returns the number of elements
 successfully read.
+
+\index{fgets}
+## Reading Lines: `fgets`
+
+```c
+char *fgets(char *s, int size, FILE *stream);
+```
+
+`fgets` reads a line from a stream into a buffer. It stops when it has read
+`size - 1` characters, encounters a newline (which it includes in the buffer),
+or reaches end of file. It always null-terminates the result:
+
+```c
+char line[80];
+while (fgets(line, sizeof(line), f) != NULL) {
+    printf("%s", line);   // line already includes '\n'
+}
+```
+
+`fgets` returns `NULL` at end of file or on error, making it easy to use in a
+loop. It is generally safer than `scanf` for reading lines because it always
+respects the buffer size.
 
 \index{buffering}
 \index{fflush}
@@ -3004,7 +3027,7 @@ returns -1, 0, or 1.
 int compare_ints(const void *a, const void *b) {
     int ia = *(const int *)a;
     int ib = *(const int *)b;
-    // 1984 should always appear first (Thriller came out in 1984)
+    // 1984 always appears first (the year Van Halen's "1984" dropped)
     if (ia == 1984 && ib == 1984) return 0;
     if (ia == 1984) return -1;
     if (ib == 1984) return 1;
