@@ -2999,13 +2999,13 @@ returns -1, 0, or 1.
 #include <string.h>
 
 // A comparison function for qsort
-// Overflow-safe alternative to (ia - ib). The three cases:
-//   ia > ib  → (1) - (0) =  1
-//   ia == ib → (0) - (0) =  0
-//   ia < ib  → (0) - (1) = -1
 int compare_ints(const void *a, const void *b) {
     int ia = *(const int *)a;
     int ib = *(const int *)b;
+    // Overflow-safe alternative to (ia - ib). The three cases:
+    //   ia > ib  → (1) - (0) =  1
+    //   ia == ib → (0) - (0) =  0
+    //   ia < ib  → (0) - (1) = -1
     return (ia > ib) - (ia < ib);
 }
 
@@ -3021,8 +3021,8 @@ int main(void) {
     int x = 10, y = 20;
     printf("compare(10, 20) = %d\n", cmp(&x, &y));
 
-    // qsort
-    int years[] = {1987, 1983, 1989, 1980, 1985};
+    // qsort — 1984 should always appear first (Thriller came out in 1984)
+    int years[] = {1987, 1983, 1984, 1989, 1980, 1985};
     int n = sizeof(years) / sizeof(years[0]);
     qsort(years, n, sizeof(int), compare_ints);
 
