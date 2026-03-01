@@ -4,6 +4,8 @@ header-includes:
   - \usepackage[most]{tcolorbox}
 ---
 
+\newpage
+
 # 0. How to read this booklet
 
 This is a short booklet to help a C++ programmer get up to speed with C.
@@ -18,7 +20,7 @@ Hopefully, you'll have the context you need to understand API documentation.
 **Traps** warn you of common mistakes made.
 **Wut** calls out a detail that is counter-intuitive, so make sure you pay attention.
 
-## Starters
+## Try It
 
 As the intro to the most amazing programming language book ever written starts out
 
@@ -26,7 +28,7 @@ As the intro to the most amazing programming language book ever written starts o
 
 You need to write some code.
 Make sure you try writing some programs from scratch.
-At the end of most sections is a **Starter** program that you can type in and modify to play with.
+At the end of most sections is a starter program that you can type in and modify to play with.
 Don't use it as an excuse to avoid writing some of your own starter programs.
 It's the only way to master a language.
 
@@ -35,6 +37,8 @@ It's the only way to master a language.
 Don't skip the exercises at the end of the chapters.
 You can get the answer key, but don't look at the answer key before you find the answer yourself.
 If you look at the answer key first, the concepts will not sink in.
+
+\newpage
 
 # 1. Introduction
 
@@ -112,6 +116,10 @@ may accept syntax that real C compilers reject. Always use `cc` when writing C.
 :::
 
 ## Printing with `printf`
+
+```c
+int printf(const char *format, ...);
+```
 
 In C++, you use `std::cout` or `std::println` for output. In C, you use
 `printf` from `<stdio.h>`. Unlike `std::println`, `printf` does not
@@ -226,6 +234,8 @@ types: `%d` for `int`, `%f` for `double`, `%s` for `char *`, and so on.
 
 5. **Write a program** that prints a 5x5 multiplication table using `printf`
    with width formatting so the columns are aligned.
+
+\newpage
 
 # 2. Pointers
 
@@ -633,6 +643,8 @@ int main(void) {
    iterate through the array, and prints each element along with its memory
    address.
 
+\newpage
+
 # 3. Allocating Memory
 
 Every variable in your program lives somewhere in memory, but not all memory is
@@ -731,6 +743,11 @@ lives in the data segment (like a global) but is only accessible inside
 
 ## Dynamic Allocation: `malloc` and `free`
 
+```c
+void *malloc(size_t size);
+void free(void *ptr);
+```
+
 Sometimes you need memory that outlives the function that created it, or memory
 whose size you do not know at compile time. For this, C provides `malloc` and
 `free` from `<stdlib.h>`.
@@ -783,10 +800,18 @@ behavior. Memory management in C is entirely your responsibility.
 `calloc` is a variant that allocates memory and initializes it to zero:
 
 ```c
+void *calloc(size_t count, size_t size);
+```
+
+```c
 int *nums = calloc(5, sizeof(int));  // 5 ints, all initialized to 0
 ```
 
 And `realloc` lets you resize a previously allocated block:
+
+```c
+void *realloc(void *ptr, size_t size);
+```
 
 ```c
 nums = realloc(nums, 10 * sizeof(int));  // grow to 10 ints
@@ -801,12 +826,20 @@ will see them constantly in C code:
 out a buffer:
 
 ```c
+void *memset(void *s, int c, size_t n);
+```
+
+```c
 int nums[10];
 memset(nums, 0, sizeof(nums));   // set all bytes to 0
 ```
 
 `memcpy` copies a block of bytes from one location to another. Unlike `strcpy`,
 it does not stop at a `'\0'` — you tell it exactly how many bytes to copy:
+
+```c
+void *memcpy(void *dest, const void *src, size_t n);
+```
 
 ```c
 int src[] = {10, 20, 30};
@@ -818,6 +851,10 @@ memcpy(dest, src, sizeof(src));  // copy all 12 bytes (3 ints × 4 bytes)
 **Trap:** `memcpy` requires that the source and destination do not overlap. If
 they might overlap (e.g., shifting elements within the same array), use
 `memmove` instead, which handles overlapping regions correctly.
+
+```c
+void *memmove(void *dest, const void *src, size_t n);
+```
 :::
 
 ## Where Variables Live: A Summary
@@ -925,6 +962,8 @@ int main(void) {
    (where `n` is provided by the user via `scanf`), fills the array with
    squares (0, 1, 4, 9, ...), prints them, and frees the memory.
 
+\newpage
+
 # 4. Strings
 
 In C++, you use `std::string` and barely think about what is happening under the
@@ -959,6 +998,10 @@ the ones you will use most:
 
 **`strlen` — Get the Length**
 
+```c
+size_t strlen(const char *s);
+```
+
 Returns the number of characters before the null terminator:
 
 ```c
@@ -976,6 +1019,11 @@ Note that `strlen` does not count the `'\0'`. The array holding `"Take On Me"`
 is 11 bytes, but `strlen` returns 10.
 
 **`strcpy` / `strncpy` — Copy a String**
+
+```c
+char *strcpy(char *dest, const char *src);
+char *strncpy(char *dest, const char *src, size_t n);
+```
 
 `strcpy` copies the source string (including the null terminator) into the
 destination buffer. You must make sure the destination is large enough:
@@ -1000,6 +1048,10 @@ longer than `n`. Always set the last byte yourself:
 :::
 
 **`strcmp` — Compare Strings**
+
+```c
+int strcmp(const char *s1, const char *s2);
+```
 
 In C++, you can compare strings with `==`. In C, you cannot — using `==` on
 two `char` arrays compares the *addresses*, not the contents. Use `strcmp`
@@ -1030,6 +1082,11 @@ means no difference.
 
 **`strchr` / `strrchr` — Find a Character**
 
+```c
+char *strchr(const char *s, int c);
+char *strrchr(const char *s, int c);
+```
+
 `strchr` finds the first occurrence of a character. `strrchr` finds the last:
 
 ```c
@@ -1047,6 +1104,10 @@ character is not in the string.
 
 **`strstr` — Find a Substring**
 
+```c
+char *strstr(const char *haystack, const char *needle);
+```
+
 Finds the first occurrence of a substring within a string:
 
 ```c
@@ -1061,6 +1122,11 @@ Like `strchr`, it returns a pointer to the start of the match, or `NULL` if not
 found.
 
 **`strcat` / `strncat` — Concatenate Strings**
+
+```c
+char *strcat(char *dest, const char *src);
+char *strncat(char *dest, const char *src, size_t n);
+```
 
 `strcat` appends one string to the end of another:
 
@@ -1092,6 +1158,10 @@ strncat(buf, ", World!", sizeof(buf) - strlen(buf) - 1);
 
 **`strdup` — Duplicate a String**
 
+```c
+char *strdup(const char *s);
+```
+
 `strdup` allocates new memory on the heap, copies the string into it, and
 returns a pointer to the copy. You are responsible for freeing the memory when
 you are done:
@@ -1111,6 +1181,10 @@ C23. It is available on virtually every system you will use, but compiling with
 :::
 
 **`strtok` — Tokenize a String**
+
+```c
+char *strtok(char *str, const char *delim);
+```
 
 `strtok` splits a string into tokens separated by any character in a delimiter
 set. In C++, you might use `std::istringstream` with `>>` or
@@ -1156,6 +1230,10 @@ to store the tokenizer state, making them safe to use in multi-threaded
 programs and allowing nested tokenization:
 
 ```c
+char *strtok_r(char *str, const char *delim, char **saveptr);
+```
+
+```c
 char *saveptr;
 char *tok = strtok_r(line, " ", &saveptr);
 while (tok != NULL) {
@@ -1190,6 +1268,11 @@ buffer in memory, which can corrupt other variables, crash the program, or —
 worst of all — create a security exploit.
 
 ## A Preview: `sprintf` and `sscanf`
+
+```c
+int sprintf(char *str, const char *format, ...);
+int sscanf(const char *str, const char *format, ...);
+```
 
 C has two powerful functions for building and parsing strings that we will cover
 in detail in the Standard I/O chapter: `sprintf` writes formatted output into a string
@@ -1301,6 +1384,8 @@ int main(void) {
 6. **Write a program** that reads a string from the user, reverses it in place
    using pointer arithmetic, and prints the result.
 
+\newpage
+
 # 5. Standard I/O
 
 C's `<stdio.h>` library is your replacement for C++ `iostream`. It provides
@@ -1310,6 +1395,10 @@ flows through the `FILE *` type — an opaque pointer to a structure that tracks
 the state of an I/O stream.
 
 ## `scanf` for Input
+
+```c
+int scanf(const char *format, ...);
+```
 
 You have already seen `printf` for output. For input, C uses `scanf`, which
 reads formatted data from standard input:
@@ -1447,6 +1536,11 @@ appear on the screen.
 
 ## `fprintf` and `fscanf`
 
+```c
+int fprintf(FILE *stream, const char *format, ...);
+int fscanf(FILE *stream, const char *format, ...);
+```
+
 `fprintf` and `fscanf` are the file versions of `printf` and `scanf`. They take
 a `FILE *` as the first argument:
 
@@ -1474,6 +1568,11 @@ if (f != NULL) {
 value tells you whether the read succeeded.
 
 ## Opening and Closing Files
+
+```c
+FILE *fopen(const char *path, const char *mode);
+int fclose(FILE *stream);
+```
 
 To read or write a file, you open it with `fopen` and close it with `fclose`:
 
@@ -1532,6 +1631,10 @@ sscanf(buf, "Track %d: %49[^\n]", &track, title);
 check the size of the destination buffer. Use `snprintf` for safety:
 
 ```c
+int snprintf(char *str, size_t size, const char *format, ...);
+```
+
+```c
 snprintf(buf, sizeof(buf), "Track %02d: %s", 3, "99 Luftballons");
 ```
 
@@ -1541,6 +1644,10 @@ including the null terminator.
 
 `asprintf` (POSIX) goes one step further — it `malloc`s a buffer that is
 exactly the right size, so you never have to guess:
+
+```c
+int asprintf(char **strp, const char *format, ...);
+```
 
 ```c
 char *msg;
@@ -1561,6 +1668,11 @@ no buffer sizing, no truncation, no overflow.
 :::
 
 ## Binary I/O: `fread` and `fwrite`
+
+```c
+size_t fread(void *ptr, size_t size, size_t count, FILE *stream);
+size_t fwrite(const void *ptr, size_t size, size_t count, FILE *stream);
+```
 
 For reading and writing raw binary data (not text), use `fread` and `fwrite`:
 
@@ -1610,6 +1722,10 @@ This means that `printf("Working...")` (no newline) might not appear on screen
 immediately when `stdout` goes to a terminal, and will almost certainly not
 appear immediately when redirected to a file. Use `fflush` to force the buffer
 to be written:
+
+```c
+int fflush(FILE *stream);
+```
 
 ```c
 printf("Working...");
@@ -1679,6 +1795,8 @@ unbuffered, which is why error messages appear immediately.
    choice of content), closes it, reopens it for reading, reads and prints each
    line using `fgets`, then closes it again.
 
+\newpage
+
 # 6. Low-Level I/O
 
 The `<stdio.h>` functions you learned in the previous chapter are built on top
@@ -1705,6 +1823,11 @@ These constants are defined in `<unistd.h>`. They correspond to `stdin`,
 
 ## `read` and `write`
 
+```c
+ssize_t read(int fd, void *buf, size_t count);
+ssize_t write(int fd, const void *buf, size_t count);
+```
+
 The `read` and `write` system calls transfer raw bytes between a file
 descriptor and a buffer:
 
@@ -1729,6 +1852,11 @@ transfer raw bytes. There are no format specifiers, no newline handling, no
 buffering.
 
 ## `open` and `close`
+
+```c
+int open(const char *path, int flags, ... /* mode_t mode */);
+int close(int fd);
+```
 
 To open a file at the system call level, use `open` from `<fcntl.h>`:
 
@@ -1774,6 +1902,10 @@ There is also `creat`, which is equivalent to `open` with
 `O_WRONLY | O_CREAT | O_TRUNC`:
 
 ```c
+int creat(const char *path, mode_t mode);
+```
+
+```c
 int fd = creat("output.txt", 0644);
 // same as: open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644)
 ```
@@ -1785,6 +1917,10 @@ with an e."
 :::
 
 ## Seeking: `lseek`
+
+```c
+off_t lseek(int fd, off_t offset, int whence);
+```
 
 `lseek` repositions the file offset for an open file descriptor:
 
@@ -1815,6 +1951,11 @@ current position without moving, just like `ftell`.
 :::
 
 ## `pread` and `pwrite`
+
+```c
+ssize_t pread(int fd, void *buf, size_t count, off_t offset);
+ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
+```
 
 `pread` and `pwrite` are like `read` and `write` but take an explicit offset
 instead of using (or modifying) the file's current position:
@@ -1875,6 +2016,8 @@ condition.
    `close`) to copy the contents of one file to another. The source and
    destination filenames should be taken from `argv`.
 
+\newpage
+
 # 7. Odds and Ends
 
 This chapter covers a few remaining topics that do not fit neatly into the
@@ -1882,6 +2025,10 @@ previous chapters but are important for writing real C programs and for working
 with C code from C++.
 
 ## `exit` vs `return`
+
+```c
+void exit(int status);
+```
 
 You already know that `return` in `main` ends the program. The `exit` function
 from `<stdlib.h>` does the same thing, but it can be called from *any*
@@ -1909,6 +2056,10 @@ pragmatic choice.
 
 `exit` also flushes all open `stdio` streams and calls any functions registered
 with `atexit` before terminating the program.
+
+```c
+int atexit(void (*func)(void));
+```
 
 ::: {.tip}
 **Tip:** Use `exit` sparingly. It is a blunt instrument — it ends the entire
@@ -2019,6 +2170,10 @@ codes, and cleanup is your responsibility.
 The simplest pattern is to check return values and bail out:
 
 ```c
+void perror(const char *s);
+```
+
+```c
 FILE *f = fopen("La Isla Bonita.txt", "r");
 if (!f) {
     perror("fopen");
@@ -2070,6 +2225,10 @@ The other common strategy is to return an error code (often `-1` or `NULL`)
 and let the caller decide what to do. Many C library functions set the global
 variable `errno` to indicate what went wrong, and you can use `perror` or
 `strerror(errno)` to get a human-readable message:
+
+```c
+char *strerror(int errnum);
+```
 
 ```c
 FILE *f = fopen("No Existe.txt", "r");
@@ -2125,6 +2284,11 @@ The most common place you will encounter function pointers is the standard
 library function `qsort` from `<stdlib.h>`. In C++, you would use
 `std::sort` with a lambda or comparator. In C, `qsort` takes a comparison
 function pointer:
+
+```c
+void qsort(void *base, size_t nel, size_t width,
+           int (*compar)(const void *, const void *));
+```
 
 ```c
 #include <stdio.h>
@@ -2290,6 +2454,8 @@ returns -1, 0, or 1.
    `strlen` from `<string.h>`, passes it a string, and prints the result.
    Compile it with `c++` to verify it works.
 
+\newpage
+
 # Conclusion
 
 You have covered a lot of ground — from `printf` format specifiers to file
@@ -2329,6 +2495,8 @@ Buena suerte — you have got this.
 ---
 
 *Content outline and editorial support from Ben. Words by Claude, the Opus.*
+
+\newpage
 
 # Appendix A: Macros
 
