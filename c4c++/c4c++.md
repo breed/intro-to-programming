@@ -1388,7 +1388,9 @@ int main(void) {
 
 # 5. Numbers and Casting
 
-To the CPU, everything is just a number. It has no concept of characters, strings, pointers, or objects. The CPU only knows about raw bits inside registers and memory addresses.
+To the CPU, everything is just a number.
+It has no concept of characters, strings, pointers, or objects.
+The CPU only knows about the numeric values in registers and memory addresses.
 
 The types we assign to variables in C do not change the underlying bits; they simply tell the *compiler* how we want to interpret and use those numbers.
 Different numeric types provide different sizes (which determines the range of values they can hold) and different semantics (like whether they are signed or unsigned, integer or floating-point).
@@ -1453,11 +1455,112 @@ int main(void) {
 
 Later on when we discuss Standard I/O, we will cover `sprintf` and `sscanf`, which provide convenient formatting routines to convert back and forth between strings and integers.
 
+## Integer Types
+
+Integer is the most common type of number you will use in C.
+The CPU can do arithmetic on integers very quickly and it can be used for pointer arithmetic and arrays.
+Integers can be signed or unsigned and can be of different sizes.
+Here is a table of the common sizes, ranges, and literal suffixes of integers on most 64-bit systems:
+
+| Type | Size | Range | Literal Suffix |
+|------|------|-------|----------------|
+| `signed char` | 1 byte | -128 to 127 | `c` |
+| `unsigned char` | 1 byte | 0 to 255 | `uc` |
+| `short` | 2 bytes | -32,768 to 32,767 | `sh` |
+| `unsigned short` | 2 bytes | 0 to 65,535 | `ush` |
+| `int` | 4 bytes | -2,147,483,648 to 2,147,483,647 | `i` |
+| `unsigned int` | 4 bytes | 0 to 4,294,967,295 | `ui` |
+| `long` | 8 bytes | -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 | `l` |
+| `unsigned long` | 8 bytes | 0 to 18,446,744,073,709,551,615 | `ul` |
+| `long long` | 8 bytes | -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 | `ll` |
+| `unsigned long long` | 8 bytes | 0 to 18,446,744,073,709,551,615 | `ull` |
+
+Note that the sizes and ranges specified here can very.
+The C standards rules about sizes are so vague they aren't worth quoting here :'( .
+Notice that the range is 1 number larger for negative numbers than for positive numbers.
+This is because signed integers use the top bit store the sign of the number.
+If the bit is set, the number is negative. If the bit is not set, the number is positive.
+For zero, the sign bit is not set, and thus is part of the positive range of numbers.
+While this may may not make your math teacher happy, it gets worse when we talk about floating point numbers!
+
+::: {.tip}
+**Trap:** You will notice that most types are signed by default except for `char`.
+Sadly, on different architectures `char` can be either signed or unsigned, and even more sadly, on x86_64 CPUs, `char` is signed by default, and on ARM CPUs, `char` is unsigned by default! Watch out!
+:::
+
+### Integer Promotion
+
+When you use an integer type in an expression that is equal to or less than the size of `int`, it is automatically promoted to `int` if `int` is large enough to hold all the values of the type. Otherwise, it is promoted to `unsigned int`. This is called integer promotion.
+
+For expressions that involve larger integer types, the rules generally promote to the signedness and the size of the larger type.
+
+::: {.tip}
+**Trap:** One place where this can cause problems is when using `strlen`. `strlen` returns a `size_t` which is an unsigned integer type. If you subtract two `size_t` values, the result will be a `size_t`. If the first value is smaller than the second value, the result will be a large positive number. This can cause problems when using the result in other expressions.
+:::
+
+## Floating Point Types
+
+Floating point numbers are used to decimal numbers that may have a fractional components.
+They also vary in size and precision, but they are always signed.
+Here is a table of the common sizes, ranges, and literal suffixes of floating point numbers on most 64-bit systems:
+
+| Type | Size | Range | Literal Suffix |
+|------|------|-------|----------------|
+| `float` | 4 bytes | -3.4e+38 to 3.4e+38 | `f` |
+| `double` | 8 bytes | -1.7e+308 to 1.7e+308 | `d` |
+| `long double` | 16 bytes | -1.2e+4932 to 1.2e+4932 | `ld` |
+
+Floating point numbers also have a signed bit, but it can be used for zero, just like other numbers, so with floating point numbers there are two zeros, one positive and one negative.
+(They both equal each other though.)
+Floating point numbers can also be used to represent infinity and NaN (Not a Number).
+
+Floating point arithmetic is not always exactly represent a number.
+The fractional part of a number is represented as a sum of negative powers of 2, number after the decimal is not 0 or doesn't end in 5, it will not be represented exactly.
+This can cause problems when using floating point numbers in expressions. For example, `1.2` and `1.3` are not exactly representable as floating point numbers, so `1.2 + 1.3` is not exactly equal to `2.5`.
+Rounding is used to get as close as possible to the number you want to represent.
+
+Observe the following code:
+
+```c
+#include <stdio.h>
+int main() {
+    float f = 1.2;
+    if (f != 1.2) printf("what?!?\n");
+    if (f == 1.2f) printf("ok\n");
+}
+```
+
+You would expect only the `ok` message to print, but the `what` message prints too!
+Why?
+The first `if` compares a `float` to a `double`. The `1.2` is promoted to a `double` before the comparison and will be a little bit closer to the true value of 1.2 than `f`.
+The second `if` compares a `float` to a `float`. The `1.2f` is a `float`.
+
 ## Casting
 
 A **cast** is a way of forcing the compiler to treat a value of one type as another type. The syntax is `(type) value`. 
 
-Casts in C are much simpler natively than C++'s `static_cast`, `reinterpret_cast`, or `dynamic_cast`. C has a single unified cast syntax that does whatever is necessary to perform the conversion. By using a cast, you are essentially telling the compiler: "I know what I am doing, suppress any warnings, and just treat this as the type I specified."
+Casts in C are much simpler than in C++.
+They are also much less magical!
+C has a single unified cast syntax `(type)value`.
+You can only cast between numeric types (`scalar` type is the term usually used), including pointers.
+The following table summarizes the allowed casts:
+
+| From / To | Integer | Floating-Point | Pointer |
+| :--- | :--- | :--- | :--- |
+| **Integer** | Yes | Yes | Yes |
+| **Floating-Point** | Yes | Yes | No |
+| **Pointer** | Yes | No | Yes |
+
+Casting from floating point to integer drops the decimal part (it does not round).
+As long as the numbers fit into the target type, the conversion works well.
+But, if the number is too large, you will starting getting the dreaded "undefined behavior"!
+Which means, anything can happen.
+
+Casting from a floating point to a pointer doesn't make since, but you can do it if you cast to an integer type first.
+Why would you ever want to do that though?
+Keep your coworkers happy and don't do it.
+
+By using a cast, you are essentially telling the compiler: "I know what I am doing, suppress any warnings, and just treat this as the type I specified."
 
 ```c
 double pi = 3.14159;
@@ -1477,11 +1580,21 @@ int bad_year = (int)movie_year; // THIS IS A BUG!
 Casting a `char *` string to an `int` does not convert the text `"1985"` into the number `1985`. It tells the compiler to take the *memory address* where the string is stored and chop or pad it to fit inside an `int`. On a 64-bit system, the pointer is 8 bytes and the `int` is 4 bytes, so compiling this code will actually result in a warning that you are casting a pointer to an integer of different size! Always use functions like `strtol` to parse strings into numbers.
 :::
 
+### Casting pointers to other pointers
+
+`void *` is a pointer that can point to anything. It is a pointer to a generic memory location.
+This is why you don't have to cast pointers returned by `malloc` to a specific pointer type.
+
+Take care when casting pointers to other pointers types.
+You have to understand the layout of the memory layout of the structures you are using.
+There is one common example of casting pointers to other pointers types:
+using a `char *` to move to the address of a structure or based on a base address and an offset and then casting to the structure pointer type.
+
 ## Key Points
 
 - Under the hood, everything (characters, pointers) is just a number.
 - C does not have native "strings," only arrays of numbers ended with a `0`.
-- The type of a variable tells the compiler how you intend to interpret its numeric bits.
+- The type of a variable tells the compiler how you intend to interpret its numeTic bits.
 - C casts `(type) value` assert your intent to the compiler. It assumes you know what you are doing.
 - Casting a pointer to an integer simply gives you the raw numeric memory address, not the parsed contents of a string. Use `strtol` to parse strings.
 
