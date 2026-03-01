@@ -503,7 +503,83 @@ Enter a string: Hola
 Reversed: aloH
 ```
 
-# 5. Standard I/O
+# 5. Numbers and Casting
+
+**1. Think about it:** C++ provides several different cast operators (`static_cast`, `reinterpret_cast`, etc.) whereas C provides only one. What are the advantages of C++'s approach over C's single cast syntax?
+
+**Answer:** C++'s multiple cast operators provide better type safety and express intent more clearly. `static_cast` restricts you to compatible types, preventing accidental casts between pointers and integers. `reinterpret_cast` explicitly warns the reader (and compiler) that you are doing something inherently unsafe with bits. By using different named casts, developers can search for dangerous casts (`reinterpret_cast`) and the compiler can prevent logic errors that a C-style cast would silently accept. C's single cast syntax does whatever is necessary to force the compilation to succeed, often hiding real bugs when used incorrectly.
+
+---
+
+**2. What does this print?**
+
+```c
+char letter = 'C';
+printf("%c %d\n", letter + 2, letter + 2);
+```
+
+**Answer:**
+
+```
+E 69
+```
+
+`'C'` has the ASCII value 67. Adding 2 gives 69, which corresponds to `'E'` in ASCII. The `%c` specifier prints the character `'E'`, and `%d` prints the numeric value 69.
+
+---
+
+**3. Calculation:** Assuming a 64-bit system where pointers are 8 bytes and `int` is 4 bytes, what is the output of `sizeof("Danger")` and what is the output of `sizeof((int)0)`?
+
+**Answer:** `sizeof("Danger")` is **7**. The string "Danger" has 6 characters plus the null terminator `\0`. `sizeof((int)0)` is **4**. Casting `0` to an `int` yields an integer value, which takes 4 bytes.
+
+---
+
+**4. Where is the bug?**
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    char *score_str = "100";
+    int score = (int)score_str;
+    printf("You got a %d percent!\n", score);
+    return 0;
+}
+```
+
+**Answer:** This code attempts to parse a string by casting the character pointer to an integer. This is a logic error. Instead of converting the text `"100"` to the value `100`, it truncates the memory address where the string literal is stored into an `int`, resulting in a meaningless number. To parse strings to integers, use `strtol`:
+
+```c
+long score = strtol(score_str, NULL, 10);
+```
+
+---
+
+**5. Write a program** that declares a `double` variable with a fractional component and uses casting to separate the integer part from the fractional part. Print both pieces.
+
+**Answer:**
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    double value = 1986.55;
+    
+    // Cast to truncate to purely the integer part
+    int whole = (int)value;
+    
+    // Subtract to find the remainder
+    double fractional = value - whole;
+    
+    printf("Original: %f\n", value);
+    printf("Whole part: %d\n", whole);
+    printf("Fractional part: %f\n", fractional);
+    
+    return 0;
+}
+```
+
+# 6. Standard I/O
 
 **1. Think about it:** Why does `scanf` need the `&` operator for scalar
 variables but not for arrays?
@@ -652,7 +728,7 @@ Line 4: Gracias
 Line 5: Adios
 ```
 
-# 6. Low-Level I/O
+# 7. Low-Level I/O
 
 **1. Think about it:** Why would you use low-level `read`/`write` instead of
 `fprintf`/`fscanf`? When would `stdio` be the better choice?
@@ -791,7 +867,7 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-# 7. Odds and Ends
+# 8. Odds and Ends
 
 **1. Think about it:** In C++ you would use exceptions for error handling. In C
 there are no exceptions. What strategies can you use to handle errors in deeply

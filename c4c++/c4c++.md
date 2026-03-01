@@ -1386,7 +1386,134 @@ int main(void) {
 
 \newpage
 
-# 5. Standard I/O
+# 5. Numbers and Casting
+
+To the CPU, everything is just a number. It has no concept of characters, strings, pointers, or objects. The CPU only knows about raw bits inside registers and memory addresses.
+
+The types we assign to variables in C do not change the underlying bits; they simply tell the *compiler* how we want to interpret and use those numbers.
+Different numeric types provide different sizes (which determines the range of values they can hold) and different semantics (like whether they are signed or unsigned, integer or floating-point).
+
+## Everything is a Number
+
+A `char` is just a small integer (usually 8 bits). Assigning `'A'` is exactly the same as assigning the number `65` (in ASCII). You can perform math on characters just as you would on any integer:
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    char grade = 'A';
+    int score = 65;
+    
+    // Both variables hold the exact same numeric value
+    printf("grade as char: %c, as int: %d\n", grade, grade);
+    printf("score as char: %c, as int: %d\n", score, score);
+    
+    char next_grade = grade + 1; // 65 + 1 = 66
+    printf("Next grade: %c\n", next_grade); // 'B'
+    
+    return 0;
+}
+```
+
+A pointer is also just a number. Specifically, it is an integer that represents a memory address. When you provide a pointer type like `int *`, you are telling the compiler: "Treat this address number as the location of an `int`." C allows you to print the address just like a number, usually formatted as hexadecimal using the `%p` specifier for pointers:
+
+```c
+int val = 1986; // Year "Danger Zone" charted
+int *p = &val;
+
+printf("Address: %p\n", (void *)p); // e.g., 0x7ffd9b8
+```
+
+## Strings are Not Special
+
+Because everything is just a number, C has no native understanding of "strings." A string in C is merely an array of characters (small integers) that ends with a special `0` byte (the null terminator, `'\0'`). 
+
+When you write a string literal like `"Africa"`, the compiler simply lays out an array of numbers (`65, 102, 114, 105, 99, 97, 0`) in read-only memory and gives you a `char *` pointer to the first number (`65`). The standard libraries (`<string.h>`) are what give us the illusion of strings, by processing these arrays of numbers until they hit that `0` byte.
+
+## Converting Strings to Numbers
+
+Because strings are really arrays of characters, the text `"1986"` is entirely different from the integer `1986`. Unsurprisingly, converting between the text representation of a number and its purely numeric form is a very common task.
+
+To translate a string representation into an actual integer, use `strtol` (string to long) from `<stdlib.h>`:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+    char *year_str = "1986";
+    
+    // 10 is the base (base-10 decimal)
+    long year = strtol(year_str, NULL, 10);
+    
+    printf("Year: %ld\n", year);
+    return 0;
+}
+```
+
+Later on when we discuss Standard I/O, we will cover `sprintf` and `sscanf`, which provide convenient formatting routines to convert back and forth between strings and integers.
+
+## Casting
+
+A **cast** is a way of forcing the compiler to treat a value of one type as another type. The syntax is `(type) value`. 
+
+Casts in C are much simpler natively than C++'s `static_cast`, `reinterpret_cast`, or `dynamic_cast`. C has a single unified cast syntax that does whatever is necessary to perform the conversion. By using a cast, you are essentially telling the compiler: "I know what I am doing, suppress any warnings, and just treat this as the type I specified."
+
+```c
+double pi = 3.14159;
+int roughly_pi = (int)pi; // truncates to 3
+```
+
+Because C trusts you implicitly, casting can be dangerous. Magic *does not* happen when you cast.
+
+::: {.tip}
+**Trap:** A classic beginner mistake is trying to convert a string to an integer by casting the pointer.
+
+```c
+char *movie_year = "1985";  // The Goonies
+int bad_year = (int)movie_year; // THIS IS A BUG!
+```
+
+Casting a `char *` string to an `int` does not convert the text `"1985"` into the number `1985`. It tells the compiler to take the *memory address* where the string is stored and chop or pad it to fit inside an `int`. On a 64-bit system, the pointer is 8 bytes and the `int` is 4 bytes, so compiling this code will actually result in a warning that you are casting a pointer to an integer of different size! Always use functions like `strtol` to parse strings into numbers.
+:::
+
+## Key Points
+
+- Under the hood, everything (characters, pointers) is just a number.
+- C does not have native "strings," only arrays of numbers ended with a `0`.
+- The type of a variable tells the compiler how you intend to interpret its numeric bits.
+- C casts `(type) value` assert your intent to the compiler. It assumes you know what you are doing.
+- Casting a pointer to an integer simply gives you the raw numeric memory address, not the parsed contents of a string. Use `strtol` to parse strings.
+
+## Exercises
+
+1. **Think about it:** C++ provides several different cast operators (`static_cast`, `reinterpret_cast`, etc.) whereas C provides only one. What are the advantages of C++'s approach over C's single cast syntax?
+2. **What does this print?**
+
+    ```c
+    char letter = 'C';
+    printf("%c %d\n", letter + 2, letter + 2);
+    ```
+
+3. **Calculation:** Assuming a 64-bit system where pointers are 8 bytes and `int` is 4 bytes, what is the output of `sizeof("Danger")` and what is the output of `sizeof((int)0)`?
+4. **Where is the bug?**
+
+    ```c
+    #include <stdio.h>
+
+    int main(void) {
+        char *score_str = "100";
+        int score = (int)score_str;
+        printf("You got a %d percent!\n", score);
+        return 0;
+    }
+    ```
+
+5. **Write a program** that declares a `double` variable with a fractional component and uses casting to separate the integer part from the fractional part. Print both pieces.
+
+\newpage
+
+# 6. Standard I/O
 
 C's `<stdio.h>` library is your replacement for C++ `iostream`. It provides
 `printf` and `scanf` for formatted output and input, file operations with
@@ -1797,7 +1924,7 @@ unbuffered, which is why error messages appear immediately.
 
 \newpage
 
-# 6. Low-Level I/O
+# 7. Low-Level I/O
 
 The `<stdio.h>` functions you learned in the previous chapter are built on top
 of a lower-level I/O interface provided by the operating system. These system
@@ -2018,7 +2145,7 @@ condition.
 
 \newpage
 
-# 7. Odds and Ends
+# 8. Odds and Ends
 
 This chapter covers a few remaining topics that do not fit neatly into the
 previous chapters but are important for writing real C programs and for working
