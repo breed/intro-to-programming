@@ -2999,6 +2999,8 @@ returns -1, 0, or 1.
 #include <string.h>
 
 // A comparison function for qsort
+// a normal numeric sort, but we want 1984 to always be first
+// because we are big thriller fans!
 int compare_ints(const void *a, const void *b) {
     int ia = *(const int *)a;
     int ib = *(const int *)b;
@@ -3536,6 +3538,66 @@ both the enum and the string array separately — and hope you never forget one.
 will see them in real codebases for error codes, command tables, and state
 machines. The key advantage: a single source of truth for a list of items.
 :::
+
+## Try It: Macro Starter
+
+```c
+#include <stdio.h>
+
+// Object-like macros
+#define MAX_TRACKS  10
+#define LABEL       "Sire Records"
+
+// Function-like macro with proper parenthesization
+#define SQUARE(x)   ((x) * (x))
+#define MAX(a, b)   ((a) > (b) ? (a) : (b))
+
+// Stringification: print variable name and value
+#define PRINT_INT(var) printf(#var " = %d\n", var)
+
+// Multi-statement macro using do { ... } while (0)
+#define SWAP(a, b) do { \
+    int tmp = (a);      \
+    (a) = (b);          \
+    (b) = tmp;          \
+} while (0)
+
+// Variadic macro
+#define LOG(fmt, ...) fprintf(stderr, "[LOG] " fmt "\n", ##__VA_ARGS__)
+
+int main(void) {
+    // Object-like
+    printf("Label: %s, Max tracks: %d\n", LABEL, MAX_TRACKS);
+
+    // Function-like
+    printf("SQUARE(5) = %d\n", SQUARE(5));
+    printf("SQUARE(1+2) = %d\n", SQUARE(1 + 2));
+    printf("MAX(3, 7) = %d\n", MAX(3, 7));
+
+    // Stringification
+    int year = 1984;
+    PRINT_INT(year);
+
+    // SWAP
+    int a = 10, b = 20;
+    printf("Before swap: a=%d, b=%d\n", a, b);
+    SWAP(a, b);
+    printf("After swap:  a=%d, b=%d\n", a, b);
+
+    // Conditional compilation
+#ifdef DEBUG
+    printf("Debug mode is on\n");
+#else
+    printf("Debug mode is off\n");
+#endif
+
+    // Variadic macro
+    LOG("started");
+    LOG("year is %d", 1985);
+
+    return 0;
+}
+```
 
 ## Key Points
 
