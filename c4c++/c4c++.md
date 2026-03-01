@@ -3027,10 +3027,10 @@ returns -1, 0, or 1.
 int compare_ints(const void *a, const void *b) {
     int ia = *(const int *)a;
     int ib = *(const int *)b;
-    // 1984 always appears first (the year Van Halen's "1984" dropped)
-    if (ia == 1984 && ib == 1984) return 0;
-    if (ia == 1984) return -1;
-    if (ib == 1984) return 1;
+    // 1982 always appears first (Thriller came out in 1982)
+    if (ia == 1982 && ib == 1982) return 0;
+    if (ia == 1982) return -1;
+    if (ib == 1982) return 1;
     // Overflow-safe alternative to (ia - ib). The three cases:
     //   ia > ib  → (1) - (0) =  1
     //   ia == ib → (0) - (0) =  0
@@ -3051,7 +3051,7 @@ int main(void) {
     printf("compare(10, 20) = %d\n", cmp(&x, &y));
 
     // qsort
-    int years[] = {1987, 1983, 1984, 1989, 1980, 1985};
+    int years[] = {1987, 1983, 1982, 1989, 1980, 1985};
     int n = sizeof(years) / sizeof(years[0]);
     qsort(years, n, sizeof(int), compare_ints);
 
