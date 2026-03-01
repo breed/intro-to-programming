@@ -1432,6 +1432,27 @@ Because everything is just a number, C has no native understanding of "strings."
 
 When you write a string literal like `"Africa"`, the compiler simply lays out an array of numbers (`65, 102, 114, 105, 99, 97, 0`) in read-only memory and gives you a `char *` pointer to the first number (`65`). The standard libraries (`<string.h>`) are what give us the illusion of strings, by processing these arrays of numbers until they hit that `0` byte.
 
+```c
+#include <stdio.h>
+
+int main(void) {
+    char word[] = "Hola";
+
+    printf("String: %s\n", word);
+    printf("Bytes: ");
+    for (int i = 0; i < (int)sizeof(word); i++)
+        printf("%d ", word[i]);
+    printf("\n");
+
+    return 0;
+}
+// Output:
+// String: Hola
+// Bytes: 72 111 108 97 0
+```
+
+The five bytes are the ASCII values for `H`, `o`, `l`, `a`, and the null terminator.
+
 ## Converting Strings to Numbers
 
 Because strings are really arrays of characters, the text `"1986"` is entirely different from the integer `1986`. Unsurprisingly, converting between the text representation of a number and its purely numeric form is a very common task.
@@ -1462,18 +1483,18 @@ The CPU can do arithmetic on integers very quickly and it can be used for pointe
 Integers can be signed or unsigned and can be of different sizes.
 Here is a table of the common sizes, ranges, and literal suffixes of integers on most 64-bit systems:
 
-| Type | Size | Range | Literal Suffix |
-|------|------|-------|----------------|
-| `signed char` | 1 byte | -128 to 127 | *(none)* |
-| `unsigned char` | 1 byte | 0 to 255 | *(none)* |
-| `short` | 2 bytes | -32,768 to 32,767 | *(none)* |
-| `unsigned short` | 2 bytes | 0 to 65,535 | *(none)* |
-| `int` | 4 bytes | -2,147,483,648 to 2,147,483,647 | *(none)* |
-| `unsigned int` | 4 bytes | 0 to 4,294,967,295 | `U` |
-| `long` | 8 bytes | -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 | `L` |
-| `unsigned long` | 8 bytes | 0 to 18,446,744,073,709,551,615 | `UL` |
-| `long long` | 8 bytes | -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 | `LL` |
-| `unsigned long long` | 8 bytes | 0 to 18,446,744,073,709,551,615 | `ULL` |
+| Type | Bytes | Range | Suffix |
+|------|:-----:|-------|:------:|
+| `signed char` | 1 | $-128$ to $127$ | |
+| `unsigned char` | 1 | $0$ to $255$ | |
+| `short` | 2 | $-32{,}768$ to $32{,}767$ | |
+| `unsigned short` | 2 | $0$ to $65{,}535$ | |
+| `int` | 4 | $-2^{31}$ to $2^{31}-1$ | |
+| `unsigned int` | 4 | $0$ to $2^{32}-1$ | `U` |
+| `long` | 8 | $-2^{63}$ to $2^{63}-1$ | `L` |
+| `unsigned long` | 8 | $0$ to $2^{64}-1$ | `UL` |
+| `long long` | 8 | $-2^{63}$ to $2^{63}-1$ | `LL` |
+| `unsigned long long` | 8 | $0$ to $2^{64}-1$ | `ULL` |
 
 Note that the sizes and ranges specified here can vary.
 The C standards rules about sizes are so vague they aren't worth quoting here :'( .
@@ -1482,6 +1503,28 @@ This is because signed integers use the top bit to store the sign of the number.
 If the bit is set, the number is negative. If the bit is not set, the number is positive.
 For zero, the sign bit is not set, and thus is part of the positive range of numbers.
 While this may not make your math teacher happy, it gets worse when we talk about floating point numbers!
+
+You can explore the actual sizes and ranges on your machine using `<limits.h>`:
+
+```c
+#include <stdio.h>
+#include <limits.h>
+
+int main(void) {
+    printf("char:      %zu byte,  range %d to %d\n",
+           sizeof(char), CHAR_MIN, CHAR_MAX);
+    printf("short:     %zu bytes, range %d to %d\n",
+           sizeof(short), SHRT_MIN, SHRT_MAX);
+    printf("int:       %zu bytes, range %d to %d\n",
+           sizeof(int), INT_MIN, INT_MAX);
+    printf("long:      %zu bytes, range %ld to %ld\n",
+           sizeof(long), LONG_MIN, LONG_MAX);
+    printf("long long: %zu bytes, range %lld to %lld\n",
+           sizeof(long long), LLONG_MIN, LLONG_MAX);
+
+    return 0;
+}
+```
 
 ::: {.tip}
 **Trap:** You will notice that most types are signed by default except for `char`.
@@ -1497,6 +1540,29 @@ For expressions that involve larger integer types, the rules generally promote t
 ::: {.tip}
 **Trap:** One place where this can cause problems is when using `strlen`. `strlen` returns a `size_t` which is an unsigned integer type. If you subtract two `size_t` values, the result will be a `size_t`. If the first value is smaller than the second value, the result will be a large positive number. This can cause problems when using the result in other expressions.
 :::
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char *a = "Jump";       // strlen = 4
+    char *b = "Jump!!!!";   // strlen = 8
+
+    // size_t is unsigned, so 4 - 8 wraps around!
+    size_t diff = strlen(a) - strlen(b);
+    printf("strlen(a) - strlen(b) = %zu\n", diff);
+
+    // cast to a signed type to get the correct result
+    long sdiff = (long)strlen(a) - (long)strlen(b);
+    printf("Signed difference:      %ld\n", sdiff);
+
+    return 0;
+}
+// Output:
+// strlen(a) - strlen(b) = 18446744073709551612
+// Signed difference:      -4
+```
 
 ## Floating Point Types
 
@@ -1591,6 +1657,27 @@ This is why you don't have to cast pointers returned by `malloc` to a specific p
 Take care when casting pointers to other pointer types.
 You must understand the memory layout of the structures you are working with.
 One common pattern is using a `char *` for byte-level arithmetic on a base address plus an offset, and then casting the result to the desired structure pointer type.
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    int nums[] = {1984, 1985, 1986, 1987};
+
+    void *vp = nums;            // any pointer converts to void *
+    int *ip = (int *)vp;        // cast back to use it
+    printf("First: %d\n", ip[0]);
+
+    // byte-level access with char *
+    char *bp = (char *)nums;
+    printf("First byte of nums[0]: 0x%02x\n", (unsigned char)bp[0]);
+
+    return 0;
+}
+// Output:
+// First: 1984
+// First byte of nums[0]: 0xc0
+```
 
 ## Key Points
 
