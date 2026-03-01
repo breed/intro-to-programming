@@ -39,8 +39,19 @@ Write chapters to help beginning C++ programmers become beginning C programmers.
 
 ## Build
 
-- Build with: `pandoc c4c++.md -o c4c++.pdf --lua-filter=callout.lua`
-- Requires `header-includes` for `\usepackage[most]{tcolorbox}` (already in frontmatter)
+- Build with: `make` (or `make all` for both PDFs)
+- Uses `pandoc` with `--lua-filter=callout.lua` and `--pdf-engine=latexmk`
+- `latexmk` handles the multi-pass build needed for the index
+- Requires `header-includes` for `\usepackage[most]{tcolorbox}` and `\usepackage{makeidx}` (already in frontmatter)
+
+## Table of Contents and Index
+
+- TOC is generated automatically via `toc: true` and `toc-depth: 2` in the YAML frontmatter
+- index uses LaTeX `makeidx` package with `\index{}` markers throughout the text
+- place `\index{term}` at the primary introduction/definition of a term, not inside code blocks
+- use `\index{parent!child}` for sub-entries (e.g., `\index{pointer!arithmetic}`)
+- in `\index{}`, escape double quotes by doubling them (e.g., `\index{extern ""C""}`)
+- `\printindex` at the end of the file generates the index page
 
 ## 80s References Already Used
 
@@ -54,6 +65,7 @@ do not repeat these in new or modified examples:
 - Everybody Wants to Rule the World, Walking on Sunshine
 - Ghostbusters, Livin' on a Prayer, La Isla Bonita, Girls Just Want to Have Fun
 - Maniac, Footloose, Flashdance, Fame
+- Danger Zone, Africa, The Goonies, Rio, Jump
 
 ## Content
 
