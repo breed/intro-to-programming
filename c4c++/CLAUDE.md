@@ -8,6 +8,7 @@ Write chapters to help beginning C++ programmers become beginning C programmers.
 
 ## Chapters
 
+- DO NOT MODIFY THE AUTHOR INTRO section
 - each numbered element in `Content` represents a chapter
 - each chapter starts with a brief overview
 - each chapter ends with a brief highlight of key points
@@ -70,6 +71,11 @@ do not repeat these in new or modified examples:
 
 ## Content
 
+DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowercase to match the author's informal writing
+
+0. How to use this book:
+    - conventions explained
+    -chapter layout
 1. Introduction:
     - in the begin know C++ automatically meant you know C, but modern C++ has dramatically different idioms and standard libraries than C, so the modern C++ programmer has some things to learn in order to program in C.
     - `The C Programming Language (Second Edition)` my go to textbook.
