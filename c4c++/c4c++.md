@@ -495,8 +495,8 @@ Pointers chapter will explore this relationship thoroughly.
 
 ::: {.tip}
 **Wut:** The `sizeof` operator is one of the few contexts where an array does
-*not* decay to a pointer. `sizeof(primes)` gives the total size of the array
-(20 bytes for 5 ints), not the size of a pointer.
+*not* decay to a pointer. `sizeof(primes)` gives the total size of the array, not the size of a pointer.
+If `int` is 4 bytes and an address is 8 bytes (common sizes on modern hardware), `sizeof(primes)` is 20 and `sizeof(p)` is 8.
 :::
 
 ### Initialization

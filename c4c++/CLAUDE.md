@@ -37,6 +37,7 @@ Write chapters to help beginning C++ programmers become beginning C programmers.
 - Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` — do not use `wrapfigure`
 - Keep the tone professional but light
 - Refer to the reader as `you`
+- do not wrap sentences in the markdown. every sentence gets its own line
 
 ## Build
 
