@@ -99,7 +99,569 @@ Output:
    5  10  15  20  25
 ```
 
-# 2. Pointers
+# 2. Variables
+
+**1. Think about it:** In C++, `auto x = 42;` lets the compiler deduce the
+type. C has no `auto` type deduction. What advantage does requiring explicit
+types give to someone reading unfamiliar C code?
+
+**Answer:** When every variable has an explicit type, you can read a function
+and immediately know the size, range, and semantics of each variable without
+tracing through initializers or return types. In C++ with `auto`, you
+sometimes need to figure out the return type of a function or the result of a
+complex expression to know what type a variable is. In C, `int count = 0;`
+tells you everything at a glance — it is a 4-byte (typically) signed integer.
+This is especially helpful in large codebases where you may be reading code
+written by someone else. The trade-off is more typing and more verbosity, but
+the explicitness reduces cognitive load when reading.
+
+---
+
+**2. What does this print?**
+
+```c
+int a[] = {10, 20, 30, 40};
+printf("%zu %zu\n", sizeof(a), sizeof(a[0]));
+```
+
+**Answer:**
+
+```
+16 4
+```
+
+`a` is an array of 4 `int` elements. On a typical system where `int` is 4
+bytes, `sizeof(a)` is `4 * 4 = 16` bytes. `sizeof(a[0])` is the size of one
+`int`, which is 4 bytes. (The common idiom `sizeof(a) / sizeof(a[0])` gives
+the element count: 4.)
+
+---
+
+**3. Calculation:** Given the following declarations on a system where `int` is
+4 bytes, what is `sizeof(grid)`?
+
+```c
+int grid[3][5];
+```
+
+**Answer:** **60 bytes.** The array has 3 rows of 5 `int` elements each, for a
+total of `3 * 5 = 15` elements. Each `int` is 4 bytes, so the total is
+`15 * 4 = 60` bytes.
+
+---
+
+**4. Where is the bug?**
+
+```c
+const int MAX = 100;
+int *p = &MAX;
+*p = 200;
+printf("MAX = %d\n", MAX);
+```
+
+**Answer:** The code takes the address of a `const int` and stores it in a
+non-`const` pointer `int *p`. This discards the `const` qualifier, and the
+compiler will warn about (or reject) this assignment. Then `*p = 200` attempts
+to modify the `const` variable through the pointer, which is **undefined
+behavior**. The `const` qualifier is a promise that the value will not change,
+and the compiler may place it in read-only memory. To fix this, respect the
+`const`:
+
+```c
+const int MAX = 100;
+const int *p = &MAX;   /* pointer to const int */
+/* *p = 200; */        /* not allowed — and that's the point */
+printf("MAX = %d\n", MAX);
+```
+
+---
+
+**5. What does this print?**
+
+```c
+struct point { int x; int y; };
+struct point a = {3, 7};
+struct point b = a;
+b.x = 99;
+printf("%d %d\n", a.x, b.x);
+```
+
+**Answer:**
+
+```
+3 99
+```
+
+Assigning `b = a` copies the raw bytes of `a` into `b`. After the copy, `a`
+and `b` are independent. Changing `b.x` to 99 does not affect `a.x`, which
+remains 3.
+
+---
+
+**6. Think about it:** In C, assigning one struct to another copies the raw
+bytes. What problem could this cause if the struct contains a `char *` member
+that points to dynamically allocated memory (via `malloc`)? How is this
+different from what C++ does by default?
+
+**Answer:** If the struct contains a `char *` pointing to `malloc`-ed memory,
+the byte-for-byte copy duplicates the pointer value — both structs now point to
+the same dynamically allocated memory. This creates two problems: (1) if one
+struct is used to `free` the memory, the other struct's pointer becomes a
+dangling pointer, and (2) if both try to `free` the memory, you get a
+double-free bug.
+
+In C++, the compiler generates a default copy constructor and `operator=` that
+perform a member-wise copy — which has the same shallow-copy problem for raw
+pointers. However, C++ lets you define custom copy constructors and assignment
+operators to perform a deep copy. C++ also provides `std::string` and smart
+pointers that handle this automatically. In C, you must write a manual copy
+function that allocates new memory and copies the string data.
+
+---
+
+**7. Write a program** that declares a `struct student` with fields `name`
+(a `char` array), `id` (an `int`), and `gpa` (a `double`). Create an array
+of 3 students, initialize them with values, and print each student's
+information using a loop. Use `%s`, `%d`, and `%.2f` in your `printf`.
+
+**Answer:**
+
+```c
+#include <stdio.h>
+
+struct student {
+    char name[50];
+    int id;
+    double gpa;
+};
+
+int main(void) {
+    struct student roster[] = {
+        {"Maria", 1001, 3.85},
+        {"Carlos", 1002, 3.42},
+        {"Elena", 1003, 3.97}
+    };
+    int n = sizeof(roster) / sizeof(roster[0]);
+
+    for (int i = 0; i < n; i++) {
+        printf("Name: %s, ID: %d, GPA: %.2f\n",
+               roster[i].name, roster[i].id, roster[i].gpa);
+    }
+    return 0;
+}
+```
+
+Output:
+
+```
+Name: Maria, ID: 1001, GPA: 3.85
+Name: Carlos, ID: 1002, GPA: 3.42
+Name: Elena, ID: 1003, GPA: 3.97
+```
+
+# 3. Expressions
+
+**1. Think about it:** In C++, you can overload operators to give `+`, `<<`,
+`==`, and others custom meanings for your classes. C does not allow operator
+overloading. What advantage does this give you when reading unfamiliar C
+code? Can you think of a situation where operator overloading would have been
+genuinely useful in C?
+
+**Answer:** Without operator overloading, every operator in C has exactly one
+meaning. When you see `a + b`, you know it is arithmetic addition — never a
+string concatenation, a matrix addition, or something a library author decided
+it should mean. This makes C code easier to read and reason about, especially
+in unfamiliar codebases. You never have to look up what `+` does for a
+particular type.
+
+A situation where operator overloading would have been genuinely useful is
+complex number arithmetic. C99 added `_Complex` as a built-in type with
+arithmetic operator support, but before that, working with complex numbers
+meant calling functions like `complex_add(a, b)` and `complex_mul(a, b)`,
+which made mathematical formulas hard to read. With operator overloading, you
+could write `a + b * c` instead of `complex_add(a, complex_mul(b, c))`.
+
+---
+
+**2. What does this print?**
+
+```c
+int x = 10;
+int y = x++ + ++x;
+printf("%d %d\n", x, y);
+```
+
+(Be careful — is the answer even defined?)
+
+**Answer:** This is **undefined behavior**. The variable `x` is modified twice
+(`x++` and `++x`) without a sequence point between the modifications. The C
+standard says the result is undefined — the compiler is free to produce any
+output. Different compilers, or the same compiler with different optimization
+levels, may give different results. The correct approach is to never modify a
+variable more than once in the same expression. Use separate statements:
+
+```c
+int x = 10;
+x++;
+int y = x + x;
+x++;
+```
+
+---
+
+**3. Calculation:** What is the result of each of these expressions?
+
+```c
+25 / 4
+25 % 4
+-25 % 4
+(1 << 4) | (1 << 1)
+0xFF & 0x0F
+```
+
+**Answer:**
+
+- `25 / 4` = **6**. Integer division truncates toward zero: 25 / 4 = 6.25,
+  truncated to 6.
+- `25 % 4` = **1**. The remainder of 25 / 4: 25 - (6 * 4) = 1.
+- `-25 % 4` = **-1**. In C99+, `%` preserves the sign of the dividend (left
+  operand). -25 / 4 = -6 (truncated toward zero), remainder =
+  -25 - (-6 * 4) = -25 + 24 = -1.
+- `(1 << 4) | (1 << 1)` = **18**. `1 << 4` is 16 (binary `10000`), `1 << 1`
+  is 2 (binary `00010`). OR-ing them gives binary `10010` = 18.
+- `0xFF & 0x0F` = **0x0F** (15). AND-ing `11111111` with `00001111` keeps
+  only the low 4 bits: `00001111`.
+
+---
+
+**4. Where is the bug?**
+
+```c
+int status = 0x07;
+if (status & 0x04 == 0x04) {
+    printf("Bit 2 is set\n");
+}
+```
+
+**Answer:** Operator precedence. The `==` operator has higher precedence than
+`&`. So this evaluates as `status & (0x04 == 0x04)`, which is
+`status & 1`, which is `0x07 & 0x01` = `1`. This happens to be nonzero (true),
+so the message prints — but for the wrong reason. If `status` were `0x06`
+(bit 2 set, bit 0 not set), `0x06 & 1` would be `0` (false), even though bit
+2 *is* set. The fix is to add parentheses:
+
+```c
+if ((status & 0x04) == 0x04) {
+    printf("Bit 2 is set\n");
+}
+```
+
+---
+
+**5. What does this print?**
+
+```c
+int a = 5, b = 10;
+a ^= b;
+b ^= a;
+a ^= b;
+printf("a=%d b=%d\n", a, b);
+```
+
+**Answer:**
+
+```
+a=10 b=5
+```
+
+This is the classic XOR swap trick. Step by step:
+
+1. `a ^= b` → `a = 5 ^ 10 = 15` (a=15, b=10)
+2. `b ^= a` → `b = 10 ^ 15 = 5` (a=15, b=5)
+3. `a ^= b` → `a = 15 ^ 5 = 10` (a=10, b=5)
+
+The values of `a` and `b` are swapped without using a temporary variable.
+
+---
+
+**6. Where is the bug?**
+
+```c
+int count = 0;
+if (count = 0) {
+    printf("El contador es cero\n");
+} else {
+    printf("El contador no es cero\n");
+}
+```
+
+**Answer:** The condition uses `=` (assignment) instead of `==` (comparison).
+`count = 0` assigns `0` to `count` and then evaluates to `0`, which is false.
+So the `else` branch always executes, printing `"El contador no es cero"` — the
+opposite of what was intended. The fix:
+
+```c
+if (count == 0) {
+    printf("El contador es cero\n");
+}
+```
+
+---
+
+**7. Write a program** that takes an `unsigned int` and prints its value in
+binary (most significant bit first). Use bitwise operators to test each bit.
+Test it with the values `0`, `1`, `255`, and `1024`.
+
+**Answer:**
+
+```c
+#include <stdio.h>
+#include <limits.h>
+
+void print_binary(unsigned int val) {
+    int bits = sizeof(unsigned int) * CHAR_BIT;
+    int started = 0;
+
+    for (int i = bits - 1; i >= 0; i--) {
+        int bit = (val >> i) & 1;
+        if (bit)
+            started = 1;
+        if (started)
+            printf("%d", bit);
+    }
+    if (!started)
+        printf("0");
+    printf("\n");
+}
+
+int main(void) {
+    print_binary(0);       /* 0 */
+    print_binary(1);       /* 1 */
+    print_binary(255);     /* 11111111 */
+    print_binary(1024);    /* 10000000000 */
+    return 0;
+}
+```
+
+Output:
+
+```
+0
+1
+11111111
+10000000000
+```
+
+# 4. Control Flow
+
+**1. Think about it:** C uses `0` for false and nonzero for true, while C++
+has a built-in `bool` type. What practical problems can arise from using
+integers as booleans? Can you think of a case where a nonzero value that
+is not `1` might cause a subtle bug?
+
+**Answer:** The main problem is that any nonzero value is true, which can cause
+subtle bugs when comparing boolean results. Consider this example:
+
+```c
+int is_ready = 2;     /* intended as "true" */
+int is_set = 1;       /* also "true" */
+if (is_ready == is_set) {
+    printf("Both true\n");    /* never prints! */
+}
+```
+
+Both variables are logically true, but `2 != 1`, so the comparison fails. This
+bug arises when you compare boolean values with `==` instead of testing them
+individually. Another common case is using bitwise AND when you mean logical
+AND:
+
+```c
+int a = 2;   /* binary: 10 */
+int b = 1;   /* binary: 01 */
+if (a & b) {
+    /* never enters — bitwise AND of 2 and 1 is 0 */
+}
+```
+
+Both `a` and `b` are logically true, but `a & b` is `0` (false) because they
+have no bits in common. The fix is to use `&&` for logical operations and to
+test boolean values with `if (x)` rather than `if (x == 1)`.
+
+---
+
+**2. What does this print?**
+
+```c
+for (int i = 0; i < 5; i++) {
+    if (i == 3)
+        continue;
+    printf("%d ", i);
+}
+printf("\n");
+```
+
+**Answer:**
+
+```
+0 1 2 4
+```
+
+The loop iterates `i` from 0 to 4. When `i` is 3, `continue` skips the
+`printf` and jumps to the next iteration. So 0, 1, 2, and 4 are printed, but
+3 is skipped.
+
+---
+
+**3. What does this print?**
+
+```c
+int x = 2;
+switch (x) {
+case 1:
+    printf("uno ");
+case 2:
+    printf("dos ");
+case 3:
+    printf("tres ");
+    break;
+default:
+    printf("other ");
+}
+printf("\n");
+```
+
+**Answer:**
+
+```
+dos tres
+```
+
+`x` is 2, so execution jumps to `case 2` and prints `"dos "`. There is no
+`break` after `case 2`, so execution **falls through** to `case 3` and prints
+`"tres "`. The `break` at the end of `case 3` exits the `switch`. The output
+is `dos tres` followed by a newline.
+
+---
+
+**4. Where is the bug?**
+
+```c
+int total = 0;
+for (int i = 0; i < 10; i++);
+{
+    total += i;
+}
+printf("Total: %d\n", total);
+```
+
+**Answer:** There are two bugs. First, there is a stray semicolon after the
+`for` statement: `for (int i = 0; i < 10; i++);`. This semicolon is an empty
+statement, making it the entire body of the loop. The loop runs 10 times doing
+nothing. Second, the variable `i` is declared inside the `for` and goes out of
+scope after the loop ends. The block `{ total += i; }` is a separate block
+where `i` is not defined — this will not compile. The fix is to remove the
+semicolon:
+
+```c
+int total = 0;
+for (int i = 0; i < 10; i++) {
+    total += i;
+}
+printf("Total: %d\n", total);   /* prints Total: 45 */
+```
+
+---
+
+**5. Calculation:** How many times does the body of this loop execute?
+
+```c
+int count = 0;
+int i = 10;
+do {
+    count++;
+    i--;
+} while (i > 10);
+```
+
+**Answer:** **1 time.** A `do-while` loop always executes the body at least
+once before checking the condition. After the first iteration, `count` becomes
+1 and `i` becomes 9. Then the condition `i > 10` is checked: `9 > 10` is
+false, so the loop exits. Even though the condition was never true, the body
+executed exactly once.
+
+---
+
+**6. Where is the bug?**
+
+```c
+int level = 5;
+if (level = 10) {
+    printf("Max level!\n");
+}
+```
+
+**Answer:** The condition uses `=` (assignment) instead of `==` (comparison).
+`level = 10` assigns `10` to `level` and then evaluates to `10`, which is
+nonzero (true). So `"Max level!"` is always printed, regardless of the original
+value of `level`. The fix:
+
+```c
+if (level == 10) {
+    printf("Max level!\n");
+}
+```
+
+---
+
+**7. Write a program** that reads integers from the user (using `scanf`) until
+the user enters `0`. Print the sum and average of all numbers entered
+(not counting the `0`). Use a `do-while` or `while` loop.
+
+**Answer:**
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    int num;
+    int sum = 0;
+    int count = 0;
+
+    printf("Enter integers (0 to stop):\n");
+
+    do {
+        printf("> ");
+        scanf("%d", &num);
+        if (num != 0) {
+            sum += num;
+            count++;
+        }
+    } while (num != 0);
+
+    if (count > 0) {
+        printf("Sum: %d\n", sum);
+        printf("Average: %.2f\n", (double)sum / count);
+    } else {
+        printf("No numbers entered.\n");
+    }
+
+    return 0;
+}
+```
+
+Example session:
+
+```
+Enter integers (0 to stop):
+> 10
+> 20
+> 30
+> 0
+Sum: 60
+Average: 20.00
+```
+
+# 5. Pointers
 
 **1. Think about it:** In C++, you can pass by reference to modify a caller's
 variable. Why do you think C was designed with only pass by value? What does
@@ -239,7 +801,217 @@ arr[3] = 40 at address 0x7ffd...
 arr[4] = 50 at address 0x7ffd...
 ```
 
-# 3. Allocating Memory
+# 6. Functions
+
+**1. Think about it:** C does not have function overloading. How does the C
+standard library handle providing similar functionality for different types?
+Look at `abs` (for `int`) and `fabs` (for `double`) as examples. What
+naming convention do you see?
+
+**Answer:** The C standard library uses different function names for different
+types, often with a prefix or suffix that indicates the type. For absolute
+value: `abs` handles `int`, `labs` handles `long`, `llabs` handles
+`long long`, and `fabs` handles `double`. For math functions, the base name
+is for `double` (e.g., `sqrt`), an `f` suffix is for `float` (e.g., `sqrtf`),
+and an `l` suffix is for `long double` (e.g., `sqrtl`).
+
+This naming convention is consistent across the standard library: `printf` vs
+`fprintf` vs `sprintf`, `strtol` vs `strtod` vs `strtof`. The type information
+that C++ encodes in overload resolution is encoded in the function name in C.
+The downside is more names to remember, but the upside is that the type being
+operated on is always visible at the call site.
+
+---
+
+**2. What does this print?**
+
+```c
+void mystery(int x) {
+    x = x * 2;
+    printf("inside: %d\n", x);
+}
+
+int main(void) {
+    int val = 5;
+    mystery(val);
+    printf("outside: %d\n", val);
+    return 0;
+}
+```
+
+**Answer:**
+
+```
+inside: 10
+outside: 5
+```
+
+C is pass by value. The function `mystery` receives a copy of `val`. Doubling
+`x` inside the function modifies the copy, not the original. After `mystery`
+returns, `val` in `main` is still 5.
+
+---
+
+**3. Where is the bug?**
+
+```c
+int count_chars(const char *s) {
+    int count;
+    while (*s != '\0') {
+        count++;
+        s++;
+    }
+    return count;
+}
+```
+
+**Answer:** The variable `count` is not initialized. In C, local variables have
+**indeterminate** (garbage) values when declared without an initializer.
+Incrementing an uninitialized variable is undefined behavior, and the function
+will return an unpredictable result. The fix:
+
+```c
+int count = 0;
+```
+
+---
+
+**4. Calculation:** Given the struct below, approximately how many bytes are
+copied each time `process_data` is called with pass by value? Assume `int`
+is 4 bytes.
+
+```c
+struct data {
+    int values[1000];
+    int count;
+};
+
+void process_data(struct data d) { /* ... */ }
+```
+
+**Answer:** **4004 bytes.** The `values` array is `1000 * 4 = 4000` bytes.
+The `count` field is 4 bytes. The total struct size is at least 4004 bytes
+(possibly more due to padding, but typically no padding is needed here since
+all fields are `int`). Every call to `process_data` copies all 4004 bytes onto
+the stack. This is why passing large structs by `const` pointer
+(`const struct data *d`) is strongly preferred.
+
+---
+
+**5. What does this print?**
+
+```c
+int apply(int (*fn)(int, int), int a, int b) {
+    return fn(a, b);
+}
+
+int mul(int a, int b) { return a * b; }
+
+int main(void) {
+    printf("%d\n", apply(mul, 6, 7));
+    return 0;
+}
+```
+
+**Answer:**
+
+```
+42
+```
+
+`apply` takes a function pointer `fn` and two integers. It calls `fn(6, 7)`.
+Since `fn` points to `mul`, this computes `6 * 7 = 42`.
+
+---
+
+**6. Where is the bug?**
+
+```c
+int get_length(void);
+int get_length() { return 42; }
+
+int main(void) {
+    printf("%d\n", get_length(1, 2, 3));
+    return 0;
+}
+```
+
+**Answer:** There is a mismatch between the prototype and the definition.
+The prototype `int get_length(void)` declares the function as taking no
+parameters. The definition `int get_length()` uses an empty parameter list,
+which in C means "unspecified parameters" — the compiler will not check the
+argument count or types. The call `get_length(1, 2, 3)` passes three arguments
+to a function that expects none. Because the definition uses `()` instead of
+`(void)`, the compiler may not catch the error.
+
+The fix is to use `(void)` consistently in both the prototype and definition:
+
+```c
+int get_length(void);
+int get_length(void) { return 42; }
+
+int main(void) {
+    printf("%d\n", get_length());   /* no arguments */
+    return 0;
+}
+```
+
+---
+
+**7. Write a program** that defines a function `void transform(int *arr, int n,
+int (*fn)(int))` which applies the function `fn` to each element of `arr`,
+modifying the array in place. Test it with a function that doubles each
+element and another that negates each element.
+
+**Answer:**
+
+```c
+#include <stdio.h>
+
+int double_it(int x) { return x * 2; }
+int negate(int x) { return -x; }
+
+void transform(int *arr, int n, int (*fn)(int)) {
+    for (int i = 0; i < n; i++) {
+        arr[i] = fn(arr[i]);
+    }
+}
+
+void print_array(const int *arr, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main(void) {
+    int nums[] = {1, 2, 3, 4, 5};
+    int n = sizeof(nums) / sizeof(nums[0]);
+
+    printf("Original: ");
+    print_array(nums, n);
+
+    transform(nums, n, double_it);
+    printf("Doubled:  ");
+    print_array(nums, n);
+
+    transform(nums, n, negate);
+    printf("Negated:  ");
+    print_array(nums, n);
+
+    return 0;
+}
+```
+
+Output:
+
+```
+Original: 1 2 3 4 5
+Doubled:  2 4 6 8 10
+Negated:  -2 -4 -6 -8 -10
+```
+
+# 7. Allocating Memory
 
 **1. Think about it:** Why would you choose `calloc` over `malloc` followed by
 `memset` to zero?
@@ -373,7 +1145,7 @@ Example output for `n = 5`:
 0 1 4 9 16
 ```
 
-# 4. Strings
+# 8. Strings
 
 **1. Think about it:** Why does `strcmp` return 0 for equal strings rather than
 1? How does this relate to the function's actual purpose?
@@ -503,7 +1275,7 @@ Enter a string: Hola
 Reversed: aloH
 ```
 
-# 5. Numbers and Casting
+# 9. Numbers and Casting
 
 **1. Think about it:** C++ provides several different cast operators (`static_cast`, `reinterpret_cast`, etc.) whereas C provides only one. What are the advantages of C++'s approach over C's single cast syntax?
 
@@ -579,7 +1351,7 @@ int main(void) {
 }
 ```
 
-# 6. Standard I/O
+# 10. Standard I/O
 
 **1. Think about it:** Why does `scanf` need the `&` operator for scalar
 variables but not for arrays?
@@ -728,7 +1500,7 @@ Line 4: Gracias
 Line 5: Adios
 ```
 
-# 7. Low-Level I/O
+# 11. Low-Level I/O
 
 **1. Think about it:** Why would you use low-level `read`/`write` instead of
 `fprintf`/`fscanf`? When would `stdio` be the better choice?
@@ -867,7 +1639,7 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-# 8. Odds and Ends
+# 12. Odds and Ends
 
 **1. Think about it:** In C++ you would use exceptions for error handling. In C
 there are no exceptions. What strategies can you use to handle errors in deeply
