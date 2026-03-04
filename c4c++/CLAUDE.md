@@ -60,6 +60,7 @@ Write chapters to help beginning C++ programmers become beginning C programmers.
 - PLAYLIST.md tracks all songs and references used in the text, organized by chapter
 - do not repeat references already listed in PLAYLIST.md
 - when adding or changing a reference in the text, update PLAYLIST.md to match
+- exception: "Come As You Are" by Nirvana (1991) is allowed in Ch 11 despite being early 90s
 
 # next 80s references
 
