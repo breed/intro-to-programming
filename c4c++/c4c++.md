@@ -74,22 +74,20 @@ If you look at the answer key first, the concepts will not sink in.
 
 # 1. Introduction
 
-In the beginning, knowing C++ automatically meant you knew C. The original C++
-compiler, `cfront`, literally translated C++ code into C before compiling it.
-But modern C++ has diverged dramatically from C. You have `std::string`,
-`std::vector`, smart pointers, RAII, templates, `iostream`, and exceptions — none
-of which exist in C. If someone hands you a C codebase today, your modern C++
-instincts will not get you very far.
+In the beginning, knowing C++ automatically meant you knew C.
+The original C++ compiler, `cfront`, literally translated C++ code into C before compiling it.
+But modern C++ has diverged dramatically from C.
+You have `std::string`, `std::vector`, smart pointers, RAII, templates, `iostream`, and exceptions — none of which exist in C.
+If someone hands you a C codebase today, your modern C++ instincts will not get you very far.
 
-So why learn C? Because C is everywhere. Operating systems, embedded firmware,
-database engines, language runtimes — the foundational software that the world
-runs on is written in C. Even if you spend most of your career in C++, you will
-encounter C code, C libraries, and C APIs. Understanding C makes you a better
-programmer, period.
+So why learn C?
+Because C is everywhere.
+Operating systems, embedded firmware, database engines, language runtimes — the foundational software that the world runs on is written in C.
+Even if you spend most of your career in C++, you will encounter C code, C libraries, and C APIs.
+Understanding C makes you a better programmer, period.
 
-My go-to C textbook is *The C Programming Language (Second Edition)* by Brian
-Kernighan and Dennis Ritchie — often called "K&R." It is one of the most
-influential programming books ever written, and it opens like this:
+My go-to C textbook is *The C Programming Language (Second Edition)* by Brian Kernighan and Dennis Ritchie — often called "K&R."
+It is one of the most influential programming books ever written, and it opens like this:
 
 > ## Getting Started
 >
@@ -122,10 +120,11 @@ influential programming books ever written, and it opens like this:
 ## Differences Summary
 
 \index{stdio.h}
-Notice the differences from C++. There is no `#include <iostream>`, no
-`std::println`, no `std::cout`. In C, you use `printf` from `<stdio.h>` for
-output. The file ends in `.c`, not `.cpp`. You compile with `cc` (the C
-compiler) rather than `c++`.
+Notice the differences from C++.
+There is no `#include <iostream>`, no `std::println`, no `std::cout`.
+In C, you use `printf` from `<stdio.h>` for output.
+The file ends in `.c`, not `.cpp`.
+You compile with `cc` (the C compiler) rather than `c++`.
 
 Here is a quick summary of the biggest differences you will encounter:
 
@@ -144,9 +143,9 @@ Here is a quick summary of the biggest differences you will encounter:
 
 ::: {.tip}
 \index{cc (compiler)}
-**Tip:** C source files use the `.c` extension and are compiled with `cc`. If
-you accidentally compile a `.c` file with `c++`, it will be treated as C++ and
-may accept syntax that real C compilers reject. Always use `cc` when writing C.
+**Tip:** C source files use the `.c` extension and are compiled with `cc`.
+If you accidentally compile a `.c` file with `c++`, it will be treated as C++ and may accept syntax that real C compilers reject.
+Always use `cc` when writing C.
 :::
 
 ## Printing with `printf`
@@ -157,14 +156,13 @@ may accept syntax that real C compilers reject. Always use `cc` when writing C.
 int printf(const char *format, ...);
 ```
 
-In C++, you use `std::cout` or `std::println` for output. In C, you use
-`printf` from `<stdio.h>`. Unlike `std::println`, `printf` does not
-automatically add a newline at the end of the output. If you want each call to
-end on its own line, you must include `\n` in the format string yourself.
+In C++, you use `std::cout` or `std::println` for output.
+In C, you use `printf` from `<stdio.h>`.
+Unlike `std::println`, `printf` does not automatically add a newline at the end of the output.
+If you want each call to end on its own line, you must include `\n` in the format string yourself.
 
-The first argument to `printf` is a **format string** containing literal text
-and **format specifiers** that start with `%`. Each specifier is replaced by the
-corresponding argument that follows:
+The first argument to `printf` is a **format string** containing literal text and **format specifiers** that start with `%`.
+Each specifier is replaced by the corresponding argument that follows:
 
 ```c
 int year = 1984;
@@ -193,10 +191,8 @@ It may work, but it is a potential security vulnerability (format string attack)
 If you only want to print a string variable, don't do ~~`printf(str)`~~, do `printf("%s", str)`.
 :::
 
-You can control the width and precision of output by placing numbers between the
-`%` and the specifier letter. A number before the specifier sets the minimum
-field width, and a `.` followed by a number sets the precision (decimal places
-for floats, max characters for strings):
+You can control the width and precision of output by placing numbers between the `%` and the specifier letter.
+A number before the specifier sets the minimum field width, and a `.` followed by a number sets the precision (decimal places for floats, max characters for strings):
 
 ```c
 double score = 98.6;
@@ -205,8 +201,8 @@ printf("Score: %.2f\n", score);    // 98.60      (2 decimal places)
 printf("Score: %e\n", score);      // 9.860000e+01 (scientific notation)
 ```
 
-**Zero-filled output** is useful for track numbers, timestamps, and hex
-addresses. Place a `0` before the width to pad with zeros instead of spaces:
+**Zero-filled output** is useful for track numbers, timestamps, and hex addresses.
+Place a `0` before the width to pad with zeros instead of spaces:
 
 ```c
 for (int i = 1; i <= 5; i++) {
@@ -225,14 +221,13 @@ int score = 95;
 printf("Score: %d%%\n", score);      // Score: 95%
 ```
 
-**Since `%` introduces a format specifier, you must write `%%` to print a literal
-percent sign.**
+**Since `%` introduces a format specifier, you must write `%%` to print a literal percent sign.**
 
 ::: {.tip}
-**Trap:** `printf` does not check that your format specifiers match the types of
-your arguments. If you write `printf("%d", 3.14)`, the compiler may warn you,
-but it will not stop you. The result is garbage. Always match specifiers to
-types: `%d` for `int`, `%f` for `double`, `%s` for `char *`, and so on.
+**Trap:** `printf` does not check that your format specifiers match the types of your arguments.
+If you write `printf("%d", 3.14)`, the compiler may warn you, but it will not stop you.
+The result is garbage.
+Always match specifiers to types: `%d` for `int`, `%f` for `double`, `%s` for `char *`, and so on.
 :::
 
 ## Try It: printf Starter
@@ -276,8 +271,9 @@ int main(void) {
 ## Exercises
 
 1. **Think about it:** C uses format specifiers in `printf` while C++ uses
-   `operator<<` or `std::format`. What advantage does the format string
-   approach give you when writing output to a log file? What is a disadvantage?
+   `operator<<` or `std::format`.
+   What advantage does the format string approach give you when writing output to a log file?
+   What is a disadvantage?
 
 2. **What does this print?**
 
@@ -302,20 +298,18 @@ int main(void) {
 
 # 2. Variables
 
-In C++, you have `auto` to let the compiler figure out types, `std::string` to
-handle text, and classes to bundle data with behavior. In C, none of that
-exists. Every type is explicit, strings are raw character arrays, and if you
-want to group data together, you use a `struct` with no member functions. This
-chapter covers how C handles variables — from basic types and arrays to
-pointers, `const`, and structures.
+In C++, you have `auto` to let the compiler figure out types, `std::string` to handle text, and classes to bundle data with behavior.
+In C, none of that exists.
+Every type is explicit, strings are raw character arrays, and if you want to group data together, you use a `struct` with no member functions.
+This chapter covers how C handles variables — from basic types and arrays to pointers, `const`, and structures.
 
 ## Basic Types
 
 \index{types}
 
-C provides a small set of built-in types. There are no classes, no
-`std::string`, and no `bool` keyword (without a header). Here are the types you
-will use most:
+C provides a small set of built-in types.
+There are no classes, no `std::string`, and no `bool` keyword (without a header).
+Here are the types you will use most:
 
 | Type | Typical Size | Description |
 |:---|:---|:---|
@@ -329,9 +323,8 @@ will use most:
 | `_Bool` | 1 byte | Boolean (C99); use `bool` via `<stdbool.h>` |
 
 \index{unsigned}
-Each integer type has an `unsigned` variant that stores only non-negative
-values, giving you twice the positive range. For example, a `signed char` holds
--128 to 127, while an `unsigned char` holds 0 to 255:
+Each integer type has an `unsigned` variant that stores only non-negative values, giving you twice the positive range.
+For example, a `signed char` holds -128 to 127, while an `unsigned char` holds 0 to 255:
 
 ```c
 unsigned char brightness = 255;
@@ -359,9 +352,8 @@ if (!done) {
 
 \index{variable}
 
-A variable declaration does two things: it allocates a region of memory large
-enough to hold the declared type, and it gives that region a name. The amount of
-memory allocated depends on the type:
+A variable declaration does two things: it allocates a region of memory large enough to hold the declared type, and it gives that region a name.
+The amount of memory allocated depends on the type:
 
 ```c
 #include <stdio.h>
@@ -380,9 +372,9 @@ int main(void) {
 ```
 
 \index{sizeof}
-The `sizeof` operator returns the size in bytes of a type or variable. It
-evaluates at compile time, so there is no runtime cost. You can use it with a
-type name or with a variable:
+The `sizeof` operator returns the size in bytes of a type or variable.
+It evaluates at compile time, so there is no runtime cost.
+You can use it with a type name or with a variable:
 
 ```c
 printf("int is %zu bytes\n", sizeof(int));
@@ -390,17 +382,17 @@ printf("year is %zu bytes\n", sizeof(year));
 ```
 
 ::: {.tip}
-**Tip:** `sizeof` returns a value of type `size_t`. Always use `%zu` to print
-it. Using `%d` is technically undefined behavior, even though it often appears
-to work.
+**Tip:** `sizeof` returns a value of type `size_t`.
+Always use `%zu` to print it.
+Using `%d` is technically undefined behavior, even though it often appears to work.
 :::
 
 ## typedef
 
 \index{typedef}
 
-The `typedef` keyword creates an alias for an existing type. It does not create
-a new type — it just gives you a shorter or more descriptive name:
+The `typedef` keyword creates an alias for an existing type.
+It does not create a new type — it just gives you a shorter or more descriptive name:
 
 ```c
 typedef unsigned long ulong;
@@ -437,37 +429,34 @@ Point origin = {0.0, 0.0};   /* much cleaner */
 ```
 
 ::: {.tip}
-**Tip:** In C++, you can use a struct name directly as a type. In C, you cannot
-— you must either write `struct name` every time or use `typedef` to create an
-alias. Most C codebases use `typedef` for any struct that appears frequently.
+**Tip:** In C++, you can use a struct name directly as a type.
+In C, you cannot — you must either write `struct name` every time or use `typedef` to create an alias.
+Most C codebases use `typedef` for any struct that appears frequently.
 :::
 
 ## Pointer Declarations
 
 \index{pointer!declaration}
 
-A pointer variable holds the address of another variable. You declare a pointer
-by placing `*` after the base type:
+A pointer variable holds the address of another variable.
+You declare a pointer by placing `*` after the base type:
 
 ```c
 int score = 100;
 int *p = &score;   /* p holds the address of score */
 ```
 
-The type before the `*` tells the compiler what kind of data lives at that
-address. An `int *` points to an `int`, a `char *` points to a `char`, and so
-on.
+The type before the `*` tells the compiler what kind of data lives at that address.
+An `int *` points to an `int`, a `char *` points to a `char`, and so on.
 
-We will not go deeper into pointers here. The Pointers chapter covers
-dereferencing, pointer arithmetic, pointers to pointers, and how pointers
-interact with arrays and structures in detail.
+We will not go deeper into pointers here.
+The Pointers chapter covers dereferencing, pointer arithmetic, pointers to pointers, and how pointers interact with arrays and structures in detail.
 
 ## Arrays
 
 \index{array}
 
-An array is a fixed-size sequence of elements of the same type, declared with
-`[]`:
+An array is a fixed-size sequence of elements of the same type, declared with `[]`:
 
 ```c
 int scores[5];                          /* 5 uninitialized ints */
@@ -475,27 +464,26 @@ int primes[5] = {2, 3, 5, 7, 11};      /* initialized */
 char greeting[] = "Hola";              /* compiler counts: 5 chars (including '\0') */
 ```
 
-When you provide an initializer, the compiler can determine the size for you, so
-you can leave the brackets empty.
+When you provide an initializer, the compiler can determine the size for you, so you can leave the brackets empty.
 
 ### The "Value" of an Array Name
 
 \index{array!decay to pointer}
 
-In most expressions, the name of an array evaluates to the address of its first
-element. This is called **decay** — the array "decays" into a pointer:
+In most expressions, the name of an array evaluates to the address of its first element.
+This is called **decay** — the array "decays" into a pointer:
 
 ```c
 int primes[5] = {2, 3, 5, 7, 11};
 int *p = primes;    /* p points to primes[0]; no & needed */
 ```
 
-This is why you can pass an array to a function that expects a pointer. The
-Pointers chapter will explore this relationship thoroughly.
+This is why you can pass an array to a function that expects a pointer.
+The Pointers chapter will explore this relationship thoroughly.
 
 ::: {.tip}
-**Wut:** The `sizeof` operator is one of the few contexts where an array does
-*not* decay to a pointer. `sizeof(primes)` gives the total size of the array, not the size of a pointer.
+**Wut:** The `sizeof` operator is one of the few contexts where an array does *not* decay to a pointer.
+`sizeof(primes)` gives the total size of the array, not the size of a pointer.
 If `int` is 4 bytes and an address is 8 bytes (common sizes on modern hardware), `sizeof(primes)` is 20 and `sizeof(p)` is 8.
 :::
 
@@ -512,9 +500,8 @@ int zeros[100] = {0};          /* all 100 elements are 0 */
 
 \index{array!multidimensional}
 
-C supports multidimensional arrays. A two-dimensional array is really an array
-of arrays, stored in **row-major** order — all elements of row 0 come first,
-then all elements of row 1, and so on:
+C supports multidimensional arrays.
+A two-dimensional array is really an array of arrays, stored in **row-major** order — all elements of row 0 come first, then all elements of row 1, and so on:
 
 ```c
 int grid[3][4] = {
@@ -524,8 +511,8 @@ int grid[3][4] = {
 };
 ```
 
-In memory, this is stored as: `1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12` — twelve
-consecutive integers. The expression `grid[r][c]` accesses row `r`, column `c`.
+In memory, this is stored as: `1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12` — twelve consecutive integers.
+The expression `grid[r][c]` accesses row `r`, column `c`.
 
 Iterating through a 2D array:
 
@@ -550,24 +537,22 @@ int main(void) {
 ```
 
 ::: {.tip}
-**Trap:** When passing a multidimensional array to a function, you must specify
-all dimensions except the first. The compiler needs the column count to
-calculate offsets:
+**Trap:** When passing a multidimensional array to a function, you must specify all dimensions except the first.
+The compiler needs the column count to calculate offsets:
 
 ```c
 void print_grid(int grid[][4], int rows);   /* OK — column size specified */
 ```
 
-You cannot write `int grid[][]` — the compiler would not know how wide each row
-is.
+You cannot write `int grid[][]` — the compiler would not know how wide each row is.
 :::
 
 ## const
 
 \index{const}
 
-The `const` qualifier marks a variable as read-only. Any attempt to modify it is
-a compile-time error:
+The `const` qualifier marks a variable as read-only.
+Any attempt to modify it is a compile-time error:
 
 ```c
 const int MAX_TRACKS = 12;
@@ -578,11 +563,10 @@ const double PI = 3.14159265358979;
 
 \index{const!with pointers}
 
-Things get interesting when `const` meets pointers. There are three
-combinations, and the **read right-to-left** rule helps you decode them:
+Things get interesting when `const` meets pointers.
+There are three combinations, and the **read right-to-left** rule helps you decode them:
 
-**Pointer to const data** — you cannot modify the data through this pointer, but
-you can change where the pointer points:
+**Pointer to const data** — you cannot modify the data through this pointer, but you can change where the pointer points:
 
 ```c
 const int *p = &x;
@@ -590,11 +574,10 @@ const int *p = &x;
 p = &y;       /* OK: p itself can change */
 ```
 
-Read right-to-left: `p` is a pointer (`*`) to `int` that is `const`. The data
-is const, not the pointer.
+Read right-to-left: `p` is a pointer (`*`) to `int` that is `const`.
+The data is const, not the pointer.
 
-**const pointer to data** — the pointer itself cannot change, but you can modify
-the data it points to:
+**const pointer to data** — the pointer itself cannot change, but you can modify the data it points to:
 
 ```c
 int *const p = &x;
@@ -602,8 +585,8 @@ int *const p = &x;
 p = &y;       /* ERROR: p itself is const */
 ```
 
-Read right-to-left: `p` is a `const` pointer (`*`) to `int`. The pointer is
-const, not the data.
+Read right-to-left: `p` is a `const` pointer (`*`) to `int`.
+The pointer is const, not the data.
 
 **const pointer to const data** — neither the pointer nor the data can change:
 
@@ -614,19 +597,16 @@ p = &y;       /* ERROR */
 ```
 
 ::: {.tip}
-**Tip:** The most common form is `const int *p` — a pointer through which you
-promise not to modify the data. You will see this constantly in function
-parameters, like `const char *msg`, where the function reads the data but does
-not change it.
+**Tip:** The most common form is `const int *p` — a pointer through which you promise not to modify the data.
+You will see this constantly in function parameters, like `const char *msg`, where the function reads the data but does not change it.
 :::
 
 ## Structures
 
 \index{struct}
 
-A `struct` groups related variables together under one name. If you come from
-C++, think of a struct as a class with only public data members — no member
-functions, no constructors, no destructors, and no access specifiers:
+A `struct` groups related variables together under one name.
+If you come from C++, think of a struct as a class with only public data members — no member functions, no constructors, no destructors, and no access specifiers:
 
 ```c
 struct song {
@@ -637,8 +617,7 @@ struct song {
 
 ### Declaring and Initializing
 
-To declare a variable of a struct type, you write `struct` followed by the tag
-name:
+To declare a variable of a struct type, you write `struct` followed by the tag name:
 
 ```c
 struct song track;
@@ -699,15 +678,14 @@ struct song copy = original;
 printf("%s (%d)\n", copy.title, copy.year);   // I Love Rock 'n' Roll (1981)
 ```
 
-This is a **shallow copy**. If the struct contained a pointer, both copies would
-point to the same memory. For structs that contain only arrays and plain values
-(like `struct song` above), the copy is complete and independent.
+This is a **shallow copy**.
+If the struct contained a pointer, both copies would point to the same memory.
+For structs that contain only arrays and plain values (like `struct song` above), the copy is complete and independent.
 
 ::: {.tip}
-**Wut:** Unlike C++, there is no copy constructor or `operator=` to customize
-what happens during assignment. C copies the raw bytes, period. If your struct
-contains a pointer to dynamically allocated memory, the copy will share that
-memory, leading to double-free bugs if you are not careful.
+**Wut:** Unlike C++, there is no copy constructor or `operator=` to customize what happens during assignment.
+C copies the raw bytes, period.
+If your struct contains a pointer to dynamically allocated memory, the copy will share that memory, leading to double-free bugs if you are not careful.
 :::
 
 ### No Member Functions
@@ -722,8 +700,8 @@ public:
 };
 ```
 
-In C, structs cannot have member functions. Instead, you write standalone
-functions that take a pointer to the struct:
+In C, structs cannot have member functions.
+Instead, you write standalone functions that take a pointer to the struct:
 
 ```c
 void song_print(const struct song *s) {
@@ -731,14 +709,13 @@ void song_print(const struct song *s) {
 }
 ```
 
-The `->` operator accesses a member through a pointer — it is shorthand for
-`(*s).title`. We will cover this in detail in the Pointers chapter.
+The `->` operator accesses a member through a pointer — it is shorthand for `(*s).title`.
+We will cover this in detail in the Pointers chapter.
 
 ::: {.tip}
-**Tip:** A common C pattern is to prefix functions with the struct name they
-operate on: `song_print`, `song_init`, `song_compare`. This gives you something
-like namespaced methods. Function pointers (covered in a later chapter) can even
-be stored in structs to simulate virtual functions.
+**Tip:** A common C pattern is to prefix functions with the struct name they operate on: `song_print`, `song_init`, `song_compare`.
+This gives you something like namespaced methods.
+Function pointers (covered in a later chapter) can even be stored in structs to simulate virtual functions.
 :::
 
 ## Try It: Variables Starter
@@ -809,7 +786,8 @@ int main(void) {
 - C has no `auto`, no `std::string`, and no classes. Every type is spelled out
   explicitly.
 - A variable declaration allocates memory of the type's size and gives it a
-  name. Use `sizeof` to see how many bytes each type occupies.
+  name.
+  Use `sizeof` to see how many bytes each type occupies.
 - `typedef` creates type aliases — especially useful for structs so you do not
   have to write `struct` everywhere.
 - Arrays are fixed-size, and the array name decays to a pointer to the first
@@ -819,13 +797,15 @@ int main(void) {
 - `const` marks a variable as read-only. With pointers, read right-to-left to
   determine what is const — the data, the pointer, or both.
 - Structs group data together but have no member functions, constructors, or
-  access specifiers. Assignment copies the raw bytes.
+  access specifiers.
+  Assignment copies the raw bytes.
 
 ## Exercises
 
 1. **Think about it:** In C++, `auto x = 42;` lets the compiler deduce the
-   type. C has no `auto` type deduction. What advantage does requiring explicit
-   types give to someone reading unfamiliar C code?
+   type.
+   C has no `auto` type deduction.
+   What advantage does requiring explicit types give to someone reading unfamiliar C code?
 
 2. **What does this print?**
 
@@ -861,49 +841,44 @@ int main(void) {
     ```
 
 6. **Think about it:** In C, assigning one struct to another copies the raw
-   bytes. What problem could this cause if the struct contains a `char *` member
-   that points to dynamically allocated memory (via `malloc`)? How is this
-   different from what C++ does by default?
+   bytes.
+   What problem could this cause if the struct contains a `char *` member that points to dynamically allocated memory (via `malloc`)?
+   How is this different from what C++ does by default?
 
 7. **Write a program** that declares a `struct student` with fields `name`
-   (a `char` array), `id` (an `int`), and `gpa` (a `double`). Create an array
-   of 3 students, initialize them with values, and print each student's
-   information using a loop. Use `%s`, `%d`, and `%.2f` in your `printf`.
+   (a `char` array), `id` (an `int`), and `gpa` (a `double`).
+   Create an array of 3 students, initialize them with values, and print each student's information using a loop.
+   Use `%s`, `%d`, and `%.2f` in your `printf`.
 
 \newpage
 
 # 3. Expressions
 
-C and C++ share most of their operators, and if you have been writing C++ you
-will find the syntax immediately familiar. But there are important differences.
-C has no operator overloading — `+` always means arithmetic addition, never
-something a class author decided it should mean. The `<<` and `>>` operators are
-strictly bitwise shifts, not I/O operations. And C uses `int` for boolean
-results — there is no built-in `bool` type (though C99 added `_Bool` and
-`<stdbool.h>`).
+C and C++ share most of their operators, and if you have been writing C++ you will find the syntax immediately familiar.
+But there are important differences.
+C has no operator overloading — `+` always means arithmetic addition, never something a class author decided it should mean.
+The `<<` and `>>` operators are strictly bitwise shifts, not I/O operations.
+And C uses `int` for boolean results — there is no built-in `bool` type (though C99 added `_Bool` and `<stdbool.h>`).
 
-This chapter walks through the operators you will use every day in C, highlights
-a few traps, and ends with the precedence table you will want to bookmark.
+This chapter walks through the operators you will use every day in C, highlights a few traps, and ends with the precedence table you will want to bookmark.
 
 ## Assignment
 
 \index{assignment operator}
 
-The `=` operator assigns a value to a variable. In C, assignment is an
-**expression** — it produces a value, which is the value being assigned. This
-lets you chain assignments:
+The `=` operator assigns a value to a variable.
+In C, assignment is an **expression** — it produces a value, which is the value being assigned.
+This lets you chain assignments:
 
 ```c
 int a, b, c;
 a = b = c = 0;   // all three are now 0
 ```
 
-The chain works right to left: `c` gets `0`, then `b` gets the value of that
-assignment (also `0`), then `a` gets the same.
+The chain works right to left: `c` gets `0`, then `b` gets the value of that assignment (also `0`), then `a` gets the same.
 
-Because assignment is an expression, you can (and sometimes will) use it inside
-other expressions. A common pattern is assigning and testing a return value in
-one step:
+Because assignment is an expression, you can (and sometimes will) use it inside other expressions.
+A common pattern is assigning and testing a return value in one step:
 
 ```c
 int ch;
@@ -915,10 +890,9 @@ while ((ch = getchar()) != EOF) {
 \index{assignment!vs equality}
 
 ::: {.tip}
-**Trap:** Because `=` is assignment and `==` is comparison, a common mistake is
-writing `if (x = 5)` when you mean `if (x == 5)`. The first assigns `5` to `x`
-and then evaluates as true (since `5` is nonzero). Modern compilers warn about
-this, but it is still one of the most famous bugs in C:
+**Trap:** Because `=` is assignment and `==` is comparison, a common mistake is writing `if (x = 5)` when you mean `if (x == 5)`.
+The first assigns `5` to `x` and then evaluates as true (since `5` is nonzero).
+Modern compilers warn about this, but it is still one of the most famous bugs in C:
 
 ```c
 int x = 0;
@@ -927,8 +901,8 @@ if (x = 5) {
 }
 ```
 
-Some programmers write the constant on the left — `if (5 == x)` — so that
-`if (5 = x)` would be a compiler error. This is called a **Yoda condition**.
+Some programmers write the constant on the left — `if (5 == x)` — so that `if (5 = x)` would be a compiler error.
+This is called a **Yoda condition**.
 :::
 
 ## Arithmetic Operators
@@ -946,9 +920,9 @@ The arithmetic operators work on numeric types just like in C++:
 | `%` | remainder | `17 % 5` | `2` |
 
 \index{integer division}
-**Integer division** truncates toward zero. This means `17 / 5` gives `3`, not
-`3.4`. If you want a floating-point result, at least one operand must be a
-floating-point type:
+**Integer division** truncates toward zero.
+This means `17 / 5` gives `3`, not `3.4`.
+If you want a floating-point result, at least one operand must be a floating-point type:
 
 ```c
 printf("%d\n", 17 / 5);       // 3
@@ -956,8 +930,8 @@ printf("%f\n", 17.0 / 5);     // 3.400000
 ```
 
 \index{remainder operator (\%)}
-The `%` operator gives the **remainder** after integer division. In C99 and
-later, the result of `%` has the same sign as the dividend (the left operand):
+The `%` operator gives the **remainder** after integer division.
+In C99 and later, the result of `%` has the same sign as the dividend (the left operand):
 
 ```c
 printf("%d\n",  17 %  5);   //  2
@@ -967,12 +941,12 @@ printf("%d\n", -17 % -5);   // -2
 ```
 
 ::: {.tip}
-**Wut:** The `%` operator is often called "modulo," but it is technically the
-**remainder** operator. For positive numbers, remainder and modulo are the same.
-For negative numbers, they differ. In mathematics, modulo always returns a
-non-negative result. In C, `%` preserves the sign of the dividend. If you need
-a true modulo that always returns a non-negative value, you need to adjust the
-result yourself:
+**Wut:** The `%` operator is often called "modulo," but it is technically the **remainder** operator.
+For positive numbers, remainder and modulo are the same.
+For negative numbers, they differ.
+In mathematics, modulo always returns a non-negative result.
+In C, `%` preserves the sign of the dividend.
+If you need a true modulo that always returns a non-negative value, you need to adjust the result yourself:
 
 ```c
 /* assumes m > 0 */
@@ -988,8 +962,8 @@ int mod(int a, int m) {
 \index{comparison operators}
 \index{logical operators}
 
-Comparison operators produce `1` for true and `0` for false. The result type is
-`int`, not `bool`:
+Comparison operators produce `1` for true and `0` for false.
+The result type is `int`, not `bool`:
 
 | Operator | Meaning |
 |:---:|:---|
@@ -1009,9 +983,9 @@ Logical operators combine boolean expressions:
 | `!` | logical NOT |
 
 \index{short-circuit evaluation}
-Both `&&` and `||` use **short-circuit evaluation**, just like C++. With `&&`,
-if the left side is false, the right side is never evaluated. With `||`, if the
-left side is true, the right side is skipped:
+Both `&&` and `||` use **short-circuit evaluation**, just like C++.
+With `&&`, if the left side is false, the right side is never evaluated.
+With `||`, if the left side is true, the right side is skipped:
 
 ```c
 int *p = NULL;
@@ -1025,10 +999,9 @@ if (p != NULL && *p > 0) {
 \index{stdbool.h}
 \index{bool}
 
-In C++, `bool` is a built-in type. In C89, there is no boolean type at all — you
-use `int` where `0` is false and anything nonzero is true. C99 added `_Bool` as
-a keyword and `<stdbool.h>` as a convenience header that defines `bool`, `true`,
-and `false`:
+In C++, `bool` is a built-in type.
+In C89, there is no boolean type at all — you use `int` where `0` is false and anything nonzero is true.
+C99 added `_Bool` as a keyword and `<stdbool.h>` as a convenience header that defines `bool`, `true`, and `false`:
 
 ```c
 #include <stdbool.h>
@@ -1050,19 +1023,19 @@ while (!done) {
 ```
 
 ::: {.tip}
-**Tip:** In C, any nonzero value is true. The number `42`, the character `'A'`,
-and the pointer `0x7fff` are all true. Only `0` (and `NULL` for pointers) is
-false. This is why you can write `if (ptr)` instead of `if (ptr != NULL)` — they
-mean the same thing.
+**Tip:** In C, any nonzero value is true.
+The number `42`, the character `'A'`, and the pointer `0x7fff` are all true.
+Only `0` (and `NULL` for pointers) is false.
+This is why you can write `if (ptr)` instead of `if (ptr != NULL)` — they mean the same thing.
 :::
 
 ## Bitwise Operators
 
 \index{bitwise operators}
 
-Bitwise operators work on the individual bits of integer values. In C++, `<<`
-and `>>` are commonly used for stream I/O. In C, they are exclusively bit shift
-operators.
+Bitwise operators work on the individual bits of integer values.
+In C++, `<<` and `>>` are commonly used for stream I/O.
+In C, they are exclusively bit shift operators.
 
 | Operator | Operation | Example | Result |
 |:---:|:---|:---|:---|
@@ -1077,8 +1050,7 @@ operators.
 
 \index{bitwise operators!flags}
 
-One of the most common uses of bitwise operators in C is manipulating **flags**
-— individual bits within an integer that each represent an on/off setting:
+One of the most common uses of bitwise operators in C is manipulating **flags** — individual bits within an integer that each represent an on/off setting:
 
 ```c
 #include <stdio.h>
@@ -1123,18 +1095,16 @@ The pattern is straightforward:
 - **Check** a bit: `if (flags & BIT)`
 
 ::: {.tip}
-**Tip:** Shifting `1` to create bit masks — `(1 << n)` — is a common idiom in
-C for hardware registers, permission flags, and option bitmasks. It is clearer
-than writing raw hex values because you can see exactly which bit position you
-are targeting.
+**Tip:** Shifting `1` to create bit masks — `(1 << n)` — is a common idiom in C for hardware registers, permission flags, and option bitmasks.
+It is clearer than writing raw hex values because you can see exactly which bit position you are targeting.
 :::
 
 ## Compound Assignment Operators
 
 \index{compound assignment}
 
-Compound assignment operators combine an arithmetic or bitwise operation with
-assignment. They work exactly as in C++:
+Compound assignment operators combine an arithmetic or bitwise operation with assignment.
+They work exactly as in C++:
 
 | Operator | Equivalent to |
 |:---:|:---|
@@ -1149,18 +1119,17 @@ assignment. They work exactly as in C++:
 | `a <<= b` | `a = a << b` |
 | `a >>= b` | `a = a >> b` |
 
-These are not just shortcuts — they express intent more clearly. When you write
-`count += 1`, the reader knows you are incrementing `count`. When you write
-`count = count + 1`, the reader has to verify that the same variable appears on
-both sides.
+These are not just shortcuts — they express intent more clearly.
+When you write `count += 1`, the reader knows you are incrementing `count`.
+When you write `count = count + 1`, the reader has to verify that the same variable appears on both sides.
 
 ## Increment and Decrement
 
 \index{increment operator}
 \index{decrement operator}
 
-The `++` and `--` operators increment or decrement a variable by one. They come
-in prefix and postfix forms:
+The `++` and `--` operators increment or decrement a variable by one.
+They come in prefix and postfix forms:
 
 ```c
 int x = 5;
@@ -1172,26 +1141,23 @@ In a standalone statement, `x++` and `++x` do the same thing — increment `x`.
 The difference only matters when the result is used in a larger expression.
 
 ::: {.tip}
-**Trap:** Do not modify a variable more than once in the same expression. The
-result is **undefined behavior**:
+**Trap:** Do not modify a variable more than once in the same expression.
+The result is **undefined behavior**:
 
 ```c
 int i = 3;
 int result = i++ + ++i;   // UNDEFINED BEHAVIOR — do not do this
 ```
 
-The compiler is free to evaluate the sub-expressions in any order, and different
-compilers (or even the same compiler with different optimization levels) may
-produce different results. If you need multiple modifications, use separate
-statements.
+The compiler is free to evaluate the sub-expressions in any order, and different compilers (or even the same compiler with different optimization levels) may produce different results.
+If you need multiple modifications, use separate statements.
 :::
 
 ## The Ternary Operator
 
 \index{ternary operator}
 
-The ternary operator `? :` is a compact alternative to `if`/`else` for simple
-value selection:
+The ternary operator `? :` is a compact alternative to `if`/`else` for simple value selection:
 
 ```c
 int volume = 11;
@@ -1199,9 +1165,8 @@ const char *verdict = (volume > 10) ? "Loco" : "Tranquilo";
 printf("Volume %d: %s\n", volume, verdict);   // Volume 11: Loco
 ```
 
-The syntax is `condition ? value_if_true : value_if_false`. The ternary operator
-is an expression, so it produces a value that can be used in assignments,
-function arguments, or anywhere a value is expected:
+The syntax is `condition ? value_if_true : value_if_false`.
+The ternary operator is an expression, so it produces a value that can be used in assignments, function arguments, or anywhere a value is expected:
 
 ```c
 printf("Track %d is %s\n", track,
@@ -1209,8 +1174,8 @@ printf("Track %d is %s\n", track,
 ```
 
 ::: {.tip}
-**Tip:** The ternary operator is great for simple one-line decisions. If your
-condition or either branch is complex, use a regular `if`/`else` instead.
+**Tip:** The ternary operator is great for simple one-line decisions.
+If your condition or either branch is complex, use a regular `if`/`else` instead.
 Readability matters more than cleverness.
 :::
 
@@ -1218,9 +1183,8 @@ Readability matters more than cleverness.
 
 \index{operator precedence}
 
-When multiple operators appear in an expression, C evaluates them according to a
-precedence table. Here are the most important levels, from highest (evaluated
-first) to lowest:
+When multiple operators appear in an expression, C evaluates them according to a precedence table.
+Here are the most important levels, from highest (evaluated first) to lowest:
 
 | Precedence | Operators | Description |
 |:---:|:---|:---|
@@ -1244,8 +1208,7 @@ first) to lowest:
 
 \index{operator precedence!traps}
 
-The most dangerous precedence surprise is that **bitwise operators bind more
-loosely than comparison operators**:
+The most dangerous precedence surprise is that **bitwise operators bind more loosely than comparison operators**:
 
 ```c
 // WRONG — this checks (x) & (0x04 == 0x04), which is (x) & (1)
@@ -1255,8 +1218,7 @@ if (x & 0x04 == 0x04) { ... }
 if ((x & 0x04) == 0x04) { ... }
 ```
 
-Similarly, `||` has lower precedence than `&&`, which matches mathematical
-convention (AND before OR) but can surprise you:
+Similarly, `||` has lower precedence than `&&`, which matches mathematical convention (AND before OR) but can surprise you:
 
 ```c
 // This evaluates as: a || (b && c)  — not (a || b) && c
@@ -1264,10 +1226,9 @@ if (a || b && c) { ... }
 ```
 
 ::: {.tip}
-**Tip:** When in doubt, use parentheses. No one will fault you for writing
-`(a & b) == c` instead of relying on precedence rules. The few extra characters
-make your intent unmistakable and save the next reader (who might be you)
-from having to look up the precedence table.
+**Tip:** When in doubt, use parentheses.
+No one will fault you for writing `(a & b) == c` instead of relying on precedence rules.
+The few extra characters make your intent unmistakable and save the next reader (who might be you) from having to look up the precedence table.
 :::
 
 ## Try It: Expressions Starter
@@ -1333,10 +1294,10 @@ int main(void) {
 ## Exercises
 
 1. **Think about it:** In C++, you can overload operators to give `+`, `<<`,
-   `==`, and others custom meanings for your classes. C does not allow operator
-   overloading. What advantage does this give you when reading unfamiliar C
-   code? Can you think of a situation where operator overloading would have been
-   genuinely useful in C?
+   `==`, and others custom meanings for your classes.
+   C does not allow operator overloading.
+   What advantage does this give you when reading unfamiliar C code?
+   Can you think of a situation where operator overloading would have been genuinely useful in C?
 
 2. **What does this print?**
 
@@ -1389,20 +1350,18 @@ int main(void) {
     ```
 
 7. **Write a program** that takes an `unsigned int` and prints its value in
-   binary (most significant bit first). Use bitwise operators to test each bit.
+   binary (most significant bit first).
+   Use bitwise operators to test each bit.
    Test it with the values `0`, `1`, `255`, and `1024`.
 
 \newpage
 
 # 4. Control Flow
 
-Control flow in C will feel very familiar if you are coming from C++. The `if`,
-`while`, `for`, and `switch` statements work essentially the same way. The
-differences are small but worth knowing: C has no range-based `for` loops, no
-structured bindings, and no `std::optional`. In C89, all variable declarations
-had to appear at the top of a block before any statements — C99 relaxed this
-and let you declare variables anywhere, which is how you are used to writing
-code in C++.
+Control flow in C will feel very familiar if you are coming from C++.
+The `if`, `while`, `for`, and `switch` statements work essentially the same way.
+The differences are small but worth knowing: C has no range-based `for` loops, no structured bindings, and no `std::optional`.
+In C89, all variable declarations had to appear at the top of a block before any statements — C99 relaxed this and let you declare variables anywhere, which is how you are used to writing code in C++.
 
 The biggest conceptual difference is that C has no native `bool` type.
 Conditions are just integers: zero is false, and any nonzero value is true.
@@ -1425,10 +1384,10 @@ if (score >= 90) {
 }
 ```
 
-The condition in an `if` is an integer expression. Zero means false, nonzero
-means true. There is no built-in `bool` type in C89. C99 added `_Bool` and
-the convenience header `<stdbool.h>`, which defines `bool`, `true`, and
-`false`:
+The condition in an `if` is an integer expression.
+Zero means false, nonzero means true.
+There is no built-in `bool` type in C89.
+C99 added `_Bool` and the convenience header `<stdbool.h>`, which defines `bool`, `true`, and `false`:
 
 ```c
 #include <stdbool.h>
@@ -1441,12 +1400,10 @@ if (is_hurricane) {
 
 \index{stdbool.h}
 
-Without `<stdbool.h>`, C programmers traditionally use `int` for boolean values
-and `0`/`1` for false/true, or define their own macros.
+Without `<stdbool.h>`, C programmers traditionally use `int` for boolean values and `0`/`1` for false/true, or define their own macros.
 
 ::: {.tip}
-**Trap:** Because conditions are just integers, assignments inside `if` are
-legal and a common source of bugs:
+**Trap:** Because conditions are just integers, assignments inside `if` are legal and a common source of bugs:
 
 ```c
 int x = 0;
@@ -1455,8 +1412,9 @@ if (x = 5) {            // BUG: assigns 5 to x, then tests 5 (nonzero = true)
 }
 ```
 
-The compiler may warn you about this, but it will not stop you. If you mean
-to compare, use `==`. Compiling with `-Wall` helps catch these.
+The compiler may warn you about this, but it will not stop you.
+If you mean to compare, use `==`.
+Compiling with `-Wall` helps catch these.
 :::
 
 ## `while` and `do-while`
@@ -1464,8 +1422,8 @@ to compare, use `==`. Compiling with `-Wall` helps catch these.
 \index{while loop}
 \index{do-while loop}
 
-A `while` loop tests the condition *before* executing the body. If the
-condition is false from the start, the body never executes:
+A `while` loop tests the condition *before* executing the body.
+If the condition is false from the start, the body never executes:
 
 ```c
 int countdown = 5;
@@ -1478,8 +1436,7 @@ printf("Vamos!\n");
 ```
 
 A `do-while` loop tests *after* the body, guaranteeing at least one iteration.
-This is useful when you need to perform an action before you can check whether
-to continue:
+This is useful when you need to perform an action before you can check whether to continue:
 
 ```c
 #include <stdio.h>
@@ -1498,14 +1455,12 @@ int main(void) {
 }
 ```
 
-The semicolon after `while (choice != 0)` is required — forgetting it is a
-syntax error.
+The semicolon after `while (choice != 0)` is required — forgetting it is a syntax error.
 
 ::: {.tip}
-**Tip:** Use `do-while` when the loop body must execute at least once. Menu
-loops and input validation loops are classic use cases. If you find yourself
-duplicating code before a `while` loop just to set up the first test, a
-`do-while` is probably cleaner.
+**Tip:** Use `do-while` when the loop body must execute at least once.
+Menu loops and input validation loops are classic use cases.
+If you find yourself duplicating code before a `while` loop just to set up the first test, a `do-while` is probably cleaner.
 :::
 
 ## `break` and `continue`
@@ -1513,8 +1468,8 @@ duplicating code before a `while` loop just to set up the first test, a
 \index{break}
 \index{continue}
 
-`break` exits the nearest enclosing loop (or `switch`) immediately. `continue`
-skips the rest of the current iteration and jumps to the next one.
+`break` exits the nearest enclosing loop (or `switch`) immediately.
+`continue` skips the rest of the current iteration and jumps to the next one.
 
 ```c
 #include <stdio.h>
@@ -1541,9 +1496,8 @@ int main(void) {
 }
 ```
 
-`break` and `continue` only affect the innermost loop. If you have nested
-loops and need to break out of an outer loop, you either use a flag variable
-or, in some cases, `goto` (discussed later in this chapter).
+`break` and `continue` only affect the innermost loop.
+If you have nested loops and need to break out of an outer loop, you either use a flag variable or, in some cases, `goto` (discussed later in this chapter).
 
 ## `for` Loops
 
@@ -1569,8 +1523,8 @@ for (int i = 0; i < n; i++) {
 ```
 
 \index{for loop!C89 vs C99}
-C99 allows you to declare the loop variable inside the `for` statement, just
-like modern C++. In C89, you had to declare it before the loop:
+C99 allows you to declare the loop variable inside the `for` statement, just like modern C++.
+In C89, you had to declare it before the loop:
 
 ```c
 /* C89 style */
@@ -1586,15 +1540,15 @@ for (int i = 0; i < n; i++) {
 ```
 
 ::: {.tip}
-**Tip:** C has no range-based `for` loop. There is no `for (auto x : vec)`.
-You always iterate with an index or a pointer. The `sizeof(arr) / sizeof(arr[0])`
-idiom gives you the element count of a stack-allocated array, but it does not
-work on pointers — a pointer does not carry size information. This is why C
-functions that take arrays almost always take a separate `size` parameter.
+**Tip:** C has no range-based `for` loop.
+There is no `for (auto x : vec)`.
+You always iterate with an index or a pointer.
+The `sizeof(arr) / sizeof(arr[0])` idiom gives you the element count of a stack-allocated array, but it does not work on pointers — a pointer does not carry size information.
+This is why C functions that take arrays almost always take a separate `size` parameter.
 :::
 
-You can iterate over an array with a pointer instead of an index. This is
-idiomatic C and worth getting comfortable with:
+You can iterate over an array with a pointer instead of an index.
+This is idiomatic C and worth getting comfortable with:
 
 ```c
 int nums[] = {10, 20, 30, 40, 50};
@@ -1607,8 +1561,8 @@ printf("\n");
 // 10 20 30 40 50
 ```
 
-Any part of the `for` header can be omitted. Omitting all three creates an
-infinite loop:
+Any part of the `for` header can be omitted.
+Omitting all three creates an infinite loop:
 
 ```c
 for (;;) {
@@ -1620,8 +1574,8 @@ for (;;) {
 
 \index{switch statement}
 
-A `switch` statement selects among multiple cases based on an integer
-expression. If you have used `switch` in C++, the syntax is identical:
+A `switch` statement selects among multiple cases based on an integer expression.
+If you have used `switch` in C++, the syntax is identical:
 
 ```c
 #include <stdio.h>
@@ -1648,14 +1602,13 @@ int main(void) {
 }
 ```
 
-Each `case` must be an integer constant expression. You cannot use strings,
-floats, or variables as case labels — only values the compiler can evaluate at
-compile time.
+Each `case` must be an integer constant expression.
+You cannot use strings, floats, or variables as case labels — only values the compiler can evaluate at compile time.
 
 \index{switch statement!fall-through}
 **Fall-through** is the most important thing to understand about `switch` in C.
-If you forget a `break`, execution falls through to the next case. This is
-sometimes intentional:
+If you forget a `break`, execution falls through to the next case.
+This is sometimes intentional:
 
 ```c
 char grade = 'B';
@@ -1677,8 +1630,8 @@ default:
 ```
 
 Here, cases `'A'`, `'B'`, and `'C'` all fall through to the same `printf`.
-This is deliberate and a common pattern. But accidental fall-through is a
-frequent bug:
+This is deliberate and a common pattern.
+But accidental fall-through is a frequent bug:
 
 ```c
 switch (x) {
@@ -1694,21 +1647,18 @@ case 2:
 If `x` is `1`, this prints both "one" and "two."
 
 ::: {.tip}
-**Trap:** Every `case` should end with `break` unless you intentionally want
-fall-through. When you do use fall-through on purpose, add a comment like
-`/* fall through */` so the next person reading the code knows it is
-deliberate. Some compilers recognize this comment and suppress warnings.
+**Trap:** Every `case` should end with `break` unless you intentionally want fall-through.
+When you do use fall-through on purpose, add a comment like `/* fall through */` so the next person reading the code knows it is deliberate.
+Some compilers recognize this comment and suppress warnings.
 :::
 
 ## `goto`
 
 \index{goto}
 
-In C++, you were probably taught to never use `goto`. In C, `goto` has a
-legitimate and widely used role: the **cleanup pattern**. When a function
-acquires multiple resources (files, memory, locks), and something goes wrong
-partway through, `goto` provides a clean way to release everything in the
-correct order.
+In C++, you were probably taught to never use `goto`.
+In C, `goto` has a legitimate and widely used role: the **cleanup pattern**.
+When a function acquires multiple resources (files, memory, locks), and something goes wrong partway through, `goto` provides a clean way to release everything in the correct order.
 
 Here is a brief example:
 
@@ -1735,20 +1685,17 @@ close_file:
 }
 ```
 
-If `malloc` fails, control jumps to `close_file`, which closes the file that
-was already opened. Without `goto`, you would need deeply nested `if`
-statements or duplicated cleanup code. The `goto` cleanup pattern is used
-extensively in production C code, including the Linux kernel.
+If `malloc` fails, control jumps to `close_file`, which closes the file that was already opened.
+Without `goto`, you would need deeply nested `if` statements or duplicated cleanup code.
+The `goto` cleanup pattern is used extensively in production C code, including the Linux kernel.
 
 ::: {.tip}
-**Tip:** The `goto` cleanup pattern is covered in more detail in the Odds and
-Ends chapter. For now, just know that `goto` in C is not the taboo it is in
-C++. When used strictly for forward jumps to cleanup labels at the end of a
-function, it makes resource management clearer, not messier.
+**Tip:** The `goto` cleanup pattern is covered in more detail in the Odds and Ends chapter.
+For now, just know that `goto` in C is not the taboo it is in C++.
+When used strictly for forward jumps to cleanup labels at the end of a function, it makes resource management clearer, not messier.
 :::
 
-`goto` has two restrictions: you can only jump within the same function, and
-you cannot jump over a variable declaration that has an initializer (in C99+).
+`goto` has two restrictions: you can only jump within the same function, and you cannot jump over a variable declaration that has an initializer (in C99+).
 
 ## Try It: Control Flow Starter
 
@@ -1823,9 +1770,9 @@ int main(void) {
 ## Exercises
 
 1. **Think about it:** C uses `0` for false and nonzero for true, while C++
-   has a built-in `bool` type. What practical problems can arise from using
-   integers as booleans? Can you think of a case where a nonzero value that
-   is not `1` might cause a subtle bug?
+   has a built-in `bool` type.
+   What practical problems can arise from using integers as booleans?
+   Can you think of a case where a nonzero value that is not `1` might cause a subtle bug?
 
 2. **What does this print?**
 
@@ -1889,33 +1836,35 @@ int main(void) {
     ```
 
 7. **Write a program** that reads integers from the user (using `scanf`) until
-   the user enters `0`. Print the sum and average of all numbers entered
-   (not counting the `0`). Use a `do-while` or `while` loop.
+   the user enters `0`.
+   Print the sum and average of all numbers entered (not counting the `0`).
+   Use a `do-while` or `while` loop.
 
 \newpage
 
 # 5. Pointers
 
-If you have been writing modern C++, you may have rarely (or never) used raw
-pointers. Smart pointers like `std::unique_ptr` and `std::shared_ptr` manage
-memory for you. References let you pass objects without copying them. The
-standard library hides pointer details behind iterators and containers.
+If you have been writing modern C++, you may have rarely (or never) used raw pointers.
+Smart pointers like `std::unique_ptr` and `std::shared_ptr` manage memory for you.
+References let you pass objects without copying them.
+The standard library hides pointer details behind iterators and containers.
 
-In C, none of that exists. Pointers are everywhere, and you must be comfortable
-with them. Every dynamic data structure, every function that needs to modify its
-arguments, every interaction with the operating system — all involve pointers.
+In C, none of that exists.
+Pointers are everywhere, and you must be comfortable with them.
+Every dynamic data structure, every function that needs to modify its arguments, every interaction with the operating system — all involve pointers.
 
 ## What Is a Pointer?
 
 \index{pointer}
 
-A pointer is a variable that holds a memory address. That's it. Instead of
-holding a value like `42`, a pointer holds the *location* where `42` is stored.
+A pointer is a variable that holds a memory address.
+That's it.
+Instead of holding a value like `42`, a pointer holds the *location* where `42` is stored.
 
 ## Declaring Pointers
 
-A pointer type is declared by placing a `*` after the base type. The type before
-the `*` tells you what kind of data lives at the address the pointer holds:
+A pointer type is declared by placing a `*` after the base type.
+The type before the `*` tells you what kind of data lives at the address the pointer holds:
 
 ```c
 int *p;         // p is a pointer to an int
@@ -1924,8 +1873,8 @@ double *d;      // d is a pointer to a double
 ```
 
 ::: {.tip}
-**Trap:** The `*` belongs to the variable, not the type. This declaration creates
-one pointer and one regular int:
+**Trap:** The `*` belongs to the variable, not the type.
+This declaration creates one pointer and one regular int:
 
 ```c
 int *p, q;    // p is a pointer to int; q is just an int
@@ -1938,8 +1887,8 @@ To declare two pointers, you need two stars: `int *p, *q;`
 
 \index{address-of operator (\&)}
 
-The `&` operator returns the address of a variable. You have seen `&` in C++ for
-references — in C, it is strictly the address-of operator:
+The `&` operator returns the address of a variable.
+You have seen `&` in C++ for references — in C, it is strictly the address-of operator:
 
 ```c
 int score = 100;
@@ -1953,8 +1902,8 @@ printf("address of score = %p\n", (void *)p);  // something like 0x7ffd5e8a3b2c
 
 \index{dereference operator (*)}
 
-The `*` operator on a pointer gives you the value at the address the pointer
-holds. This is called **dereferencing**:
+The `*` operator on a pointer gives you the value at the address the pointer holds.
+This is called **dereferencing**:
 
 ```c
 int score = 100;
@@ -1966,15 +1915,15 @@ printf("Value at p: %d\n", *p);   // 100
 printf("score is now: %d\n", score);  // 200
 ```
 
-Notice the dual use of `*`: in a declaration, it means "this is a pointer." In
-an expression, it means "follow the pointer to the value."
+Notice the dual use of `*`: in a declaration, it means "this is a pointer."
+In an expression, it means "follow the pointer to the value."
 
 ## Pointers to Pointers
 
 \index{pointer!to pointer}
 
-Since a pointer is just a variable, it has an address too. You can create a
-pointer to a pointer:
+Since a pointer is just a variable, it has an address too.
+You can create a pointer to a pointer:
 
 ```c
 int val = 42;
@@ -1986,10 +1935,8 @@ printf("*p = %d\n", *p);        // 42
 printf("**pp = %d\n", **pp);    // 42
 ```
 
-You dereference `pp` twice: once to get `p`, and again to get `val`. Pointers to
-pointers show up frequently in C — for example, `main` can be declared as
-`int main(int argc, char **argv)`, where `argv` is a pointer to an array of
-string pointers.
+You dereference `pp` twice: once to get `p`, and again to get `val`.
+Pointers to pointers show up frequently in C — for example, `main` can be declared as `int main(int argc, char **argv)`, where `argv` is a pointer to an array of string pointers.
 
 ## Visualizing Pointers in Memory
 
@@ -2002,8 +1949,8 @@ int *p = &x;
 int **pp = &p;
 ```
 
-Every variable lives at some address in memory. Here is what the layout looks
-like (using made-up but realistic addresses):
+Every variable lives at some address in memory.
+Here is what the layout looks like (using made-up but realistic addresses):
 
 ```
   Variable    Address      Value
@@ -2014,20 +1961,18 @@ like (using made-up but realistic addresses):
   pp          0x1010       0x1008  -------> p -------> x
 ```
 
-The variable `x` lives at address `0x1000` and holds the value `1985`. The
-pointer `p` lives at address `0x1008` and holds the value `0x1000` — the address
-of `x`. The pointer-to-pointer `pp` lives at `0x1010` and holds `0x1008` — the
-address of `p`. Following the chain: `*pp` gives you `p` (which is `0x1000`),
-and `**pp` gives you `x` (which is `1985`).
+The variable `x` lives at address `0x1000` and holds the value `1985`.
+The pointer `p` lives at address `0x1008` and holds the value `0x1000` — the address of `x`.
+The pointer-to-pointer `pp` lives at `0x1010` and holds `0x1008` — the address of `p`.
+Following the chain: `*pp` gives you `p` (which is `0x1000`), and `**pp` gives you `x` (which is `1985`).
 
-Notice that `p` and `pp` are just variables that hold numbers. Those numbers
-happen to be memory addresses. There is nothing magical about a pointer — it is
-just a variable whose value is an address.
+Notice that `p` and `pp` are just variables that hold numbers.
+Those numbers happen to be memory addresses.
+There is nothing magical about a pointer — it is just a variable whose value is an address.
 
 ::: {.tip}
-**Tip:** You can take the address of any variable with `&`, including the
-address of a pointer variable. The expression `&p` gives you the address where
-`p` itself is stored, not the address `p` points to.
+**Tip:** You can take the address of any variable with `&`, including the address of a pointer variable.
+The expression `&p` gives you the address where `p` itself is stored, not the address `p` points to.
 :::
 
 ## NULL Pointers
@@ -2046,21 +1991,19 @@ if (p != NULL) {
 }
 ```
 
-Dereferencing a `NULL` pointer is undefined behavior and usually crashes your
-program with a segmentation fault. Always check before dereferencing a pointer
-you did not initialize yourself.
+Dereferencing a `NULL` pointer is undefined behavior and usually crashes your program with a segmentation fault.
+Always check before dereferencing a pointer you did not initialize yourself.
 
 ::: {.tip}
-**Tip:** In C, `NULL` is typically defined as `((void *)0)`. You may also see
-`0` used directly. C++11 introduced `nullptr` as a type-safe null pointer — C
-does not have `nullptr`, so use `NULL`.
+**Tip:** In C, `NULL` is typically defined as `((void *)0)`.
+You may also see `0` used directly.
+C++11 introduced `nullptr` as a type-safe null pointer — C does not have `nullptr`, so use `NULL`.
 :::
 
 ## Pointers and Arrays
 
-A pointer might point to a single value in memory, or it might point to the
-first element of an array of values. There is nothing in the type system that
-tells you which — an `int *` looks the same either way:
+A pointer might point to a single value in memory, or it might point to the first element of an array of values.
+There is nothing in the type system that tells you which — an `int *` looks the same either way:
 
 ```c
 int score = 100;
@@ -2070,18 +2013,17 @@ int nums[] = {10, 20, 30};
 int *q = nums;                // points to the first of three ints
 ```
 
-Both `p` and `q` are `int *`. The compiler does not know whether there are more
-`int` values after the one being pointed to. It is up to you, the programmer, to
-keep track of how many elements a pointer refers to and to stay within bounds.
+Both `p` and `q` are `int *`.
+The compiler does not know whether there are more `int` values after the one being pointed to.
+It is up to you, the programmer, to keep track of how many elements a pointer refers to and to stay within bounds.
 
-You already saw in the Variables chapter that an array name decays to a pointer
-to its first element. Now let's see what that lets you do.
+You already saw in the Variables chapter that an array name decays to a pointer to its first element.
+Now let's see what that lets you do.
 
 \index{pointer!arithmetic}
-**Pointer arithmetic** works in units of the pointed-to type. If `p` is an
-`int *` and `int` is 4 bytes, then `p + 1` advances the address by 4 bytes to
-the next `int`. You never have to think about byte sizes — the compiler handles
-it:
+**Pointer arithmetic** works in units of the pointed-to type.
+If `p` is an `int *` and `int` is 4 bytes, then `p + 1` advances the address by 4 bytes to the next `int`.
+You never have to think about byte sizes — the compiler handles it:
 
 ```c
 int nums[] = {10, 20, 30, 40, 50};
@@ -2094,17 +2036,14 @@ printf("%d\n", p[2]);     // 30 — yes, you can use [] on pointers!
 
 ::: {.tip}
 **Tip:** Array indexing `nums[i]` is actually syntactic sugar for `*(nums + i)`.
-This is why `2[nums]` technically works — it is `*(2 + nums)`, which is the same
-thing. Don't write code like that, but knowing this helps you understand how
-arrays and pointers relate.
+This is why `2[nums]` technically works — it is `*(2 + nums)`, which is the same thing.
+Don't write code like that, but knowing this helps you understand how arrays and pointers relate.
 :::
 
 ## Pointers and Structures
 
-You already know how to declare structs and access members with `.` from the
-Variables chapter. Pointers to structures are extremely common in C — almost any
-non-trivial program passes struct pointers around rather than copying entire
-structs.
+You already know how to declare structs and access members with `.` from the Variables chapter.
+Pointers to structures are extremely common in C — almost any non-trivial program passes struct pointers around rather than copying entire structs.
 
 ```c
 struct song {
@@ -2125,8 +2064,8 @@ printf("Year: %d\n", (*p).year);
 ```
 
 \index{arrow operator (->)}
-Writing `(*p).field` everywhere is tedious. C provides the `->` operator as a
-convenient shorthand:
+Writing `(*p).field` everywhere is tedious.
+C provides the `->` operator as a convenient shorthand:
 
 ```c
 printf("Title: %s\n", p->title);     // same as (*p).title
@@ -2134,9 +2073,9 @@ printf("Year: %d\n", p->year);       // same as (*p).year
 ```
 
 ::: {.tip}
-**Tip:** The `->` operator is simply `(*p).field` written more clearly. You
-will see `->` far more often than `(*p).` in real C code. If you have a
-pointer to a struct, reach for `->`.
+**Tip:** The `->` operator is simply `(*p).field` written more clearly.
+You will see `->` far more often than `(*p).` in real C code.
+If you have a pointer to a struct, reach for `->`.
 :::
 
 ## Pass by Value (and Pointers as a Workaround)
@@ -2149,9 +2088,8 @@ In C++, you can pass arguments by reference using `&`:
 void increment(int &x) { x++; }   // C++ — modifies the original
 ```
 
-C does not have references. **All function parameters in C are pass by value** —
-the function receives a copy of the argument, not the original. If you want a
-function to modify a variable in the caller, you pass a *pointer* to it:
+C does not have references. **All function parameters in C are pass by value** — the function receives a copy of the argument, not the original.
+If you want a function to modify a variable in the caller, you pass a *pointer* to it:
 
 ```c
 void increment(int *x) {
@@ -2166,15 +2104,12 @@ int main(void) {
 }
 ```
 
-The function `increment` receives a *copy* of the pointer (the address), but
-since both the original and the copy point to the same memory, dereferencing
-either one reaches the same variable. This is how C simulates pass by reference.
+The function `increment` receives a *copy* of the pointer (the address), but since both the original and the copy point to the same memory, dereferencing either one reaches the same variable.
+This is how C simulates pass by reference.
 
 ::: {.tip}
-**Tip:** Every time you see a function parameter with `*` in C, ask yourself:
-"Is this pointer here so the function can modify the caller's variable, or
-because it needs to access a block of memory (like an array)?" Often it is
-both.
+**Tip:** Every time you see a function parameter with `*` in C, ask yourself: "Is this pointer here so the function can modify the caller's variable, or because it needs to access a block of memory (like an array)?"
+Often it is both.
 :::
 
 ## Try It: Pointer Starter
@@ -2238,8 +2173,9 @@ int main(void) {
 ## Exercises
 
 1. **Think about it:** In C++, you can pass by reference to modify a caller's
-   variable. Why do you think C was designed with only pass by value? What does
-   this simplify in the language?
+   variable.
+   Why do you think C was designed with only pass by value?
+   What does this simplify in the language?
 
 2. **What does this print?**
 
@@ -2284,21 +2220,20 @@ int main(void) {
     ```
 
 7. **Write a program** that declares an array of 5 integers, uses a pointer to
-   iterate through the array, and prints each element along with its memory
-   address.
+   iterate through the array, and prints each element along with its memory address.
 
 \newpage
 
 # 6. Functions
 
-C functions look a lot like C++ functions — same return types, same curly braces,
-same `return` statement. But several features you rely on in C++ are simply not
-available in C. There is no function overloading, no default arguments, no
-references, and no `auto` return type deduction. Every parameter is pass by
-value. If you want a function to modify a caller's variable, you pass a pointer.
+C functions look a lot like C++ functions — same return types, same curly braces, same `return` statement.
+But several features you rely on in C++ are simply not available in C.
+There is no function overloading, no default arguments, no references, and no `auto` return type deduction.
+Every parameter is pass by value.
+If you want a function to modify a caller's variable, you pass a pointer.
 
-Despite these restrictions, C functions are straightforward. Once you understand
-the handful of differences from C++, you will find them easy to work with.
+Despite these restrictions, C functions are straightforward.
+Once you understand the handful of differences from C++, you will find them easy to work with.
 
 ## Function Declarations and Definitions
 
@@ -2306,10 +2241,9 @@ the handful of differences from C++, you will find them easy to work with.
 \index{function!definition}
 \index{prototype}
 
-In C++, you can often define a function before it is called and skip the
-separate declaration. In C, you should always declare a function (provide its
-**prototype**) before you call it. A prototype tells the compiler the function's
-return type, name, and parameter types — without the body:
+In C++, you can often define a function before it is called and skip the separate declaration.
+In C, you should always declare a function (provide its **prototype**) before you call it.
+A prototype tells the compiler the function's return type, name, and parameter types — without the body:
 
 ```c
 int add(int a, int b);        // declaration (prototype)
@@ -2323,15 +2257,14 @@ int add(int a, int b) {       // definition
 }
 ```
 
-Prototypes typically go in header files (`.h`) so that other `.c` files can call
-the function. The definition lives in exactly one `.c` file.
+Prototypes typically go in header files (`.h`) so that other `.c` files can call the function.
+The definition lives in exactly one `.c` file.
 
 ::: {.tip}
-**Tip:** In C++, `int foo()` means "takes no parameters." In C, `int foo()`
-means "takes an *unspecified* number of parameters" — the compiler will not
-check your arguments at all. To declare a function that truly takes no
-parameters in C, write `int foo(void)`. Always use `void` in empty parameter
-lists.
+**Tip:** In C++, `int foo()` means "takes no parameters."
+In C, `int foo()` means "takes an *unspecified* number of parameters" — the compiler will not check your arguments at all.
+To declare a function that truly takes no parameters in C, write `int foo(void)`.
+Always use `void` in empty parameter lists.
 :::
 
 \index{void parameter list}
@@ -2349,16 +2282,16 @@ You will see `int main(void)` throughout this book for exactly this reason.
 
 \index{function!overloading}
 
-In C++, you can have multiple functions with the same name but different
-parameter types:
+In C++, you can have multiple functions with the same name but different parameter types:
 
 ```cpp
 int max(int a, int b);
 double max(double a, double b);   // C++ overload — fine
 ```
 
-C does not support this. Every function must have a unique name. If you need a
-`max` for both `int` and `double`, you name them differently:
+C does not support this.
+Every function must have a unique name.
+If you need a `max` for both `int` and `double`, you name them differently:
 
 ```c
 int max_int(int a, int b);
@@ -2375,8 +2308,8 @@ C++ lets you provide default values for parameters:
 void greet(const char *name, int times = 1);   // C++ — valid
 ```
 
-C does not support default arguments. Every argument must be provided at every
-call site:
+C does not support default arguments.
+Every argument must be provided at every call site:
 
 ```c
 void greet(const char *name, int times);   // C — no defaults allowed
@@ -2386,18 +2319,16 @@ greet("Iron Man", 3);   // must pass both arguments
 
 ## Pass by Value
 
-As you saw in the Pointers chapter, all function parameters in C are pass by
-value — the function receives a copy of each argument. To modify a caller's
-variable, pass a pointer. There are no `&` reference parameters in C; every
-"output" parameter is a pointer.
+As you saw in the Pointers chapter, all function parameters in C are pass by value — the function receives a copy of each argument.
+To modify a caller's variable, pass a pointer.
+There are no `&` reference parameters in C; every "output" parameter is a pointer.
 
 ## `const` Parameters
 
 \index{const!parameter}
 
-When a function takes a pointer parameter, the caller cannot tell from the
-call site whether the function will modify the data. The `const` keyword solves
-this by making a promise: "I will not modify what this pointer points to."
+When a function takes a pointer parameter, the caller cannot tell from the call site whether the function will modify the data.
+The `const` keyword solves this by making a promise: "I will not modify what this pointer points to."
 
 ```c
 #include <stdio.h>
@@ -2415,27 +2346,25 @@ int main(void) {
 
 \index{const!documentation}
 
-Using `const` serves two purposes. First, it documents intent — anyone reading
-the prototype knows the function will not modify the data. Second, it catches
-bugs at compile time. If you accidentally try to write through a `const`
-pointer, the compiler will stop you.
+Using `const` serves two purposes.
+First, it documents intent — anyone reading the prototype knows the function will not modify the data.
+Second, it catches bugs at compile time.
+If you accidentally try to write through a `const` pointer, the compiler will stop you.
 
 ::: {.tip}
-**Tip:** Make every pointer parameter `const` unless the function genuinely
-needs to modify the pointed-to data. This is one of the cheapest and most
-effective ways to prevent bugs in C.
+**Tip:** Make every pointer parameter `const` unless the function genuinely needs to modify the pointed-to data.
+This is one of the cheapest and most effective ways to prevent bugs in C.
 :::
 
-You will see `const char *` everywhere in C — it is the standard way to accept
-a string that the function will read but not modify. Functions like `printf`,
-`strlen`, and `strcmp` all take `const char *` parameters.
+You will see `const char *` everywhere in C — it is the standard way to accept a string that the function will read but not modify.
+Functions like `printf`, `strlen`, and `strcmp` all take `const char *` parameters.
 
 ## Passing Structures
 
 \index{struct!passing}
 
-Structures can be passed by value just like any other type. The function
-receives a complete copy of the struct:
+Structures can be passed by value just like any other type.
+The function receives a complete copy of the struct:
 
 ```c
 #include <stdio.h>
@@ -2456,12 +2385,11 @@ int main(void) {
 }
 ```
 
-This works, but copying a large struct every time you call a function is
-wasteful. If `struct hero` had thousands of bytes of data, every call to
-`print_hero` would copy all of it onto the stack.
+This works, but copying a large struct every time you call a function is wasteful.
+If `struct hero` had thousands of bytes of data, every call to `print_hero` would copy all of it onto the stack.
 
-The solution is to pass a pointer to the struct instead. Since the function only
-needs to read the data, use `const`:
+The solution is to pass a pointer to the struct instead.
+Since the function only needs to read the data, use `const`:
 
 ```c
 void print_hero(const struct hero *h) {
@@ -2476,8 +2404,8 @@ int main(void) {
 ```
 
 ::: {.tip}
-**Tip:** For small structs (a few bytes), passing by value is fine and
-sometimes clearer. For anything larger, prefer `const struct type *param`.
+**Tip:** For small structs (a few bytes), passing by value is fine and sometimes clearer.
+For anything larger, prefer `const struct type *param`.
 When the function needs to modify the struct, drop the `const`.
 :::
 
@@ -2489,16 +2417,14 @@ void level_up(struct hero *h) {
 }
 ```
 
-This pattern — `const` pointer for read-only access, non-`const` pointer for
-modification — is the C equivalent of const references and non-const references
-in C++.
+This pattern — `const` pointer for read-only access, non-`const` pointer for modification — is the C equivalent of const references and non-const references in C++.
 
 ## Recursive Functions
 
 \index{recursion}
 
-C supports recursion just like C++. A function can call itself, and each call
-gets its own set of local variables on the stack.
+C supports recursion just like C++.
+A function can call itself, and each call gets its own set of local variables on the stack.
 
 ### Factorial
 
@@ -2540,54 +2466,49 @@ int main(void) {
 ```
 
 ::: {.tip}
-**Trap:** This Fibonacci implementation has exponential time complexity because
-it recomputes the same values over and over. It works for small inputs, but
-try `fibonacci(50)` and you will be waiting a long time. In practice, you
-would use an iterative approach or memoization.
+**Trap:** This Fibonacci implementation has exponential time complexity because it recomputes the same values over and over.
+It works for small inputs, but try `fibonacci(50)` and you will be waiting a long time.
+In practice, you would use an iterative approach or memoization.
 :::
 
 ### Stack Depth
 
 \index{stack overflow}
 
-Every function call pushes a new frame onto the call stack. Recursive functions
-can exhaust the stack if the recursion goes too deep. There is no built-in
-protection — C has no exception mechanism, so there is no stack overflow
-exception to catch. The program will simply crash (usually with a segmentation
-fault). Keep your recursion depth reasonable, or convert deep recursion to
-iteration.
+Every function call pushes a new frame onto the call stack.
+Recursive functions can exhaust the stack if the recursion goes too deep.
+There is no built-in protection — C has no exception mechanism, so there is no stack overflow exception to catch.
+The program will simply crash (usually with a segmentation fault).
+Keep your recursion depth reasonable, or convert deep recursion to iteration.
 
 ## Function Pointers
 
 \index{function pointer}
 
-In C++, you might use `std::function`, lambdas, or template parameters to pass
-behavior around. C has none of those — but it does have **function pointers**.
+In C++, you might use `std::function`, lambdas, or template parameters to pass behavior around.
+C has none of those — but it does have **function pointers**.
 A function pointer is a variable that holds the address of a function.
 
 ### Declaring Function Pointers
 
-The syntax takes some getting used to. A pointer to a function that takes two
-`int` parameters and returns an `int` looks like this:
+The syntax takes some getting used to.
+A pointer to a function that takes two `int` parameters and returns an `int` looks like this:
 
 ```c
 int (*fp)(int, int);
 ```
 
-Read it from the inside out: `fp` is a pointer (`*fp`) to a function that takes
-`(int, int)` and returns `int`.
+Read it from the inside out: `fp` is a pointer (`*fp`) to a function that takes `(int, int)` and returns `int`.
 
 ::: {.tip}
-**Wut:** The parentheses around `*fp` are critical. Without them, `int *fp(int,
-int)` declares a *function* that returns an `int *` — a completely different
-thing. The parentheses force `fp` to be a pointer first.
+**Wut:** The parentheses around `*fp` are critical.
+Without them, `int *fp(int, int)` declares a *function* that returns an `int *` — a completely different thing.
+The parentheses force `fp` to be a pointer first.
 :::
 
 ### Using Function Pointers
 
-You can assign a function's name to a function pointer (the function name
-decays to a pointer, just like array names do) and then call the function
-through the pointer:
+You can assign a function's name to a function pointer (the function name decays to a pointer, just like array names do) and then call the function through the pointer:
 
 ```c
 #include <stdio.h>
@@ -2612,7 +2533,8 @@ int main(void) {
 
 \index{typedef!function pointer}
 
-The raw function pointer syntax is noisy. A `typedef` gives it a clean name:
+The raw function pointer syntax is noisy.
+A `typedef` gives it a clean name:
 
 ```c
 #include <stdio.h>
@@ -2633,19 +2555,16 @@ int main(void) {
 }
 ```
 
-Now `binop_fn` is a type that means "pointer to a function taking two `int`
-parameters and returning `int`." You can use it for parameters, local
-variables, struct members, and arrays of function pointers.
+Now `binop_fn` is a type that means "pointer to a function taking two `int` parameters and returning `int`."
+You can use it for parameters, local variables, struct members, and arrays of function pointers.
 
 ### Callbacks
 
 \index{callback}
 
-Function pointers are often used as **callbacks** — you pass a function pointer
-to another function, which calls it at the right moment. This is the C
-equivalent of passing a lambda or functor in C++. The Odds and Ends chapter
-shows a practical example using `qsort`, the standard library's sorting
-function that takes a comparison callback.
+Function pointers are often used as **callbacks** — you pass a function pointer to another function, which calls it at the right moment.
+This is the C equivalent of passing a lambda or functor in C++.
+The Odds and Ends chapter shows a practical example using `qsort`, the standard library's sorting function that takes a comparison callback.
 
 ## Try It: Functions Starter
 
@@ -2714,7 +2633,8 @@ int main(void) {
 - Use `void` in empty parameter lists: `int foo(void)`. In C, `int foo()`
   means "unspecified parameters," not "no parameters."
 - Use `const` on pointer parameters when the function does not modify the
-  pointed-to data. It documents intent and catches bugs.
+  pointed-to data.
+  It documents intent and catches bugs.
 - For large structs, prefer `const struct type *param` over pass by value to
   avoid expensive copies.
 - Function pointers let you store and pass functions as values — C's
@@ -2725,8 +2645,8 @@ int main(void) {
 
 1. **Think about it:** C does not have function overloading. How does the C
    standard library handle providing similar functionality for different types?
-   Look at `abs` (for `int`) and `fabs` (for `double`) as examples. What
-   naming convention do you see?
+   Look at `abs` (for `int`) and `fabs` (for `double`) as examples.
+   What naming convention do you see?
 
 2. **What does this print?**
 
@@ -2758,8 +2678,8 @@ int main(void) {
     ```
 
 4. **Calculation:** Given the struct below, approximately how many bytes are
-   copied each time `process_data` is called with pass by value? Assume `int`
-   is 4 bytes.
+   copied each time `process_data` is called with pass by value?
+   Assume `int` is 4 bytes.
 
     ```c
     struct data {
@@ -2803,24 +2723,21 @@ int main(void) {
     ```
 
 7. **Write a program** that defines a function `void transform(int *arr, int n,
-   int (*fn)(int))` which applies the function `fn` to each element of `arr`,
-   modifying the array in place. Test it with a function that doubles each
-   element and another that negates each element.
+   int (*fn)(int))` which applies the function `fn` to each element of `arr`, modifying the array in place. Test it with a function that doubles each element and another that negates each element.
 
 \newpage
 
 # 7. Allocating Memory
 
-Every variable in your program lives somewhere in memory, but not all memory is
-created equal. Understanding where variables live — and how long they last — is
-essential for writing correct C programs.
+Every variable in your program lives somewhere in memory, but not all memory is created equal.
+Understanding where variables live — and how long they last — is essential for writing correct C programs.
 
 ## Global Variables
 
 \index{global variable}
 
-A **global variable** is declared outside of any function. It is created when the
-program starts and exists until the program exits:
+A **global variable** is declared outside of any function.
+It is created when the program starts and exists until the program exits:
 
 ```c
 #include <stdio.h>
@@ -2841,21 +2758,21 @@ int main(void) {
 }
 ```
 
-Global variables are visible to every function in the file. They are convenient
-but can make programs harder to reason about, since any function can change them.
+Global variables are visible to every function in the file.
+They are convenient but can make programs harder to reason about, since any function can change them.
 
 ::: {.tip}
-**Tip:** Use global variables sparingly. When every function can read and write
-the same variable, bugs become harder to track down. Prefer passing data through
-function parameters.
+**Tip:** Use global variables sparingly.
+When every function can read and write the same variable, bugs become harder to track down.
+Prefer passing data through function parameters.
 :::
 
 ## Local Variables
 
 \index{local variable}
 
-A **local variable** is declared inside a function (or block). It is created when
-the function is called and destroyed when the function returns:
+A **local variable** is declared inside a function (or block).
+It is created when the function is called and destroyed when the function returns:
 
 ```c
 void greet(void) {
@@ -2866,14 +2783,12 @@ void greet(void) {
 ```
 
 \index{stack}
-Local variables live on the **stack** — a region of memory that grows and shrinks
-automatically as functions are called and return. You do not need to free stack
-memory; it is reclaimed automatically.
+Local variables live on the **stack** — a region of memory that grows and shrinks automatically as functions are called and return.
+You do not need to free stack memory; it is reclaimed automatically.
 
 ::: {.tip}
-**Trap:** Never return a pointer to a local variable. The memory is freed when the
-function returns, and the pointer becomes a **dangling pointer** — it points to
-memory that no longer belongs to you:
+**Trap:** Never return a pointer to a local variable.
+The memory is freed when the function returns, and the pointer becomes a **dangling pointer** — it points to memory that no longer belongs to you:
 
 ```c
 int *bad(void) {
@@ -2887,9 +2802,8 @@ int *bad(void) {
 
 \index{static}
 
-A **static local variable** has the scope of a local variable but the lifetime
-of a global. It is declared inside a function with the `static` keyword, created
-once when the program starts, and retains its value between calls:
+A **static local variable** has the scope of a local variable but the lifetime of a global.
+It is declared inside a function with the `static` keyword, created once when the program starts, and retains its value between calls:
 
 ```c
 #include <stdio.h>
@@ -2908,9 +2822,8 @@ int main(void) {
 }
 ```
 
-Without `static`, `count` would be reset to 0 on every call. With `static`, it
-lives in the data segment (like a global) but is only accessible inside
-`count_calls`.
+Without `static`, `count` would be reset to 0 on every call.
+With `static`, it lives in the data segment (like a global) but is only accessible inside `count_calls`.
 
 ## Dynamic Allocation: `malloc` and `free`
 
@@ -2922,9 +2835,8 @@ void *malloc(size_t size);
 void free(void *ptr);
 ```
 
-Sometimes you need memory that outlives the function that created it, or memory
-whose size you do not know at compile time. For this, C provides `malloc` and
-`free` from `<stdlib.h>`.
+Sometimes you need memory that outlives the function that created it, or memory whose size you do not know at compile time.
+For this, C provides `malloc` and `free` from `<stdlib.h>`.
 
 \index{heap}
 `malloc` allocates a block of memory on the **heap** and returns a pointer to it.
@@ -2954,8 +2866,8 @@ int main(void) {
 }
 ```
 
-`malloc` returns a `void *` — a generic pointer that can be assigned to any
-pointer type without a cast in C. It returns `NULL` if the allocation fails.
+`malloc` returns a `void *` — a generic pointer that can be assigned to any pointer type without a cast in C.
+It returns `NULL` if the allocation fails.
 Always check for `NULL` after calling `malloc`.
 Having said that, there is a school of thought held by some very good engineers that `NULL` checks just clutter the code.
 To handle `NULL` gracefully, there will be a check and logic every place where it could be `NULL`, so you end up with checks and logic that are rarely used and almost never tested.
@@ -2965,11 +2877,14 @@ For safety-critical systems, the above argument does not hold, although those sy
 
 ::: {.tip}
 \index{memory leak}
-**Tip:** There are no smart pointers in C. There is no RAII. There is no garbage
-collector. If you call `malloc`, you *must* call `free` when you are done. If
-you forget, you leak memory. If you call `free` twice on the same pointer, you
-get undefined behavior. If you use a pointer after freeing it, you get undefined
-behavior. Memory management in C is entirely your responsibility.
+**Tip:** There are no smart pointers in C.
+There is no RAII.
+There is no garbage collector.
+If you call `malloc`, you *must* call `free` when you are done.
+If you forget, you leak memory.
+If you call `free` twice on the same pointer, you get undefined behavior.
+If you use a pointer after freeing it, you get undefined behavior.
+Memory management in C is entirely your responsibility.
 :::
 
 \index{calloc}
@@ -2996,9 +2911,8 @@ nums = realloc(nums, 10 * sizeof(int));  // grow to 10 ints
 
 ::: {.tip}
 **Trap:** Never assign the result of `realloc` directly back to the same pointer.
-If `realloc` fails, it returns `NULL` and the original memory is not freed — so
-`nums = realloc(nums, ...)` loses your only pointer to the original block,
-causing a memory leak. Use a temporary pointer instead:
+If `realloc` fails, it returns `NULL` and the original memory is not freed — so `nums = realloc(nums, ...)` loses your only pointer to the original block, causing a memory leak.
+Use a temporary pointer instead:
 
 ```c
 int *tmp = realloc(nums, 10 * sizeof(int));
@@ -3015,11 +2929,11 @@ if (tmp == NULL) {
 \index{memcpy}
 \index{memset}
 
-Two functions from `<string.h>` operate on raw bytes rather than strings. You
-will see them constantly in C code:
+Two functions from `<string.h>` operate on raw bytes rather than strings.
+You will see them constantly in C code:
 
-`memset` fills a block of memory with a byte value. It is commonly used to zero
-out a buffer:
+`memset` fills a block of memory with a byte value.
+It is commonly used to zero out a buffer:
 
 ```c
 void *memset(void *s, int c, size_t n);
@@ -3030,8 +2944,8 @@ int nums[10];
 memset(nums, 0, sizeof(nums));   // set all bytes to 0
 ```
 
-`memcpy` copies a block of bytes from one location to another. Unlike `strcpy`,
-it does not stop at a `'\0'` — you tell it exactly how many bytes to copy:
+`memcpy` copies a block of bytes from one location to another.
+Unlike `strcpy`, it does not stop at a `'\0'` — you tell it exactly how many bytes to copy:
 
 ```c
 void *memcpy(void *dest, const void *src, size_t n);
@@ -3045,9 +2959,8 @@ memcpy(dest, src, sizeof(src));  // copy all 12 bytes (3 ints × 4 bytes)
 
 ::: {.tip}
 \index{memmove}
-**Trap:** `memcpy` requires that the source and destination do not overlap. If
-they might overlap (e.g., shifting elements within the same array), use
-`memmove` instead, which handles overlapping regions correctly.
+**Trap:** `memcpy` requires that the source and destination do not overlap.
+If they might overlap (e.g., shifting elements within the same array), use `memmove` instead, which handles overlapping regions correctly.
 
 ```c
 void *memmove(void *dest, const void *src, size_t n);
@@ -3156,18 +3069,16 @@ int main(void) {
     ```
 
 6. **Write a program** that uses `malloc` to allocate an array of `n` integers
-   (where `n` is provided by the user via `scanf`), fills the array with
-   squares (0, 1, 4, 9, ...), prints them, and frees the memory.
+   (where `n` is provided by the user via `scanf`), fills the array with squares (0, 1, 4, 9, ...), prints them, and frees the memory.
 
 \newpage
 
 \index{string}
 # 8. Strings
 
-In C++, you use `std::string` and barely think about what is happening under the
-hood. In C, there is no string type at all. \index{null terminator}A "string" in C is just an array of
-`char` that ends with a null character `'\0'`. Every string function in C depends
-on finding that null terminator to know where the string ends.
+In C++, you use `std::string` and barely think about what is happening under the hood.
+In C, there is no string type at all. \index{null terminator}A "string" in C is just an array of `char` that ends with a null character `'\0'`.
+Every string function in C depends on finding that null terminator to know where the string ends.
 
 ## Declaring C Strings
 
@@ -3179,20 +3090,19 @@ char band[20] = "Depeche Mode";         // 20-byte buffer, only 13 used
 char empty[10] = "";                     // 10 bytes, first byte is '\0'
 ```
 
-When you write `"Hola, mundo"`, the compiler automatically adds a `'\0'` at the
-end. The array `greeting` is 12 bytes: 11 visible characters plus the null
-terminator.
+When you write `"Hola, mundo"`, the compiler automatically adds a `'\0'` at the end.
+The array `greeting` is 12 bytes: 11 visible characters plus the null terminator.
 
 ::: {.tip}
-**Trap:** Always remember the null terminator when sizing your buffers. The
-string `"hello"` needs 6 bytes, not 5. Off-by-one errors with null terminators
-are one of the most common bugs in C.
+**Trap:** Always remember the null terminator when sizing your buffers.
+The string `"hello"` needs 6 bytes, not 5.
+Off-by-one errors with null terminators are one of the most common bugs in C.
 :::
 
 ## String Functions
 
-C provides a library of string manipulation functions in `<string.h>`. These are
-the ones you will use most:
+C provides a library of string manipulation functions in `<string.h>`.
+These are the ones you will use most:
 
 \index{strlen}
 **`strlen` — Get the Length**
@@ -3214,8 +3124,8 @@ int main(void) {
 }
 ```
 
-Note that `strlen` does not count the `'\0'`. The array holding `"Take On Me"`
-is 11 bytes, but `strlen` returns 10.
+Note that `strlen` does not count the `'\0'`.
+The array holding `"Take On Me"` is 11 bytes, but `strlen` returns 10.
 
 \index{strcpy}
 \index{strncpy}
@@ -3226,8 +3136,8 @@ char *strcpy(char *dest, const char *src);
 char *strncpy(char *dest, const char *src, size_t n);
 ```
 
-`strcpy` copies the source string (including the null terminator) into the
-destination buffer. You must make sure the destination is large enough:
+`strcpy` copies the source string (including the null terminator) into the destination buffer.
+You must make sure the destination is large enough:
 
 ```c
 char dest[20];
@@ -3243,9 +3153,8 @@ dest[9] = '\0';  // strncpy does NOT guarantee null termination!
 ```
 
 ::: {.tip}
-**Wut:** `strncpy` does not null-terminate the destination if the source is
-longer than `n`. Always set the last byte yourself:
-`dest[sizeof(dest) - 1] = '\0';`
+**Wut:** `strncpy` does not null-terminate the destination if the source is longer than `n`.
+Always set the last byte yourself: `dest[sizeof(dest) - 1] = '\0';`
 :::
 
 \index{strcmp}
@@ -3255,9 +3164,9 @@ longer than `n`. Always set the last byte yourself:
 int strcmp(const char *s1, const char *s2);
 ```
 
-In C++, you can compare strings with `==`. In C, you cannot — using `==` on
-two `char` arrays compares the *addresses*, not the contents. Use `strcmp`
-instead:
+In C++, you can compare strings with `==`.
+In C, you cannot — using `==` on two `char` arrays compares the *addresses*, not the contents.
+Use `strcmp` instead:
 
 ```c
 char a[] = "Rush";
@@ -3273,13 +3182,12 @@ if (strcmp(a, b) == 0) {
 }
 ```
 
-`strcmp` returns 0 if the strings are equal, a negative value if the first is
-lexicographically less, and a positive value if it is greater.
+`strcmp` returns 0 if the strings are equal, a negative value if the first is lexicographically less, and a positive value if it is greater.
 
 ::: {.tip}
-**Trap:** Yes, `strcmp` returns 0 for equal strings. It is a common source of
-confusion. Think of it as returning the "difference" between the strings — zero
-means no difference.
+**Trap:** Yes, `strcmp` returns 0 for equal strings.
+It is a common source of confusion.
+Think of it as returning the "difference" between the strings — zero means no difference.
 :::
 
 \index{strchr}
@@ -3291,7 +3199,8 @@ char *strchr(const char *s, int c);
 char *strrchr(const char *s, int c);
 ```
 
-`strchr` finds the first occurrence of a character. `strrchr` finds the last:
+`strchr` finds the first occurrence of a character.
+`strrchr` finds the last:
 
 ```c
 char lyric[] = "Don't You Forget About Me";
@@ -3303,8 +3212,7 @@ if (first_o != NULL) {
 }
 ```
 
-Both functions return a pointer to the found character, or `NULL` if the
-character is not in the string.
+Both functions return a pointer to the found character, or `NULL` if the character is not in the string.
 
 \index{strstr}
 **`strstr` — Find a Substring**
@@ -3323,8 +3231,7 @@ if (found != NULL) {
 }
 ```
 
-Like `strchr`, it returns a pointer to the start of the match, or `NULL` if not
-found.
+Like `strchr`, it returns a pointer to the start of the match, or `NULL` if not found.
 
 \index{strcat}
 \index{strncat}
@@ -3343,17 +3250,15 @@ strcat(message, "back");
 printf("%s\n", message);  // "I'll be back"
 ```
 
-This works fine as long as the destination buffer is large enough. But `strcat`
-does not check bounds — if you run out of space, it writes past the end of the
-array.
+This works fine as long as the destination buffer is large enough.
+But `strcat` does not check bounds — if you run out of space, it writes past the end of the array.
 
 ::: {.tip}
 \index{buffer overflow}
-**Trap:** `strcat` is one of the most dangerous functions in C. It has no way to
-know how large the destination buffer is, so it blindly appends bytes. If the
-combined strings exceed the buffer size, you get a **buffer overflow** — one of
-the most common security vulnerabilities in the history of software. Use
-`strncat` instead.
+**Trap:** `strcat` is one of the most dangerous functions in C.
+It has no way to know how large the destination buffer is, so it blindly appends bytes.
+If the combined strings exceed the buffer size, you get a **buffer overflow** — one of the most common security vulnerabilities in the history of software.
+Use `strncat` instead.
 :::
 
 `strncat` takes a maximum number of characters to append as the last argument.
@@ -3371,9 +3276,8 @@ strncat(buf, ", World!", sizeof(buf) - strlen(buf) - 1);
 char *strdup(const char *s);
 ```
 
-`strdup` allocates new memory on the heap, copies the string into it, and
-returns a pointer to the copy. You are responsible for freeing the memory when
-you are done:
+`strdup` allocates new memory on the heap, copies the string into it, and returns a pointer to the copy.
+You are responsible for freeing the memory when you are done:
 
 ```c
 char *copy = strdup("Video Killed the Radio Star");
@@ -3382,11 +3286,11 @@ free(copy);  // you must free memory allocated by strdup
 ```
 
 ::: {.tip}
-**Tip:** `strdup` calls `malloc` internally. Every call to `strdup` must
-eventually be paired with a call to `free`. If you forget, you have a memory
-leak. Note that `strdup` is a POSIX function, not part of the C standard until
-C23. It is available on virtually every system you will use, but compiling with
-`-std=c99 -pedantic` or `-std=c11 -pedantic` will produce a warning.
+**Tip:** `strdup` calls `malloc` internally.
+Every call to `strdup` must eventually be paired with a call to `free`.
+If you forget, you have a memory leak.
+Note that `strdup` is a POSIX function, not part of the C standard until C23.
+It is available on virtually every system you will use, but compiling with `-std=c99 -pedantic` or `-std=c11 -pedantic` will produce a warning.
 :::
 
 \index{strtok}
@@ -3396,9 +3300,8 @@ C23. It is available on virtually every system you will use, but compiling with
 char *strtok(char *str, const char *delim);
 ```
 
-`strtok` splits a string into tokens separated by any character in a delimiter
-set. In C++, you might use `std::istringstream` with `>>` or
-`std::string::find` — in C, `strtok` is the standard approach:
+`strtok` splits a string into tokens separated by any character in a delimiter set.
+In C++, you might use `std::istringstream` with `>>` or `std::string::find` — in C, `strtok` is the standard approach:
 
 ```c
 #include <stdio.h>
@@ -3423,22 +3326,19 @@ int main(void) {
 // 'Fun'
 ```
 
-The first call passes the string to tokenize. Each subsequent call passes
-`NULL` to continue tokenizing the same string. `strtok` returns `NULL` when
-there are no more tokens.
+The first call passes the string to tokenize.
+Each subsequent call passes `NULL` to continue tokenizing the same string.
+`strtok` returns `NULL` when there are no more tokens.
 
-There are two important gotchas. First, `strtok` **modifies the original
-string** by replacing delimiter characters with `'\0'`. If you need the
-original string preserved, make a copy with `strdup` before tokenizing.
-Second, `strtok` stores its state in a hidden static variable, which means it
-is **not thread-safe** and you cannot tokenize two strings at the same time.
+There are two important gotchas.
+First, `strtok` **modifies the original string** by replacing delimiter characters with `'\0'`.
+If you need the original string preserved, make a copy with `strdup` before tokenizing.
+Second, `strtok` stores its state in a hidden static variable, which means it is **not thread-safe** and you cannot tokenize two strings at the same time.
 
 ::: {.tip}
 \index{strtok\_r}
-**Tip:** Use `strtok_r` (POSIX) or `strtok_s` (C11 Annex K / Windows) instead
-of `strtok`. These reentrant versions take an extra `char **saveptr` parameter
-to store the tokenizer state, making them safe to use in multi-threaded
-programs and allowing nested tokenization:
+**Tip:** Use `strtok_r` (POSIX) or `strtok_s` (C11 Annex K / Windows) instead of `strtok`.
+These reentrant versions take an extra `char **saveptr` parameter to store the tokenizer state, making them safe to use in multi-threaded programs and allowing nested tokenization:
 
 ```c
 char *strtok_r(char *str, const char *delim, char **saveptr);
@@ -3473,11 +3373,9 @@ int main(void) {
 }
 ```
 
-The buffer is 12 bytes, `"Buenas "` uses 8 (including the `'\0'`), and
-`"noches"` needs 7 more bytes (including its `'\0'`). That is 14 bytes total in
-a 12-byte buffer. The extra bytes overwrite whatever happens to be next to the
-buffer in memory, which can corrupt other variables, crash the program, or —
-worst of all — create a security exploit.
+The buffer is 12 bytes, `"Buenas "` uses 8 (including the `'\0'`), and `"noches"` needs 7 more bytes (including its `'\0'`).
+That is 14 bytes total in a 12-byte buffer.
+The extra bytes overwrite whatever happens to be next to the buffer in memory, which can corrupt other variables, crash the program, or — worst of all — create a security exploit.
 
 ## A Preview: `sprintf` and `sscanf`
 
@@ -3489,11 +3387,8 @@ int sprintf(char *str, const char *format, ...);
 int sscanf(const char *str, const char *format, ...);
 ```
 
-C has two powerful functions for building and parsing strings that we will cover
-in detail in the Standard I/O chapter: `sprintf` writes formatted output into a string
-buffer (like `printf` but to a string), and `sscanf` reads formatted input from
-a string (like `scanf` but from a string). They are the C programmer's Swiss
-Army knife for string manipulation:
+C has two powerful functions for building and parsing strings that we will cover in detail in the Standard I/O chapter: `sprintf` writes formatted output into a string buffer (like `printf` but to a string), and `sscanf` reads formatted input from a string (like `scanf` but from a string).
+They are the C programmer's Swiss Army knife for string manipulation:
 
 ```c
 char result[50];
@@ -3556,14 +3451,16 @@ int main(void) {
   `strncat`.
 - `strdup` allocates memory with `malloc` — you must `free` the result.
 - `strtok` splits strings into tokens but modifies the original string and is
-  not thread-safe. Use `strtok_r` or `strtok_s` instead.
+  not thread-safe.
+  Use `strtok_r` or `strtok_s` instead.
 - `strlen` returns the number of characters *before* the `'\0'`, not the buffer
   size.
 
 ## Exercises
 
 1. **Think about it:** Why does `strcmp` return 0 for equal strings rather than
-   1? How does this relate to the function's actual purpose?
+   1?
+   How does this relate to the function's actual purpose?
 
 2. **What does this print?**
 
@@ -3594,7 +3491,8 @@ int main(void) {
     }
     ```
 
-    (Hint: what does `==` actually compare here? Is the output guaranteed?)
+    (Hint: what does `==` actually compare here?
+    Is the output guaranteed?)
 
 6. **Write a program** that reads a string from the user, reverses it in place
    using pointer arithmetic, and prints the result.
@@ -3613,7 +3511,9 @@ Different numeric types provide different sizes (which determines the range of v
 ## Everything is a Number
 
 \index{char}
-A `char` is just a small integer (usually 8 bits). Assigning `'A'` is exactly the same as assigning the number `65` (in ASCII). You can perform math on characters just as you would on any integer:
+A `char` is just a small integer (usually 8 bits).
+Assigning `'A'` is exactly the same as assigning the number `65` (in ASCII).
+You can perform math on characters just as you would on any integer:
 
 ```c
 #include <stdio.h>
@@ -3633,7 +3533,10 @@ int main(void) {
 }
 ```
 
-A pointer is also just a number. Specifically, it is an integer that represents a memory address. When you provide a pointer type like `int *`, you are telling the compiler: "Treat this address number as the location of an `int`." C allows you to print the address just like a number, usually formatted as hexadecimal using the `%p` specifier for pointers:
+A pointer is also just a number.
+Specifically, it is an integer that represents a memory address.
+When you provide a pointer type like `int *`, you are telling the compiler: "Treat this address number as the location of an `int`."
+C allows you to print the address just like a number, usually formatted as hexadecimal using the `%p` specifier for pointers:
 
 ```c
 int val = 1986; // Year "Danger Zone" charted
@@ -3644,9 +3547,11 @@ printf("Address: %p\n", (void *)p); // e.g., 0x7ffd9b8
 
 ## Strings are Not Special
 
-Because everything is just a number, C has no native understanding of "strings." A string in C is merely an array of characters (small integers) that ends with a special `0` byte (the null terminator, `'\0'`). 
+Because everything is just a number, C has no native understanding of "strings."
+A string in C is merely an array of characters (small integers) that ends with a special `0` byte (the null terminator, `'\0'`).
 
-When you write a string literal like `"Africa"`, the compiler simply lays out an array of numbers (`65, 102, 114, 105, 99, 97, 0`) in read-only memory and gives you a `char *` pointer to the first number (`65`). The standard libraries (`<string.h>`) are what give us the illusion of strings, by processing these arrays of numbers until they hit that `0` byte.
+When you write a string literal like `"Africa"`, the compiler simply lays out an array of numbers (`65, 102, 114, 105, 99, 97, 0`) in read-only memory and gives you a `char *` pointer to the first number (`65`).
+The standard libraries (`<string.h>`) are what give us the illusion of strings, by processing these arrays of numbers until they hit that `0` byte.
 
 ```c
 #include <stdio.h>
@@ -3671,7 +3576,8 @@ The five bytes are the ASCII values for `H`, `o`, `l`, `a`, and the null termina
 
 ## Converting Strings to Numbers
 
-Because strings are really arrays of characters, the text `"1986"` is entirely different from the integer `1986`. Unsurprisingly, converting between the text representation of a number and its purely numeric form is a very common task.
+Because strings are really arrays of characters, the text `"1986"` is entirely different from the integer `1986`.
+Unsurprisingly, converting between the text representation of a number and its purely numeric form is a very common task.
 
 \index{strtol}
 To translate a string representation into an actual integer, use `strtol` (string to long) from `<stdlib.h>`:
@@ -3680,7 +3586,9 @@ To translate a string representation into an actual integer, use `strtol` (strin
 long strtol(const char *str, char **endptr, int base);
 ```
 
-The first argument is the string to parse. The second argument, `endptr`, is an optional pointer that `strtol` sets to point to the first character after the parsed number (pass `NULL` if you don't need it). The third argument is the numeric base (10 for decimal, 16 for hex, 0 to auto-detect from the prefix).
+The first argument is the string to parse.
+The second argument, `endptr`, is an optional pointer that `strtol` sets to point to the first character after the parsed number (pass `NULL` if you don't need it).
+The third argument is the numeric base (10 for decimal, 16 for hex, 0 to auto-detect from the prefix).
 
 ```c
 #include <stdio.h>
@@ -3759,20 +3667,27 @@ int main(void) {
 
 ::: {.tip}
 **Trap:** Most integer types are always signed by default, but `char` is different — its signedness is implementation-defined.
-Sadly, on x86_64 CPUs, `char` is signed by default, and on ARM CPUs, `char` is unsigned by default! Watch out!
+Sadly, on x86_64 CPUs, `char` is signed by default, and on ARM CPUs, `char` is unsigned by default!
+Watch out!
 :::
 
 ### Integer Promotion
 
 \index{integer promotion}
 
-When you use an integer type in an expression that is equal to or less than the size of `int`, it is automatically promoted to `int` if `int` is large enough to hold all the values of the type. Otherwise, it is promoted to `unsigned int`. This is called integer promotion.
+When you use an integer type in an expression that is equal to or less than the size of `int`, it is automatically promoted to `int` if `int` is large enough to hold all the values of the type.
+Otherwise, it is promoted to `unsigned int`.
+This is called integer promotion.
 
 For expressions that involve larger integer types, the rules generally promote to the signedness and the size of the larger type.
 
 ::: {.tip}
 \index{size\_t}
-**Trap:** One place where this can cause problems is when using `strlen`. `strlen` returns a `size_t` which is an unsigned integer type. If you subtract two `size_t` values, the result will be a `size_t`. If the first value is smaller than the second value, the result will be a large positive number. This can cause problems when using the result in other expressions.
+**Trap:** One place where this can cause problems is when using `strlen`.
+`strlen` returns a `size_t` which is an unsigned integer type.
+If you subtract two `size_t` values, the result will be a `size_t`.
+If the first value is smaller than the second value, the result will be a large positive number.
+This can cause problems when using the result in other expressions.
 :::
 
 ```c
@@ -3838,7 +3753,8 @@ int main(void) {
 
 You would expect only the `ok` message to print, but the `what` message prints too!
 Why?
-The literal `1.2` is a `double`. When it is assigned to `f`, the value is rounded to fit in a `float`, losing some precision.
+The literal `1.2` is a `double`.
+When it is assigned to `f`, the value is rounded to fit in a `float`, losing some precision.
 In the first `if`, `f` is promoted back to `double` for the comparison, but the precision lost during the assignment is not recovered, so `f` and `1.2` are not equal.
 In the second `if`, `1.2f` is a `float` literal, which was rounded the same way, so the comparison succeeds.
 
@@ -3846,7 +3762,8 @@ In the second `if`, `1.2f` is a `float` literal, which was rounded the same way,
 
 \index{cast}
 
-A **cast** is a way of forcing the compiler to treat a value of one type as another type. The syntax is `(type) value`. 
+A **cast** is a way of forcing the compiler to treat a value of one type as another type.
+The syntax is `(type) value`.
 
 Casts in C are much simpler than in C++.
 They are also much less magical!
@@ -3876,7 +3793,8 @@ double pi = 3.14159;
 int roughly_pi = (int)pi; // truncates to 3
 ```
 
-Because C trusts you implicitly, casting can be dangerous. Magic *does not* happen when you cast.
+Because C trusts you implicitly, casting can be dangerous.
+Magic *does not* happen when you cast.
 
 ::: {.tip}
 **Trap:** A classic beginner mistake is trying to convert a string to an integer by casting the pointer.
@@ -3886,14 +3804,18 @@ char *movie_year = "1985";  // The Goonies
 int bad_year = (int)movie_year; // THIS IS A BUG! not 1985!!
 ```
 
-Casting a `char *` string to an `int` does not convert the text `"1985"` into the number `1985`. It tells the compiler to take the *memory address* where the string is stored and chop or pad it to fit inside an `int`. On a 64-bit system, the pointer is 8 bytes and the `int` is 4 bytes, so compiling this code will actually result in a warning that you are casting a pointer to an integer of different size! Always use functions like `strtol` to parse strings into numbers.
+Casting a `char *` string to an `int` does not convert the text `"1985"` into the number `1985`.
+It tells the compiler to take the *memory address* where the string is stored and chop or pad it to fit inside an `int`.
+On a 64-bit system, the pointer is 8 bytes and the `int` is 4 bytes, so compiling this code will actually result in a warning that you are casting a pointer to an integer of different size!
+Always use functions like `strtol` to parse strings into numbers.
 :::
 
 ### Casting pointers to other pointers
 
 \index{void pointer}
 
-`void *` is a pointer that can point to anything. It is a pointer to a generic memory location.
+`void *` is a pointer that can point to anything.
+It is a pointer to a generic memory location.
 This is why you don't have to cast pointers returned by `malloc` to a specific pointer type.
 
 Take care when casting pointers to other pointer types.
@@ -4026,12 +3948,11 @@ int main(void) {
 
 # 10. Standard I/O
 
-C's `<stdio.h>` library is your replacement for C++ `iostream`. It provides
-`printf` and `scanf` for formatted output and input, file operations with
-`fopen` and `fclose`, and binary I/O with `fread` and `fwrite`. Everything
+C's `<stdio.h>` library is your replacement for C++ `iostream`.
+It provides `printf` and `scanf` for formatted output and input, file operations with `fopen` and `fclose`, and binary I/O with `fread` and `fwrite`.
+Everything
 \index{FILE}
-flows through the `FILE *` type — an opaque pointer to a structure that tracks
-the state of an I/O stream.
+flows through the `FILE *` type — an opaque pointer to a structure that tracks the state of an I/O stream.
 
 ## `scanf` for Input
 
@@ -4041,8 +3962,8 @@ the state of an I/O stream.
 int scanf(const char *format, ...);
 ```
 
-You have already seen `printf` for output. For input, C uses `scanf`, which
-reads formatted data from standard input:
+You have already seen `printf` for output.
+For input, C uses `scanf`, which reads formatted data from standard input:
 
 ```c
 #include <stdio.h>
@@ -4056,10 +3977,9 @@ int main(void) {
 }
 ```
 
-Notice the `&` before `year`. Since C is pass by value, `scanf` needs the
-*address* of the variable so it can store the result there. Forgetting the `&`
-is a classic bug — the program compiles but crashes or produces garbage at
-runtime.
+Notice the `&` before `year`.
+Since C is pass by value, `scanf` needs the *address* of the variable so it can store the result there.
+Forgetting the `&` is a classic bug — the program compiles but crashes or produces garbage at runtime.
 
 `scanf` uses similar format specifiers to `printf`, but not identical ones.
 Notably, `scanf` uses `%lf` for `double` while `printf` uses `%f`:
@@ -4075,27 +3995,25 @@ Note that `name` does not need `&` because an array name already points to the b
 But `gpa` does need a `&`, because `scanf` needs to know where `gpa` is stored to fill it in.
 
 ::: {.tip}
-**Trap:** `scanf("%s", ...)` reads a single word (stopping at whitespace). It
-also has no bounds checking — it will happily overflow your buffer. Use a
-width specifier like `%49s` to limit input to 49 characters (plus `'\0'`).
+**Trap:** `scanf("%s", ...)` reads a single word (stopping at whitespace).
+It also has no bounds checking — it will happily overflow your buffer.
+Use a width specifier like `%49s` to limit input to 49 characters (plus `'\0'`).
 :::
 
 ## Scan Sets
 
 \index{scan set}
 
-`scanf` supports **scan set specifiers** with `%[...]`, which let you define
-exactly which characters to accept. The scan set reads characters as long as
-they are in the set, and stops at the first character that is not:
+`scanf` supports **scan set specifiers** with `%[...]`, which let you define exactly which characters to accept.
+The scan set reads characters as long as they are in the set, and stops at the first character that is not:
 
 ```c
 char vowels[20];
 scanf("%19[aeiouAEIOU]", vowels);  // reads only vowels, stops at first non-vowel
 ```
 
-A caret `^` at the start of the set **negates** it — read everything *except*
-the listed characters. This gives you a way to read an entire line with `scanf`,
-since `%[^\n]` reads everything up to (but not including) the newline:
+A caret `^` at the start of the set **negates** it — read everything *except* the listed characters.
+This gives you a way to read an entire line with `scanf`, since `%[^\n]` reads everything up to (but not including) the newline:
 
 ```c
 char line[80];
@@ -4105,8 +4023,8 @@ printf("You said: %s\n", line);
 
 Always include a width limit to prevent buffer overflow, just like with `%s`.
 
-Scan sets work with `sscanf` too. Here is an example that parses a structured
-string:
+Scan sets work with `sscanf` too.
+Here is an example that parses a structured string:
 
 ```c
 char buf[] = "Track 03: 99 Luftballons";
@@ -4117,17 +4035,15 @@ sscanf(buf, "Track %d: %49[^\n]", &track, title);
 ```
 
 ::: {.tip}
-**Tip:** `%[^\n]` is the `scanf` way to read a line, but `fgets` is generally
-safer and simpler for line-oriented input. Use scan sets when you need to parse
-structured input where only certain characters are valid.
+**Tip:** `%[^\n]` is the `scanf` way to read a line, but `fgets` is generally safer and simpler for line-oriented input.
+Use scan sets when you need to parse structured input where only certain characters are valid.
 :::
 
 ## The `%m` Modifier (POSIX)
 
 With `%s` and `%[...]`, you must always provide a buffer that is large enough.
-The POSIX `%m` modifier (called the **assignment-allocation** modifier) tells
-`scanf` to `malloc` the buffer for you. Instead of passing a `char[]`, you pass
-a `char **` and `scanf` allocates exactly enough memory:
+The POSIX `%m` modifier (called the **assignment-allocation** modifier) tells `scanf` to `malloc` the buffer for you.
+Instead of passing a `char[]`, you pass a `char **` and `scanf` allocates exactly enough memory:
 
 ```c
 char *line = NULL;
@@ -4136,9 +4052,8 @@ printf("You said: %s\n", line);
 free(line);                     // you must free it
 ```
 
-Notice `&line` — `scanf` needs a pointer to your `char *` so it can fill it in
-with the address of the newly allocated buffer. This eliminates buffer overflow
-risk entirely, since the buffer is always the right size.
+Notice `&line` — `scanf` needs a pointer to your `char *` so it can fill it in with the address of the newly allocated buffer.
+This eliminates buffer overflow risk entirely, since the buffer is always the right size.
 
 `%ms` works the same way for single words:
 
@@ -4149,10 +4064,9 @@ free(word);
 ```
 
 ::: {.tip}
-**Tip:** `%m` is a POSIX extension (available on Linux, macOS, and most Unix
-systems) and is not part of the C standard. It will not work with MSVC on
-Windows. When portability is not a concern, `%m` is an excellent way to avoid
-buffer sizing headaches.
+**Tip:** `%m` is a POSIX extension (available on Linux, macOS, and most Unix systems) and is not part of the C standard.
+It will not work with MSVC on Windows.
+When portability is not a concern, `%m` is an excellent way to avoid buffer sizing headaches.
 :::
 
 ## `stdin`, `stdout`, and `stderr`
@@ -4169,16 +4083,14 @@ When your C program starts, three streams (of type `FILE *`) are already open:
 | `stdout` | Standard output (screen) | `std::cout` |
 | `stderr` | Standard error (screen) | `std::cerr` |
 
-`printf(...)` is actually shorthand for `fprintf(stdout, ...)`. You can write
-to `stderr` for error messages:
+`printf(...)` is actually shorthand for `fprintf(stdout, ...)`.
+You can write to `stderr` for error messages:
 
 ```c
 fprintf(stderr, "Error: file not found\n");
 ```
 
-Error messages sent to `stderr` are not affected by output redirection
-(`./program > output.txt` only redirects `stdout`), so error messages still
-appear on the screen.
+Error messages sent to `stderr` are not affected by output redirection (`./program > output.txt` only redirects `stdout`), so error messages still appear on the screen.
 `./program 2> err.txt` will redirect errors to `err.txt` and `stdout` will appear on the screen.
 
 ## `fprintf` and `fscanf`
@@ -4191,16 +4103,16 @@ int fprintf(FILE *stream, const char *format, ...);
 int fscanf(FILE *stream, const char *format, ...);
 ```
 
-`fprintf` and `fscanf` are the file versions of `printf` and `scanf`. They take
-a `FILE *` as the first argument:
+`fprintf` and `fscanf` are the file versions of `printf` and `scanf`.
+They take a `FILE *` as the first argument:
 
 ```c
 fprintf(stdout, "Hello\n");           // same as printf("Hello\n")
 fprintf(stderr, "Something broke\n"); // write to stderr
 ```
 
-More usefully, you can use them with files you have opened yourself. Here is
-`fscanf` reading from a file:
+More usefully, you can use them with files you have opened yourself.
+Here is `fscanf` reading from a file:
 
 ```c
 FILE *f = fopen("scores.txt", "r");
@@ -4214,8 +4126,7 @@ if (f != NULL) {
 }
 ```
 
-`fscanf` returns the number of items successfully read, so checking the return
-value tells you whether the read succeeded.
+`fscanf` returns the number of items successfully read, so checking the return value tells you whether the read succeeded.
 
 ## Opening and Closing Files
 
@@ -4258,10 +4169,8 @@ The second argument to `fopen` is the **mode string**:
 | `"w+"` | Read and write (creates or truncates) |
 | `"a+"` | Read and append |
 
-To open a file in **binary mode**, add `b` to the mode string: `"rb"`, `"wb"`,
-`"ab"`, etc. On Unix systems, binary and text modes behave identically. On
-Windows, text mode translates `\r\n` to `\n` on input and vice versa on
-output — binary mode does not.
+To open a file in **binary mode**, add `b` to the mode string: `"rb"`, `"wb"`, `"ab"`, etc. On Unix systems, binary and text modes behave identically.
+On Windows, text mode translates `\r\n` to `\n` on input and vice versa on output — binary mode does not.
 
 ## `sprintf` and `sscanf`
 
@@ -4281,8 +4190,8 @@ sscanf(buf, "Track %d: %49[^\n]", &track, title);
 
 ::: {.tip}
 \index{snprintf}
-**Trap:** `sprintf` has the same buffer overflow risk as `strcpy` — it does not
-check the size of the destination buffer. Use `snprintf` for safety:
+**Trap:** `sprintf` has the same buffer overflow risk as `strcpy` — it does not check the size of the destination buffer.
+Use `snprintf` for safety:
 
 ```c
 int snprintf(char *str, size_t size, const char *format, ...);
@@ -4292,12 +4201,10 @@ int snprintf(char *str, size_t size, const char *format, ...);
 snprintf(buf, sizeof(buf), "Track %02d: %s", 3, "99 Luftballons");
 ```
 
-`snprintf` guarantees it will not write more than `sizeof(buf)` bytes,
-including the null terminator.
+`snprintf` guarantees it will not write more than `sizeof(buf)` bytes, including the null terminator.
 :::
 
-`asprintf` (POSIX) goes one step further — it `malloc`s a buffer that is
-exactly the right size, so you never have to guess:
+`asprintf` (POSIX) goes one step further — it `malloc`s a buffer that is exactly the right size, so you never have to guess:
 
 ```c
 int asprintf(char **strp, const char *format, ...);
@@ -4310,15 +4217,13 @@ printf("%s\n", msg);   // "Track 03: Mis Ojos Lloran Por Ti"
 free(msg);              // you must free it
 ```
 
-Like `%m` in `scanf`, you pass a pointer to a `char *` and `asprintf` fills it
-in with the address of the newly allocated string. It returns the number of
-characters written, or -1 on failure.
+Like `%m` in `scanf`, you pass a pointer to a `char *` and `asprintf` fills it in with the address of the newly allocated string.
+It returns the number of characters written, or -1 on failure.
 
 ::: {.tip}
-**Tip:** `asprintf` is a POSIX/GNU extension, not part of the C standard. It is
-available on Linux, macOS, and most Unix systems but not MSVC. When it is
-available, it is the safest and most convenient way to build formatted strings —
-no buffer sizing, no truncation, no overflow.
+**Tip:** `asprintf` is a POSIX/GNU extension, not part of the C standard.
+It is available on Linux, macOS, and most Unix systems but not MSVC.
+When it is available, it is the safest and most convenient way to build formatted strings — no buffer sizing, no truncation, no overflow.
 :::
 
 ## Binary I/O: `fread` and `fwrite`
@@ -4358,10 +4263,8 @@ int main(void) {
 }
 ```
 
-Both functions take four arguments: a pointer to the data, the size of each
-element, the number of elements, and the file stream. `fwrite` returns the
-number of elements successfully written; `fread` returns the number of elements
-successfully read.
+Both functions take four arguments: a pointer to the data, the size of each element, the number of elements, and the file stream.
+`fwrite` returns the number of elements successfully written; `fread` returns the number of elements successfully read.
 
 ## Reading Lines: `fgets`
 
@@ -4371,9 +4274,9 @@ successfully read.
 char *fgets(char *s, int size, FILE *stream);
 ```
 
-`fgets` reads a line from a stream into a buffer. It stops when it has read
-`size - 1` characters, encounters a newline (which it includes in the buffer),
-or reaches end of file. It always null-terminates the result:
+`fgets` reads a line from a stream into a buffer.
+It stops when it has read `size - 1` characters, encounters a newline (which it includes in the buffer), or reaches end of file.
+It always null-terminates the result:
 
 ```c
 char line[80];
@@ -4382,18 +4285,17 @@ while (fgets(line, sizeof(line), f) != NULL) {
 }
 ```
 
-`fgets` returns `NULL` at end of file or on error, making it easy to use in a
-loop. It is generally safer than `scanf` for reading lines because it always
-respects the buffer size.
+`fgets` returns `NULL` at end of file or on error, making it easy to use in a loop.
+It is generally safer than `scanf` for reading lines because it always respects the buffer size.
 
 ## Buffering and `fflush`
 
 \index{buffering}
 \index{fflush}
 
-`stdio` does not write directly to the output device on every call. Instead, it
-accumulates data in an internal buffer and writes it in larger chunks for
-efficiency. There are three buffering modes:
+`stdio` does not write directly to the output device on every call.
+Instead, it accumulates data in an internal buffer and writes it in larger chunks for efficiency.
+There are three buffering modes:
 
 - **Full buffering:** Output is written when the buffer is full (default for
   files).
@@ -4401,10 +4303,8 @@ efficiency. There are three buffering modes:
   `stdout` when connected to a terminal).
 - **Unbuffered:** Output is written immediately (default for `stderr`).
 
-This means that `printf("Working...")` (no newline) will not appear on screen
-immediately when `stdout` goes to a terminal, and will not
-appear when redirected to a file until the buffer fills or the program exits. Use `fflush` to force the buffer
-to be written:
+This means that `printf("Working...")` (no newline) will not appear on screen immediately when `stdout` goes to a terminal, and will not appear when redirected to a file until the buffer fills or the program exits.
+Use `fflush` to force the buffer to be written:
 
 ```c
 int fflush(FILE *stream);
@@ -4418,12 +4318,10 @@ printf(" done!\n");
 ```
 
 ::: {.tip}
-**Trap:** When `stdout` is connected to a terminal, output is **line
-buffered** — a `\n` triggers a flush. When `stdout` is redirected to a file or
-pipe, it is **fully buffered** — output may not appear until the buffer fills
-up or the program exits. If you need output to appear immediately (e.g.,
-progress indicators), call `fflush(stdout)` after printing. `stderr` is always
-unbuffered, which is why error messages appear immediately.
+**Trap:** When `stdout` is connected to a terminal, output is **line buffered** — a `\n` triggers a flush.
+When `stdout` is redirected to a file or pipe, it is **fully buffered** — output may not appear until the buffer fills up or the program exits.
+If you need output to appear immediately (e.g., progress indicators), call `fflush(stdout)` after printing.
+`stderr` is always unbuffered, which is why error messages appear immediately.
 :::
 
 ## Try It: Standard I/O Starter
@@ -4495,8 +4393,7 @@ int main(void) {
     ```
 
 3. **Calculation:** If `buf` is declared as `char buf[20]` and you call
-   `snprintf(buf, sizeof(buf), "Year: %d", 1984)`, how many characters
-   (excluding the null terminator) are written to `buf`?
+   `snprintf(buf, sizeof(buf), "Year: %d", 1984)`, how many characters (excluding the null terminator) are written to `buf`?
 
 4. **Where is the bug?**
 
@@ -4514,31 +4411,27 @@ int main(void) {
     ```
 
 6. **Think about it:** You run `./program > output.txt` and your program
-   contains both `printf` and `fprintf(stderr, ...)` calls. Which messages
-   appear in `output.txt` and which appear on the screen? Why?
+   contains both `printf` and `fprintf(stderr, ...)` calls.
+   Which messages appear in `output.txt` and which appear on the screen?
+   Why?
 
 7. **Write a program** that opens a text file, writes five lines to it (your
-   choice of content), closes it, reopens it for reading, reads and prints each
-   line using `fgets`, then closes it again.
+   choice of content), closes it, reopens it for reading, reads and prints each line using `fgets`, then closes it again.
 
 \newpage
 
 # 11. Low-Level I/O
 
-The `<stdio.h>` functions you learned in the previous chapter are built on top
-of a lower-level I/O interface provided by the operating system. These system
-calls — `read`, `write`, `open`, and `close` — work directly with **file
-descriptors** rather than `FILE *` pointers. You will encounter them in systems
-programming, and understanding them helps you see what `stdio` is actually
-doing under the hood.
+The `<stdio.h>` functions you learned in the previous chapter are built on top of a lower-level I/O interface provided by the operating system.
+These system calls — `read`, `write`, `open`, and `close` — work directly with **file descriptors** rather than `FILE *` pointers.
+You will encounter them in systems programming, and understanding them helps you see what `stdio` is actually doing under the hood.
 
 ## File Descriptors
 
 \index{file descriptor}
 
-A file descriptor is a small non-negative integer that the operating system
-uses to identify an open file (or pipe, socket, device, etc.). When your
-program starts, three file descriptors are already open:
+A file descriptor is a small non-negative integer that the operating system uses to identify an open file (or pipe, socket, device, etc.).
+When your program starts, three file descriptors are already open:
 
 | File Descriptor | POSIX Name | Purpose |
 |:---|:---|:---|
@@ -4547,8 +4440,8 @@ program starts, three file descriptors are already open:
 | 2 | `STDERR_FILENO` | Standard error |
 
 \index{unistd.h}
-These constants are defined in `<unistd.h>`. They correspond to `stdin`,
-`stdout`, and `stderr` from `<stdio.h>`, but at a lower level.
+These constants are defined in `<unistd.h>`.
+They correspond to `stdin`, `stdout`, and `stderr` from `<stdio.h>`, but at a lower level.
 
 ## `read` and `write`
 
@@ -4560,8 +4453,7 @@ ssize_t read(int fd, void *buf, size_t count);
 ssize_t write(int fd, const void *buf, size_t count);
 ```
 
-The `read` and `write` system calls transfer raw bytes between a file
-descriptor and a buffer:
+The `read` and `write` system calls transfer raw bytes between a file descriptor and a buffer:
 
 ```c
 #include <unistd.h>
@@ -4575,13 +4467,11 @@ ssize_t n = read(0, buf, sizeof(buf));  // read from stdin
 write(1, buf, n);                        // echo it back
 ```
 
-`read` returns the number of bytes actually read (which may be less than
-requested), 0 at end of file, or -1 on error. `write` returns the number of
-bytes actually written, or -1 on error.
+`read` returns the number of bytes actually read (which may be less than requested), 0 at end of file, or -1 on error.
+`write` returns the number of bytes actually written, or -1 on error.
 
-Unlike `printf` and `scanf`, these functions perform no formatting — they
-transfer raw bytes. There are no format specifiers, no newline handling, no
-buffering.
+Unlike `printf` and `scanf`, these functions perform no formatting — they transfer raw bytes.
+There are no format specifiers, no newline handling, no buffering.
 
 ## `open` and `close`
 
@@ -4630,12 +4520,10 @@ To **create a new file** (or truncate an existing one), combine flags:
 int fd = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 ```
 
-The third argument (`0644`) is the **file permissions** — only used with
-`O_CREAT`. The value `0644` means the owner can read and write, and everyone
-else can only read.
+The third argument (`0644`) is the **file permissions** — only used with `O_CREAT`.
+The value `0644` means the owner can read and write, and everyone else can only read.
 
-There is also `creat`, which is equivalent to `open` with
-`O_WRONLY | O_CREAT | O_TRUNC`:
+There is also `creat`, which is equivalent to `open` with `O_WRONLY | O_CREAT | O_TRUNC`:
 
 ```c
 int creat(const char *path, mode_t mode);
@@ -4647,9 +4535,9 @@ int fd = creat("output.txt", 0644);
 ```
 
 ::: {.tip}
-**Wut:** Yes, it is `creat` with no `e`. Ken Thompson was once asked what he
-would do differently if he were redesigning Unix. His answer: "I'd spell creat
-with an e."
+**Wut:** Yes, it is `creat` with no `e`.
+Ken Thompson was once asked what he would do differently if he were redesigning Unix.
+His answer: "I'd spell creat with an e."
 :::
 
 ## Seeking: `lseek`
@@ -4686,9 +4574,8 @@ The three `SEEK_` constants control where the offset is relative to:
 `lseek` returns the new offset from the beginning of the file, or -1 on error.
 
 ::: {.tip}
-**Tip:** In `<stdio.h>`, the equivalent functions are `fseek` and `ftell`. The
-low-level `lseek` combines both: calling `lseek(fd, 0, SEEK_CUR)` returns the
-current position without moving, just like `ftell`.
+**Tip:** In `<stdio.h>`, the equivalent functions are `fseek` and `ftell`.
+The low-level `lseek` combines both: calling `lseek(fd, 0, SEEK_CUR)` returns the current position without moving, just like `ftell`.
 :::
 
 ## `pread` and `pwrite`
@@ -4701,8 +4588,7 @@ ssize_t pread(int fd, void *buf, size_t count, off_t offset);
 ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
 ```
 
-`pread` and `pwrite` are like `read` and `write` but take an explicit offset
-instead of using (or modifying) the file's current position:
+`pread` and `pwrite` are like `read` and `write` but take an explicit offset instead of using (or modifying) the file's current position:
 
 ```c
 // Read 100 bytes starting at offset 200, without changing the file position
@@ -4712,9 +4598,7 @@ ssize_t n = pread(fd, buf, 100, 200);
 pwrite(fd, data, 50, 0);
 ```
 
-These are useful in multi-threaded programs where multiple threads share a file
-descriptor — since they do not modify the file position, there is no race
-condition.
+These are useful in multi-threaded programs where multiple threads share a file descriptor — since they do not modify the file position, there is no race condition.
 
 ## Try It: Low-Level I/O Starter
 
@@ -4773,7 +4657,8 @@ int main(void) {
 ## Exercises
 
 1. **Think about it:** Why would you use low-level `read`/`write` instead of
-   `fprintf`/`fscanf`? When would `stdio` be the better choice?
+   `fprintf`/`fscanf`?
+   When would `stdio` be the better choice?
 
 2. **What does this print?**
 
@@ -4783,7 +4668,8 @@ int main(void) {
     ```
 
 3. **Calculation:** If `read(fd, buf, 1024)` returns 512, what does that tell
-   you? Does it mean there was an error?
+   you?
+   Does it mean there was an error?
 
 4. **Where is the bug?**
 
@@ -4794,20 +4680,18 @@ int main(void) {
     ```
 
 5. **Think about it:** Explain the difference between
-   `lseek(fd, 0, SEEK_END)` and `lseek(fd, -1, SEEK_END)`. What does each
-   return?
+   `lseek(fd, 0, SEEK_END)` and `lseek(fd, -1, SEEK_END)`.
+   What does each return?
 
 6. **Write a program** that uses low-level I/O (`open`, `read`, `write`,
-   `close`) to copy the contents of one file to another. The source and
-   destination filenames should be taken from `argv`.
+   `close`) to copy the contents of one file to another.
+   The source and destination filenames should be taken from `argv`.
 
 \newpage
 
 # 12. Odds and Ends
 
-This chapter covers a few remaining topics that do not fit neatly into the
-previous chapters but are important for writing real C programs and for working
-with C code from C++.
+This chapter covers a few remaining topics that do not fit neatly into the previous chapters but are important for writing real C programs and for working with C code from C++.
 
 ## `exit` vs `return`
 
@@ -4817,9 +4701,8 @@ with C code from C++.
 void exit(int status);
 ```
 
-You already know that `return` in `main` ends the program. The `exit` function
-from `<stdlib.h>` does the same thing, but it can be called from *any*
-function — not just `main`:
+You already know that `return` in `main` ends the program.
+The `exit` function from `<stdlib.h>` does the same thing, but it can be called from *any* function — not just `main`:
 
 ```c
 #include <stdio.h>
@@ -4836,35 +4719,30 @@ void check_file(const char *path) {
 }
 ```
 
-`exit` is useful when an error deep inside a call chain is unrecoverable and
-there is no reasonable way to propagate the error back through multiple layers
-of callers. In C++, you would throw an exception; in C, `exit` is sometimes the
-pragmatic choice.
+`exit` is useful when an error deep inside a call chain is unrecoverable and there is no reasonable way to propagate the error back through multiple layers of callers.
+In C++, you would throw an exception; in C, `exit` is sometimes the pragmatic choice.
 
 \index{atexit}
-`exit` also flushes all open `stdio` streams and calls any functions registered
-with `atexit` before terminating the program.
+`exit` also flushes all open `stdio` streams and calls any functions registered with `atexit` before terminating the program.
 
 ```c
 int atexit(void (*func)(void));
 ```
 
 ::: {.tip}
-**Tip:** Use `exit` sparingly. It is a blunt instrument — it ends the entire
-program immediately, skipping any cleanup code in calling functions. If you can
-reasonably propagate an error code back to `main` and let `main` return, prefer
-that approach. Reserve `exit` for truly fatal errors.
+**Tip:** Use `exit` sparingly.
+It is a blunt instrument — it ends the entire program immediately, skipping any cleanup code in calling functions.
+If you can reasonably propagate an error code back to `main` and let `main` return, prefer that approach.
+Reserve `exit` for truly fatal errors.
 :::
 
 ## `extern "C"` — Calling C from C++
 
 \index{extern ""C""}
 
-If you are writing C++ code that needs to call functions from a C library, you
-need `extern "C"`. The reason: C++ **mangles** function names to support
-overloading (so `void foo(int)` and `void foo(double)` have different symbol
-names), but C does not. Without `extern "C"`, the C++ linker looks for the
-mangled name and cannot find the C function.
+If you are writing C++ code that needs to call functions from a C library, you need `extern "C"`.
+The reason: C++ **mangles** function names to support overloading (so `void foo(int)` and `void foo(double)` have different symbol names), but C does not.
+Without `extern "C"`, the C++ linker looks for the mangled name and cannot find the C function.
 
 ```cpp
 // In your C++ code:
@@ -4879,8 +4757,7 @@ Or for a single function:
 extern "C" void c_function(int x);
 ```
 
-Many C headers protect themselves with this pattern so they work from both C
-and C++:
+Many C headers protect themselves with this pattern so they work from both C and C++:
 
 ```c
 #ifdef __cplusplus
@@ -4895,27 +4772,23 @@ int another_function(const char *s);
 #endif
 ```
 
-The `__cplusplus` macro is only defined when compiling with a C++ compiler, so
-the `extern "C"` wrapper only appears in C++ compilation.
+The `__cplusplus` macro is only defined when compiling with a C++ compiler, so the `extern "C"` wrapper only appears in C++ compilation.
 
 ::: {.tip}
-**Tip:** The reason C++ mangles names is to support **function overloading** —
-having multiple functions with the same name but different parameter types. C
-has no function overloading. Every function name must be unique. If you need
-two functions that do the same thing for different types, you give them
-different names — for example, `abs` for `int`, `fabs` for `double`, and
-`labs` for `long`. The upside is that when you see a function call in C, you
-know exactly which function will be invoked — there is only one version.
+**Tip:** The reason C++ mangles names is to support **function overloading** — having multiple functions with the same name but different parameter types.
+C has no function overloading.
+Every function name must be unique.
+If you need two functions that do the same thing for different types, you give them different names — for example, `abs` for `int`, `fabs` for `double`, and `labs` for `long`.
+The upside is that when you see a function call in C, you know exactly which function will be invoked — there is only one version.
 :::
 
 ## Pointer Ownership
 
 \index{pointer!ownership}
 
-In C++, smart pointers make ownership clear: a `std::unique_ptr` owns the
-memory, and when it goes out of scope, the memory is freed. In C, there are no
-smart pointers. When a function returns a pointer, you must ask: **who owns
-this memory?**
+In C++, smart pointers make ownership clear: a `std::unique_ptr` owns the memory, and when it goes out of scope, the memory is freed.
+In C, there are no smart pointers.
+When a function returns a pointer, you must ask: **who owns this memory?**
 
 There are three common patterns:
 
@@ -4937,7 +4810,8 @@ struct hostent *h = gethostbyname("example.com");
 ```
 
 **3. You own it (you passed it in).** You allocated the memory and passed a
-pointer to the function. The function used it but did not take ownership:
+pointer to the function.
+The function used it but did not take ownership:
 
 ```c
 char buf[100];
@@ -4950,17 +4824,16 @@ fgets(buf, sizeof(buf), stdin);
 \index{use-after-free}
 \index{double free}
 **Trap:** Always read the documentation of a C function that returns a pointer.
-Look for words like "the caller must free the returned pointer" or "the
-returned pointer points to a static buffer." If the documentation does not say,
-look at the source code. Getting ownership wrong leads to either memory leaks
-(never freeing) or double-free bugs (freeing what you do not own).
+Look for words like "the caller must free the returned pointer" or "the returned pointer points to a static buffer."
+If the documentation does not say, look at the source code.
+Getting ownership wrong leads to either memory leaks (never freeing) or double-free bugs (freeing what you do not own).
 :::
 
 ## Error Handling Without Exceptions
 
-In C++, you can `throw` an exception and let a `catch` block handle it several
-call levels up. C has no exceptions. Error handling is done through return
-codes, and cleanup is your responsibility.
+In C++, you can `throw` an exception and let a `catch` block handle it several call levels up.
+C has no exceptions.
+Error handling is done through return codes, and cleanup is your responsibility.
 
 The simplest pattern is to check return values and bail out:
 
@@ -4977,9 +4850,9 @@ if (!f) {
 ```
 
 \index{goto}
-But what happens when a function acquires multiple resources? You need to
-release them in the correct order when something goes wrong. The idiomatic
-C pattern uses `goto` to jump to cleanup labels:
+But what happens when a function acquires multiple resources?
+You need to release them in the correct order when something goes wrong.
+The idiomatic C pattern uses `goto` to jump to cleanup labels:
 
 ```c
 int process(const char *path) {
@@ -5006,23 +4879,20 @@ close_file:
 }
 ```
 
-Each resource acquired gets a corresponding cleanup label below it. If any
-allocation fails, control jumps to the label that releases everything acquired
-so far, in reverse order. This pattern is used extensively in real C code
-including the Linux kernel.
+Each resource acquired gets a corresponding cleanup label below it.
+If any allocation fails, control jumps to the label that releases everything acquired so far, in reverse order.
+This pattern is used extensively in real C code including the Linux kernel.
 
 ::: {.tip}
-**Wut:** C++ programmers are taught "never use `goto`." In C, `goto` for
-cleanup is an accepted and widely used idiom. It is the closest thing C has
-to RAII — a structured way to ensure resources are always released.
+**Wut:** C++ programmers are taught "never use `goto`."
+In C, `goto` for cleanup is an accepted and widely used idiom.
+It is the closest thing C has to RAII — a structured way to ensure resources are always released.
 :::
 
 \index{errno}
 \index{perror}
-The other common strategy is to return an error code (often `-1` or `NULL`)
-and let the caller decide what to do. Many C library functions set the global
-variable `errno` to indicate what went wrong, and you can use `perror` or
-`strerror(errno)` to get a human-readable message:
+The other common strategy is to return an error code (often `-1` or `NULL`) and let the caller decide what to do.
+Many C library functions set the global variable `errno` to indicate what went wrong, and you can use `perror` or `strerror(errno)` to get a human-readable message:
 
 ```c
 char *strerror(int errnum);
@@ -5039,11 +4909,10 @@ if (!f) {
 
 \index{qsort}
 
-You learned about function pointers in the Functions chapter. The most common
-place you will encounter them in practice is the standard
-library function `qsort` from `<stdlib.h>`. In C++, you would use
-`std::sort` with a lambda or comparator. In C, `qsort` takes a comparison
-function pointer:
+You learned about function pointers in the Functions chapter.
+The most common place you will encounter them in practice is the standard library function `qsort` from `<stdlib.h>`.
+In C++, you would use `std::sort` with a lambda or comparator.
+In C, `qsort` takes a comparison function pointer:
 
 ```c
 void qsort(void *base, size_t nel, size_t width,
@@ -5076,11 +4945,9 @@ int main(void) {
 }
 ```
 
-`qsort` takes four arguments: the array, the number of elements, the size of
-each element, and a pointer to a comparison function. The comparison function
-receives `const void *` pointers — you must cast them to the correct type
-inside the function. It returns a negative value if the first argument is less
-than the second, zero if equal, and a positive value if greater.
+`qsort` takes four arguments: the array, the number of elements, the size of each element, and a pointer to a comparison function.
+The comparison function receives `const void *` pointers — you must cast them to the correct type inside the function.
+It returns a negative value if the first argument is less than the second, zero if equal, and a positive value if greater.
 
 You can sort anything with `qsort` by writing different comparison functions.
 Here is one that sorts strings:
@@ -5112,15 +4979,12 @@ int main(void) {
 }
 ```
 
-Notice the double cast in `compare_strings`: `qsort` passes a pointer *to*
-each array element, and each element is already a `char *`, so you receive a
-`char **` disguised as `const void *`.
+Notice the double cast in `compare_strings`: `qsort` passes a pointer *to* each array element, and each element is already a `char *`, so you receive a `char **` disguised as `const void *`.
 
 ::: {.tip}
-**Wut:** A common mistake is to write `return a - b` in integer comparison
-functions. This can overflow when `a` and `b` have very different signs (e.g.,
-`INT_MAX - (-1)` overflows). The pattern `(a > b) - (a < b)` is safe and
-returns -1, 0, or 1.
+**Wut:** A common mistake is to write `return a - b` in integer comparison functions.
+This can overflow when `a` and `b` have very different signs (e.g., `INT_MAX - (-1)` overflows).
+The pattern `(a > b) - (a < b)` is safe and returns -1, 0, or 1.
 :::
 
 ## Try It: Odds and Ends Starter
@@ -5214,8 +5078,9 @@ free_buf:
 ## Exercises
 
 1. **Think about it:** In C++ you would use exceptions for error handling. In C
-   there are no exceptions. What strategies can you use to handle errors in
-   deeply nested function calls? When is `exit` appropriate and when is it not?
+   there are no exceptions.
+   What strategies can you use to handle errors in deeply nested function calls?
+   When is `exit` appropriate and when is it not?
 
 2. **What happens here?**
 
@@ -5245,8 +5110,8 @@ free_buf:
     ```
 
 4. **Think about it:** You call a function `char *get_name(int id)` from a
-   library. How would you determine whether you need to `free` the returned
-   pointer?
+   library.
+   How would you determine whether you need to `free` the returned pointer?
 
 5. **Where is the bug?** (Hint: ownership)
 
@@ -5278,8 +5143,8 @@ free_buf:
     ```
 
 8. **Write a program** that uses `qsort` to sort an array of strings in
-   reverse alphabetical order. Write a custom comparison function that calls
-   `strcmp` with the arguments swapped.
+   reverse alphabetical order.
+   Write a custom comparison function that calls `strcmp` with the arguments swapped.
 
 9. **Write a program** in C++ that uses `extern "C"` to call the C function
    `strlen` from `<string.h>`, passes it a string, and prints the result.
@@ -5289,13 +5154,14 @@ free_buf:
 
 # Conclusion
 
-You have covered a lot of ground — from `printf` format specifiers to file
-descriptors to pointer ownership. Here are the key takeaways:
+You have covered a lot of ground — from `printf` format specifiers to file descriptors to pointer ownership.
+Here are the key takeaways:
 
 - **C and C++ are different languages.** Modern C++ has evolved far from C.
   Knowing one does not mean you automatically know the other.
 - **`printf` and `scanf` replace `iostream`.** Format specifiers must match
-  argument types. `scanf` needs `&` for scalar variables.
+  argument types.
+  `scanf` needs `&` for scalar variables.
 - **C types are explicit.** No `auto`, no `std::string`, no classes. You have
   basic types, `typedef`, arrays, and `struct`.
 - **C shares most operators with C++** but there is no operator overloading,
@@ -5303,16 +5169,15 @@ descriptors to pointer ownership. Here are the key takeaways:
 - **Control flow is nearly identical to C++** except there are no range-based
   `for` loops and `goto` is an accepted idiom for cleanup.
 - **Pointers hold memory addresses.** Use `&` to get an address, `*` to follow
-  one, and `->` to access struct fields through a pointer. Arrays decay to
-  pointers, and pointer arithmetic moves in units of the pointed-to type.
+  one, and `->` to access struct fields through a pointer.
+  Arrays decay to pointers, and pointer arithmetic moves in units of the pointed-to type.
 - **All function arguments are pass by value.** To modify a caller's variable,
-  pass a pointer to it. Use `const` parameters to document read-only intent.
+  pass a pointer to it.
+  Use `const` parameters to document read-only intent.
 - **Know where your memory lives.** Global variables last the whole program,
-  local variables live on the stack, and dynamic memory from `malloc` lives on
-  the heap until you `free` it.
+  local variables live on the stack, and dynamic memory from `malloc` lives on the heap until you `free` it.
 - **Strings in C are `char` arrays** terminated by `'\0'`. You must manage
-  buffer sizes manually and use functions like `strlen`, `strcpy`, `strcmp`, and
-  `strcat` instead of `std::string` methods.
+  buffer sizes manually and use functions like `strlen`, `strcpy`, `strcmp`, and `strcat` instead of `std::string` methods.
 - **`stdio` provides buffered I/O** through `FILE *` pointers. Low-level I/O
   uses file descriptors and system calls like `read`, `write`, and `open`.
 - **C has no exceptions.** Use return codes for errors and `goto` cleanup to
@@ -5320,31 +5185,31 @@ descriptors to pointer ownership. Here are the key takeaways:
 - **Function pointers replace lambdas.** `qsort` is the classic example —
   pass a comparison function to sort any type.
 - **`exit` terminates from anywhere.** Use it for fatal errors. `extern "C"`
-  bridges C and C++. Always know who owns a pointer.
+  bridges C and C++.
+  Always know who owns a pointer.
 
-Es un mundo nuevo, but you have the C++ foundation to build on. The syntax will
-feel familiar even when the idioms are different. Write small programs, compile
-them with `cc`, and get comfortable with the compiler's warnings — they are
-your best amigo.
+Es un mundo nuevo, but you have the C++ foundation to build on.
+The syntax will feel familiar even when the idioms are different.
+Write small programs, compile them with `cc`, and get comfortable with the compiler's warnings — they are your best amigo.
 
 Buena suerte — you have got this.
 
 ---
 
-*Content outline and editorial support from Ben. Words by Claude, the Opus.*
+*Content outline and editorial support from Ben.
+Words by Claude, the Opus.*
 
 \newpage
 
 # Appendix A: Macros
 
-In C++, you have `constexpr` for compile-time constants, templates for generic
-code, and `inline` functions to avoid call overhead. C has none of those.
-Instead, C leans heavily on the **preprocessor** — the `#define` macro system
-that rewrites your source code *before* the compiler sees it.
+In C++, you have `constexpr` for compile-time constants, templates for generic code, and `inline` functions to avoid call overhead.
+C has none of those.
+Instead, C leans heavily on the **preprocessor** — the `#define` macro system that rewrites your source code *before* the compiler sees it.
 
-Macros are pure textual substitution. The preprocessor does not know about
-types, scope, or expressions — it just replaces text. This makes macros
-powerful and flexible, but also a source of subtle bugs if you are not careful.
+Macros are pure textual substitution.
+The preprocessor does not know about types, scope, or expressions — it just replaces text.
+This makes macros powerful and flexible, but also a source of subtle bugs if you are not careful.
 
 ## Object-Like Macros
 
@@ -5359,13 +5224,12 @@ The simplest macros define named constants:
 #define GREETING  "Hola, amigo"
 ```
 
-Everywhere the preprocessor sees `MAX_BUF`, it replaces it with `1024`. No
-semicolons — a common mistake is writing `#define MAX_BUF 1024;`, which would
-paste `1024;` everywhere, breaking expressions like `malloc(MAX_BUF * sizeof(int))`.
+Everywhere the preprocessor sees `MAX_BUF`, it replaces it with `1024`.
+No semicolons — a common mistake is writing `#define MAX_BUF 1024;`, which would paste `1024;` everywhere, breaking expressions like `malloc(MAX_BUF * sizeof(int))`.
 
 ::: {.tip}
-**Trap:** Do not put a semicolon at the end of a `#define`. The semicolon
-becomes part of the replacement text and will cause surprising errors.
+**Trap:** Do not put a semicolon at the end of a `#define`.
+The semicolon becomes part of the replacement text and will cause surprising errors.
 :::
 
 ### Conditional Compilation
@@ -5382,9 +5246,9 @@ Macros also control which code the compiler sees:
 #endif
 ```
 
-`#ifdef` checks whether a macro is defined (regardless of its value). Its
-complement `#ifndef` checks that a macro is *not* defined. You can also use
-`#if`, `#elif`, and `#else` for more complex conditions:
+`#ifdef` checks whether a macro is defined (regardless of its value).
+Its complement `#ifndef` checks that a macro is *not* defined.
+You can also use `#if`, `#elif`, and `#else` for more complex conditions:
 
 ```c
 #if VERBOSE_LEVEL >= 2
@@ -5400,8 +5264,7 @@ complement `#ifndef` checks that a macro is *not* defined. You can also use
 
 \index{include guard}
 
-The most common use of `#ifndef` is protecting header files from being included
-more than once:
+The most common use of `#ifndef` is protecting header files from being included more than once:
 
 ```c
 /* myheader.h */
@@ -5417,14 +5280,13 @@ void draw_point(struct point p);
 #endif /* MYHEADER_H */
 ```
 
-The first time `myheader.h` is included, `MYHEADER_H` is not defined, so the
-contents are processed and `MYHEADER_H` gets defined. Any subsequent include
-finds `MYHEADER_H` already defined and skips the entire file.
+The first time `myheader.h` is included, `MYHEADER_H` is not defined, so the contents are processed and `MYHEADER_H` gets defined.
+Any subsequent include finds `MYHEADER_H` already defined and skips the entire file.
 
 ::: {.tip}
-**Tip:** Many compilers support `#pragma once` as a non-standard alternative to
-include guards. It is simpler to write but not portable to all compilers. When
-in doubt, use the `#ifndef` guard — it works everywhere.
+**Tip:** Many compilers support `#pragma once` as a non-standard alternative to include guards.
+It is simpler to write but not portable to all compilers.
+When in doubt, use the `#ifndef` guard — it works everywhere.
 :::
 
 ## Function-Like Macros
@@ -5439,8 +5301,8 @@ Macros can take parameters, making them look like functions:
 #define ABS(x)      ((x) < 0 ? -(x) : (x))
 ```
 
-But they are *not* functions — they are text substitution with parameter
-placeholders. This distinction matters.
+But they are *not* functions — they are text substitution with parameter placeholders.
+This distinction matters.
 
 ### The Parenthesization Rules
 
@@ -5458,13 +5320,11 @@ Always parenthesize every parameter use *and* the entire macro body:
 /* SQUARE(1 + 2) expands to: ((1 + 2) * (1 + 2)) = 9 */
 ```
 
-Without parentheses, operator precedence in the surrounding expression can
-silently rearrange the computation.
+Without parentheses, operator precedence in the surrounding expression can silently rearrange the computation.
 
 ### The Double-Evaluation Trap
 
-Since macros substitute text, each parameter reference evaluates the argument
-again:
+Since macros substitute text, each parameter reference evaluates the argument again:
 
 ```c
 #define SQUARE(x) ((x) * (x))
@@ -5475,20 +5335,18 @@ int result = SQUARE(i++);
 /* Undefined behavior: two unsequenced modifications of i */
 ```
 
-A real function evaluates its argument once. A macro evaluates it once per
-appearance in the replacement text. This is the most important difference
-between macros and functions.
+A real function evaluates its argument once.
+A macro evaluates it once per appearance in the replacement text.
+This is the most important difference between macros and functions.
 
 ::: {.tip}
-**Trap:** Never pass expressions with side effects (like `i++`, `f()`, or
-assignment) to function-like macros. The expression will be evaluated multiple
-times, producing unexpected results or undefined behavior.
+**Trap:** Never pass expressions with side effects (like `i++`, `f()`, or assignment) to function-like macros.
+The expression will be evaluated multiple times, producing unexpected results or undefined behavior.
 :::
 
 ### Multi-Statement Macros: `do { ... } while (0)`
 
-If a macro needs to execute multiple statements, wrap them in
-`do { ... } while (0)`:
+If a macro needs to execute multiple statements, wrap them in `do { ... } while (0)`:
 
 ```c
 #define SWAP(a, b) do { \
@@ -5498,7 +5356,8 @@ If a macro needs to execute multiple statements, wrap them in
 } while (0)
 ```
 
-Why not just use braces? Consider:
+Why not just use braces?
+Consider:
 
 ```c
 if (x > y)
@@ -5507,15 +5366,12 @@ else
     printf("Already sorted\n");
 ```
 
-If `SWAP` expanded to a bare `{ ... }`, the semicolon after `SWAP(x, y)` would
-terminate the `if` statement, and the `else` would become a syntax error. The
-`do { ... } while (0)` idiom creates a single statement that works correctly
-with semicolons and control flow.
+If `SWAP` expanded to a bare `{ ... }`, the semicolon after `SWAP(x, y)` would terminate the `if` statement, and the `else` would become a syntax error.
+The `do { ... } while (0)` idiom creates a single statement that works correctly with semicolons and control flow.
 
 ::: {.tip}
-**Tip:** The `do { ... } while (0)` pattern is everywhere in C codebases. It
-looks odd at first, but it is the standard way to make multi-statement macros
-behave like ordinary statements.
+**Tip:** The `do { ... } while (0)` pattern is everywhere in C codebases.
+It looks odd at first, but it is the standard way to make multi-statement macros behave like ordinary statements.
 :::
 
 ## Stringification and Token Pasting
@@ -5539,8 +5395,7 @@ PRINT_VAR(score);
 /* Output: score = 42 */
 ```
 
-This is useful for debug macros where you want to print both the variable name
-and its value.
+This is useful for debug macros where you want to print both the variable name and its value.
 
 ### Token Pasting: `##`
 
@@ -5558,8 +5413,7 @@ DECLARE_PAIR(int)
 */
 ```
 
-Token pasting is commonly used to generate families of related variables or
-functions from a single macro.
+Token pasting is commonly used to generate families of related variables or functions from a single macro.
 
 ## Variadic Macros
 
@@ -5575,28 +5429,25 @@ LOG("score is %d", 42);
 /* Expands to: fprintf(stderr, "[LOG] " "score is %d" "\n", 42); */
 ```
 
-This is commonly used to wrap `printf`-style functions with extra decoration
-like timestamps or log levels.
+This is commonly used to wrap `printf`-style functions with extra decoration like timestamps or log levels.
 
 ::: {.tip}
-**Tip:** When `__VA_ARGS__` is empty, the trailing comma before it can cause a
-compilation error. GNU C provides `##__VA_ARGS__` which swallows the comma when
-the argument list is empty:
+**Tip:** When `__VA_ARGS__` is empty, the trailing comma before it can cause a compilation error.
+GNU C provides `##__VA_ARGS__` which swallows the comma when the argument list is empty:
 
 ```c
 #define LOG(fmt, ...) fprintf(stderr, "[LOG] " fmt "\n", ##__VA_ARGS__)
 LOG("started");  /* No extra args — comma is removed */
 ```
 
-This is a GCC/Clang extension. C23 standardizes this behavior with
-`__VA_OPT__`.
+This is a GCC/Clang extension.
+C23 standardizes this behavior with `__VA_OPT__`.
 :::
 
 ## Multi-Level Expansion
 
-Macros can expand to other macros, and the preprocessor **rescans** the result
-to expand again. But the `#` and `##` operators are special — they operate on
-the raw argument text *before* any expansion happens.
+Macros can expand to other macros, and the preprocessor **rescans** the result to expand again.
+But the `#` and `##` operators are special — they operate on the raw argument text *before* any expansion happens.
 
 ```c
 #define MAX_BUF 1024
@@ -5612,30 +5463,24 @@ printf("%s\n", XSTRINGIFY(MAX_BUF));
 /* Prints "1024" */
 ```
 
-`STRINGIFY(MAX_BUF)` gives `"MAX_BUF"` because `#` stringifies its argument
-before expansion. `XSTRINGIFY(MAX_BUF)` first expands `MAX_BUF` to `1024`
-(since the outer macro does not use `#` directly), then passes `1024` to
-`STRINGIFY`, producing `"1024"`.
+`STRINGIFY(MAX_BUF)` gives `"MAX_BUF"` because `#` stringifies its argument before expansion.
+`XSTRINGIFY(MAX_BUF)` first expands `MAX_BUF` to `1024` (since the outer macro does not use `#` directly), then passes `1024` to `STRINGIFY`, producing `"1024"`.
 
-This two-level indirect pattern is used whenever you need the *expanded* value
-of a macro as a string.
+This two-level indirect pattern is used whenever you need the *expanded* value of a macro as a string.
 
 ::: {.tip}
-**Tip:** Whenever you need a macro's expanded value as a string, use the
-two-level indirect pattern. It comes up often when embedding version numbers
-or configuration values in strings.
+**Tip:** Whenever you need a macro's expanded value as a string, use the two-level indirect pattern.
+It comes up often when embedding version numbers or configuration values in strings.
 :::
 
 ## X-Macros
 
 \index{X-macro}
 
-X-macros are a technique for defining a list of items once and expanding it in
-multiple ways. The idea: define the list as a macro that calls an unspecified
-"action" macro on each item, then define that action differently for each use.
+X-macros are a technique for defining a list of items once and expanding it in multiple ways.
+The idea: define the list as a macro that calls an unspecified "action" macro on each item, then define that action differently for each use.
 
-Here is a concrete example that generates both an enum and a string table from
-a single list of log levels:
+Here is a concrete example that generates both an enum and a string table from a single list of log levels:
 
 ```c
 #include <stdio.h>
@@ -5674,14 +5519,14 @@ Output:
 4 = LOG_FATAL
 ```
 
-Add a new log level? Add one line to `LOG_LEVELS` and the enum and string
-table stay in sync automatically. Without X-macros, you would need to update
-both the enum and the string array separately — and hope you never forget one.
+Add a new log level?
+Add one line to `LOG_LEVELS` and the enum and string table stay in sync automatically.
+Without X-macros, you would need to update both the enum and the string array separately — and hope you never forget one.
 
 ::: {.tip}
-**Tip:** X-macros are one of the preprocessor's most powerful patterns. You
-will see them in real codebases for error codes, command tables, and state
-machines. The key advantage: a single source of truth for a list of items.
+**Tip:** X-macros are one of the preprocessor's most powerful patterns.
+You will see them in real codebases for error codes, command tables, and state machines.
+The key advantage: a single source of truth for a list of items.
 :::
 
 ## Try It: Macro Starter
@@ -5766,8 +5611,9 @@ int main(void) {
 ## Exercises
 
 1. **Think about it:** C++ uses `constexpr` and `inline` functions to replace
-   many uses of macros. What specific problems do macros have that these C++
-   features solve? Why does C still rely on macros despite these problems?
+   many uses of macros.
+   What specific problems do macros have that these C++ features solve?
+   Why does C still rely on macros despite these problems?
 
 2. **What does this produce?**
 
@@ -5779,7 +5625,8 @@ int main(void) {
     ```
 
 3. **Calculation:** Given the macro `#define BUFSIZE 256`, how many bytes does
-   `char buf[BUFSIZE + 1]` allocate? Why is the `+ 1` a common pattern?
+   `char buf[BUFSIZE + 1]` allocate?
+   Why is the `+ 1` a common pattern?
 
 4. **Where is the bug?**
 
@@ -5814,7 +5661,7 @@ int main(void) {
     ```
 
 7. **Write a program** that defines an X-macro list of at least four colors,
-   then uses it to generate both an `enum` and a function that returns the
-   string name for a given enum value. Print each color's enum value and name.
+   then uses it to generate both an `enum` and a function that returns the string name for a given enum value.
+   Print each color's enum value and name.
 
 \printindex
