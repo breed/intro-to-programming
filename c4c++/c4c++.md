@@ -1794,7 +1794,7 @@ int main(void) {
     printf("Side B, Track %d: ", track);
     switch (track) {
     case 1:  printf("Big City Nights\n");   break;
-    case 2:  printf("Bad Boys Running Wild\n"); break;
+    case 2:  printf("Winds of Change\n"); break;
     case 3:  printf("Rock You Like a Hurricane\n"); break;
     default: printf("Unknown track\n");     break;
     }

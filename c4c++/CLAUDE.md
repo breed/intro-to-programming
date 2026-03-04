@@ -69,7 +69,7 @@ do not repeat these in new or modified examples:
 - Danger Zone, Africa, The Goonies, Rio, Jump
 - Hungry Like the Wolf, Come As You Are, Master of Puppets, Thriller
 - Joan Jett, I Love Rock 'n' Roll, Crazy Train, Scorpions, Rock You Like a Hurricane
-- Iron Man, Bad Reputation, Big City Nights, Bad Boys Running Wild
+- Iron Man, Bad Reputation, Big City Nights, Winds of Change
 
 # next 80s references
 
