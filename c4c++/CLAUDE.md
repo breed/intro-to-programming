@@ -81,6 +81,7 @@ the next 80s songs to use
 - 2112
 - we got the beat
 - walk like an egyptian
+- final countdown
 
 ## Cross-References Between Chapters
 
