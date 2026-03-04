@@ -1,0 +1,63 @@
+# 80s References Used in C for C++ Programmers
+
+Songs, movies, and cultural references appearing in the text, organized by chapter.
+
+## Chapter 2: Variables
+- I Love Rock 'n' Roll — Joan Jett & the Blackhearts
+
+## Chapter 3: Expressions
+- Crazy Train — Ozzy Osbourne
+
+## Chapter 4: Control Flow
+- Rock You Like a Hurricane — Scorpions
+- Big City Nights — Scorpions
+- Winds of Change — Scorpions
+
+## Chapter 5: Pointers
+- Karma Chameleon — Culture Club
+- Totally, Radical, Tubular (80s slang)
+
+## Chapter 6: Functions
+- Iron Man — Black Sabbath
+
+## Chapter 8: Strings
+- Depeche Mode (band)
+- Take On Me — a-ha
+- Tainted Love — Soft Cell
+- Enjoy the Silence — Depeche Mode
+- Rush (band)
+- Don't You Forget About Me — Simple Minds
+- Blade Runner (1982 film)
+- I'll Be Back (The Terminator, 1984)
+- Video Killed the Radio Star — The Buggles
+- Girls Just Want to Have Fun — Cyndi Lauper
+- Sweet Dreams (Are Made of This) — Eurythmics
+- Never Gonna Give You Up — Rick Astley
+- Ghostbusters — Ray Parker Jr.
+
+## Chapter 9: Numbers and Casting
+- Danger Zone — Kenny Loggins
+- Africa — Toto
+- Rio — Duran Duran
+- Jump — Van Halen
+- The Goonies (1985 film)
+
+## Chapter 10: Standard I/O
+- 99 Luftballons — Nena
+- Under Pressure — Queen & David Bowie
+- Hungry Like the Wolf — Duran Duran
+
+## Chapter 11: Low-Level I/O
+- Blue Monday — New Order
+- Come As You Are — Nirvana
+
+## Chapter 12: Odds and Ends
+- Everybody Wants to Rule the World — Tears for Fears
+- Walking on Sunshine — Katrina and the Waves
+- La Isla Bonita — Madonna
+- Maniac — Michael Sembello
+- Footloose — Kenny Loggins
+- Flashdance... What a Feeling — Irene Cara
+- Fame — Irene Cara
+- Thriller — Michael Jackson
+- Master of Puppets — Metallica

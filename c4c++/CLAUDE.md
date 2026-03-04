@@ -54,22 +54,11 @@ Write chapters to help beginning C++ programmers become beginning C programmers.
 - in `\index{}`, escape double quotes by doubling them (e.g., `\index{extern ""C""}`)
 - `\printindex` at the end of the file generates the index page
 
-## 80s References Already Used
+## 80s References
 
-do not repeat these in new or modified examples:
-
-- Take On Me, Tainted Love, Enjoy the Silence, Don't You Forget About Me
-- Video Killed the Radio Star, Never Gonna Give You Up, Sweet Dreams
-- Blade Runner 1982, I'll be back, Depeche Mode, Rush
-- Totally, Radical, Tubular, Karma Chameleon
-- Under Pressure, 99 Luftballons, Blue Monday
-- Everybody Wants to Rule the World, Walking on Sunshine
-- Ghostbusters, Livin' on a Prayer, La Isla Bonita, Girls Just Want to Have Fun
-- Maniac, Footloose, Flashdance, Fame
-- Danger Zone, Africa, The Goonies, Rio, Jump
-- Hungry Like the Wolf, Come As You Are, Master of Puppets, Thriller
-- Joan Jett, I Love Rock 'n' Roll, Crazy Train, Scorpions, Rock You Like a Hurricane
-- Iron Man, Bad Reputation, Big City Nights, Winds of Change
+- PLAYLIST.md tracks all songs and references used in the text, organized by chapter
+- do not repeat references already listed in PLAYLIST.md
+- when adding or changing a reference in the text, update PLAYLIST.md to match
 
 # next 80s references
 
