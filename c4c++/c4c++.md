@@ -1745,7 +1745,7 @@ int main(void) {
     printf("Side B, Track %d: ", track);
     switch (track) {
     case 1:  printf("Big City Nights\n");   break;
-    case 2:  printf("Winds of Change\n"); break;
+    case 2:  printf("Wind of Change\n"); break;
     case 3:  printf("Rock You Like a Hurricane\n"); break;
     default: printf("Unknown track\n");     break;
     }
@@ -4303,7 +4303,7 @@ There are three buffering modes:
   `stdout` when connected to a terminal).
 - **Unbuffered:** Output is written immediately (default for `stderr`).
 
-This means that `printf("Working...")` (no newline) will not appear on screen immediately when `stdout` goes to a terminal, and will not appear when redirected to a file until the buffer fills or the program exits.
+This means that `printf("Working...")` (no newline) will not appear on screen until the next newline when `stdout` goes to a terminal, and will not appear when redirected to a file until the buffer fills or the program exits.
 Use `fflush` to force the buffer to be written:
 
 ```c

@@ -11,7 +11,7 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 ## Chapter 4: Control Flow
 - Rock You Like a Hurricane — Scorpions
 - Big City Nights — Scorpions
-- Winds of Change — Scorpions
+- Wind of Change — Scorpions
 
 ## Chapter 5: Pointers
 - Karma Chameleon — Culture Club
@@ -21,6 +21,7 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Iron Man — Black Sabbath
 
 ## Chapter 8: Strings
+- Livin' on a Prayer — Bon Jovi
 - Depeche Mode (band)
 - Take On Me — a-ha
 - Tainted Love — Soft Cell
