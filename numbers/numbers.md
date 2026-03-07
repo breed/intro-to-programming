@@ -236,12 +236,138 @@ int main() {
 }
 ```
 
-## 4. Converting from Other Bases
+## 4. Strings and Numbers
+
+Programs frequently need to convert between strings and numbers — reading user
+input, parsing files, or displaying results. C++ provides several functions for
+this, each with different strengths.
+
+### Strings to Integers
+
+The `std::stoi` function (string-to-integer) converts a string to an `int`. You
+first used `std::stoi` to convert strings to numbers in Chapter 9.
+
+```cpp
+int a = std::stoi("42");        // 42
+int b = std::stoi("  -7");      // -7 (leading whitespace is skipped)
+int c = std::stoi("1984abc");   // 1984 (stops at first non-digit)
+```
+
+For larger values, use `std::stol` for `long` or `std::stoll` for `long long`:
+
+```cpp
+long big = std::stol("3000000000");           // too large for int on most systems
+long long huge = std::stoll("9000000000000");  // needs long long
+```
+
+::: {.tip}
+**Tip:** `std::stoi` and its siblings throw `std::invalid_argument` if no
+conversion can be performed and `std::out_of_range` if the value won't fit.
+Always be prepared to handle these when converting user input.
+:::
+
+### The `pos` Parameter
+
+The full signature of `std::stoi` is:
+
+```cpp
+int stoi(const std::string& str, std::size_t* pos = nullptr, int base = 10);
+```
+
+The second parameter, `pos`, receives the index of the first character that was
+**not** part of the number. This is useful when a string contains a number
+followed by other data:
+
+```cpp
+std::size_t pos;
+int val = std::stoi("42px", &pos);
+// val == 42, pos == 2 (index of 'p')
+```
+
+You can use `pos` to parse multiple numbers from a single string or to check
+whether the entire string was consumed:
+
+```cpp
+std::string input = "100 200 300";
+std::size_t pos = 0;
+int first = std::stoi(input, &pos);            // first == 100, pos == 3
+int second = std::stoi(input.substr(pos), &pos); // second == 200
+```
+
+If you don't need `pos`, pass `nullptr` (or just omit it):
+
+```cpp
+int x = std::stoi("42", nullptr);   // same as std::stoi("42")
+```
+
+### Strings to Floating Point
+
+The functions `std::stof`, `std::stod`, and `std::stold` convert strings to
+`float`, `double`, and `long double` respectively:
+
+```cpp
+float  f = std::stof("3.14");       // 3.14f
+double d = std::stod("2.71828");    // 2.71828
+double e = std::stod("1.5e3");      // 1500.0 (scientific notation)
+```
+
+These follow the same pattern as the integer functions — they skip leading
+whitespace, stop at the first character that doesn't fit the number format, and
+throw the same exceptions for bad input.
+
+### Numbers to Strings
+
+The `std::to_string` function converts numeric types back to strings:
+
+```cpp
+std::string s1 = std::to_string(42);       // "42"
+std::string s2 = std::to_string(-7);       // "-7"
+std::string s3 = std::to_string(3.14);     // "3.140000"
+```
+
+For more control over formatting, use `std::format` (introduced in Chapter 10):
+
+```cpp
+std::string s = std::format("{:.2f}", 3.14);   // "3.14"
+std::string h = std::format("{:#x}", 255);     // "0xff"
+```
+
+### Converting Bases with `std::stoi`
+
+The third parameter of `std::stoi` specifies the base to use when parsing. You
+can use any base from 2 to 36:
+
+```cpp
+int a = std::stoi("101010", nullptr, 2);   // binary  -> 42
+int b = std::stoi("2A", nullptr, 16);      // hex     -> 42
+int c = std::stoi("52", nullptr, 8);       // octal   -> 42
+```
+
+The same base parameter works with `std::stol` and `std::stoll`:
+
+```cpp
+long d = std::stol("7C1", nullptr, 16);    // hex -> 1985
+```
+
+::: {.tip}
+**Tip:** Pass base `0` and `std::stoi` will auto-detect the base from the
+prefix — `0x` for hex, `0b` for binary, and a leading `0` for octal:
+
+```
+std::stoi("0x2A", nullptr, 0);      // hex -> 42
+std::stoi("0b101010", nullptr, 0);  // binary -> 42
+std::stoi("052", nullptr, 0);       // octal -> 42
+```
+
+This is convenient, but beware: with base 0, the string `"010"` is parsed as
+**octal 8**, not decimal 10. If your data might have leading zeros that should
+be treated as decimal, specify base 10 explicitly.
+:::
 
 ### Manual Conversion
 
-To convert a number from another base to decimal, multiply each digit by its
-place value and add the results. You already saw this with binary:
+To convert a number from another base to decimal by hand, multiply each digit by
+its place value and add the results:
 
 ```
 0x2A = 2 × 16 + 10 × 1 = 42
@@ -261,48 +387,43 @@ collect the remainders:
 Read remainders bottom-to-top: 101010
 ```
 
-### `std::stoi` with a Base
+### Try It: Strings and Numbers
 
-The `std::stoi` function (string-to-integer) accepts an optional base parameter.
-You first used `std::stoi` to convert strings to numbers — now you can tell it
-which base the string is in:
-
-```cpp
-int a = std::stoi("101010", nullptr, 2);   // binary  -> 42
-int b = std::stoi("2A", nullptr, 16);      // hex     -> 42
-int c = std::stoi("52", nullptr, 8);       // octal   -> 42
-```
-
-The second parameter is a pointer that receives the position where parsing
-stopped — `nullptr` means you don't need it. The third parameter is the base.
-
-::: {.tip}
-**Tip:** `std::stoi` throws `std::invalid_argument` if the string cannot be
-parsed and `std::out_of_range` if the value is too large. Always be prepared to
-handle these when converting user input.
-:::
-
-### Try It: Base Converter
-
-This program converts strings in different bases to decimal:
+This program demonstrates conversions in both directions:
 
 ```cpp
 #include <print>
 #include <string>
 
 int main() {
-    // "Take On Me" was released in 1985
-    std::string hex_str = "7C1";     // 1985 in hex
-    int val = std::stoi(hex_str, nullptr, 16);
-    std::println("Hex \"{}\" = decimal {}", hex_str, val);
+    // string to integer
+    int year = std::stoi("1985");   // "Take On Me" was released in 1985
+    std::println("Year: {}", year);
 
-    std::string bin_str = "11111000001";  // 1985 in binary
-    val = std::stoi(bin_str, nullptr, 2);
-    std::println("Binary \"{}\" = decimal {}", bin_str, val);
+    // string to double
+    double bpm = std::stod("150.2");
+    std::println("BPM: {}", bpm);
 
-    std::string oct_str = "3701";    // 1985 in octal
-    val = std::stoi(oct_str, nullptr, 8);
-    std::println("Octal \"{}\" = decimal {}", oct_str, val);
+    // number to string
+    std::string msg = "Side " + std::to_string(1) + " of the cassette";
+    std::println("{}", msg);
+
+    // using the pos parameter
+    std::size_t pos;
+    int tempo = std::stoi("120bpm", &pos);
+    std::println("Tempo: {} (unit starts at index {})", tempo, pos);
+
+    // base conversions
+    std::println("\n1985 in different bases:");
+    std::println("  Hex \"7C1\"            = {}", std::stoi("7C1", nullptr, 16));
+    std::println("  Binary \"11111000001\" = {}", std::stoi("11111000001", nullptr, 2));
+    std::println("  Octal \"3701\"         = {}", std::stoi("3701", nullptr, 8));
+
+    // base 0 auto-detection
+    std::println("\nBase 0 auto-detection:");
+    std::println("  \"0x7C1\"  = {}", std::stoi("0x7C1", nullptr, 0));
+    std::println("  \"010\"    = {} (octal, not 10!)", std::stoi("010", nullptr, 0));
+    std::println("  \"10\"     = {}", std::stoi("10", nullptr, 0));
 }
 ```
 
@@ -801,7 +922,10 @@ Here are the key takeaways from this chapter:
 - **Decimal, binary, hex, and octal** are just different bases. Each one makes
   certain patterns easier to see.
 - **C++ supports multiple bases** in literals (`0b`, `0x`, `0`), output
-  (`{:b}`, `{:x}`, `{:o}`), and conversion (`std::stoi` with a base).
+  (`{:b}`, `{:x}`, `{:o}`), and conversion (`std::stoi` with a base parameter).
+- **Converting between strings and numbers** is straightforward with `std::stoi`,
+  `std::stod`, and `std::to_string`. The `pos` parameter tells you where
+  parsing stopped, and the base parameter lets you parse hex, binary, and octal.
 - **A byte is 8 bits**, and integer types come in different sizes — from 1-byte
   `char` to 8-byte `long long`. The number of bits determines the range of
   values a type can hold.

@@ -50,9 +50,14 @@ A chapter to supplement the textbook about representation and storage of numbers
 4. Printing numbers in other bases
     - `std::format`/`std::println` with `{:b}`, `{:x}`, `{:o}`
     - `#` flag for base prefix
-5. Converting from other bases
+5. Strings and numbers
+    - strings to integers (`std::stoi`, `std::stol`, `std::stoll`)
+    - the `pos` parameter
+    - strings to floating point (`std::stof`, `std::stod`, `std::stold`)
+    - numbers to strings (`std::to_string`, `std::format`)
+    - converting bases with `std::stoi` base parameter
+    - tip about base 0 auto-detection and `"010"` being octal
     - manual place-value math
-    - `std::stoi` with base parameter
 6. Two's complement
     - one's complement (we don't use it — double zero problem)
     - two's complement (flip bits and add 1)
