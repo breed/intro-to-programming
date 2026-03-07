@@ -241,6 +241,8 @@ int main() {
 Programs frequently need to convert between strings and numbers — reading user
 input, parsing files, or displaying results. C++ provides several functions for
 this, each with different strengths.
+When you see `"52"` and `52` they may appear to be the same number, but to C++, the former is a `std::string` and not a number at all while the later is an integer number.
+If we want to use `"52"` as a number, we need to convert the string to an integer.
 
 ### Strings to Integers
 
@@ -300,38 +302,6 @@ If you don't need `pos`, pass `nullptr` (or just omit it):
 int x = std::stoi("42", nullptr);   // same as std::stoi("42")
 ```
 
-### Strings to Floating Point
-
-The functions `std::stof`, `std::stod`, and `std::stold` convert strings to
-`float`, `double`, and `long double` respectively:
-
-```cpp
-float  f = std::stof("3.14");       // 3.14f
-double d = std::stod("2.71828");    // 2.71828
-double e = std::stod("1.5e3");      // 1500.0 (scientific notation)
-```
-
-These follow the same pattern as the integer functions — they skip leading
-whitespace, stop at the first character that doesn't fit the number format, and
-throw the same exceptions for bad input.
-
-### Numbers to Strings
-
-The `std::to_string` function converts numeric types back to strings:
-
-```cpp
-std::string s1 = std::to_string(42);       // "42"
-std::string s2 = std::to_string(-7);       // "-7"
-std::string s3 = std::to_string(3.14);     // "3.140000"
-```
-
-For more control over formatting, use `std::format` (introduced in Chapter 10):
-
-```cpp
-std::string s = std::format("{:.2f}", 3.14);   // "3.14"
-std::string h = std::format("{:#x}", 255);     // "0xff"
-```
-
 ### Converting Bases with `std::stoi`
 
 The third parameter of `std::stoi` specifies the base to use when parsing. You
@@ -364,27 +334,36 @@ This is convenient, but beware: with base 0, the string `"010"` is parsed as
 be treated as decimal, specify base 10 explicitly.
 :::
 
-### Manual Conversion
+### Strings to Floating Point
 
-To convert a number from another base to decimal by hand, multiply each digit by
-its place value and add the results:
+The functions `std::stof`, `std::stod`, and `std::stold` convert strings to
+`float`, `double`, and `long double` respectively:
 
+```cpp
+float  f = std::stof("3.14");       // 3.14f
+double d = std::stod("2.71828");    // 2.71828
+double e = std::stod("1.5e3");      // 1500.0 (scientific notation)
 ```
-0x2A = 2 × 16 + 10 × 1 = 42
-052  = 5 × 8  +  2 × 1  = 42
+
+These follow the same pattern as the integer functions — they skip leading
+whitespace, stop at the first character that doesn't fit the number format, and
+throw the same exceptions for bad input.
+
+### Numbers to Strings
+
+The `std::to_string` function converts numeric types back to strings:
+
+```cpp
+std::string s1 = std::to_string(42);       // "42"
+std::string s2 = std::to_string(-7);       // "-7"
+std::string s3 = std::to_string(3.14);     // "3.140000"
 ```
 
-To convert from decimal to another base, repeatedly divide by the base and
-collect the remainders:
+For more control over formatting, use `std::format` (introduced in Chapter 10):
 
-```
-42 / 2 = 21 remainder 0
-21 / 2 = 10 remainder 1
-10 / 2 =  5 remainder 0
- 5 / 2 =  2 remainder 1
- 2 / 2 =  1 remainder 0
- 1 / 2 =  0 remainder 1
-Read remainders bottom-to-top: 101010
+```cpp
+std::string s = std::format("{:.2f}", 3.14);   // "3.14"
+std::string h = std::format("{:#x}", 255);     // "0xff"
 ```
 
 ### Try It: Strings and Numbers
