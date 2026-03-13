@@ -666,8 +666,9 @@ This gives you something like namespaced methods.
 Function pointers (covered in a later chapter) can even be stored in structs to simulate virtual functions.
 :::
 
-### Designated Initializers
+## Designated Initializers
 
+\index{array!designated initializers}
 \index{struct!designated initializers}
 \index{designated initializers}
 
