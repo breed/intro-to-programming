@@ -666,6 +666,51 @@ This gives you something like namespaced methods.
 Function pointers (covered in a later chapter) can even be stored in structs to simulate virtual functions.
 :::
 
+### Designated Initializers
+
+\index{struct!designated initializers}
+\index{designated initializers}
+
+C99 introduced **designated initializers**, which let you initialize struct members by name instead of relying on declaration order:
+
+```c
+struct song track = {.year = 1985, .title = "I Can't Drive 55"};
+```
+
+This is clearer than positional initialization because the reader does not need to remember the order of members.
+It also lets you skip members you want left at zero:
+
+```c
+struct album {
+    char title[40];
+    int year;
+    int tracks;
+};
+
+struct album a = {.title = "Hysteria", .year = 1987};
+// a.tracks is initialized to 0
+```
+
+Any member you do not mention is initialized to zero (or null for pointers).
+
+::: {.tip}
+**Tip:** Prefer designated initializers over positional initialization.
+They make the code self-documenting and protect you from bugs when someone reorders the struct members later.
+:::
+
+Designated initializers also work with arrays.
+You can initialize specific elements by index:
+
+```c
+int flags[8] = {[0] = 1, [4] = 1, [7] = 1};
+// flags is {1, 0, 0, 0, 1, 0, 0, 1}
+```
+
+::: {.tip}
+**Wut:** C++ did not support designated initializers until C++20, and even then it requires the initializers to appear in declaration order.
+C has no such restriction — you can list members in any order.
+:::
+
 ## typedef
 
 \index{typedef}

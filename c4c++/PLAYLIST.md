@@ -4,6 +4,8 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 
 ## Chapter 2: Variables
 - I Love Rock 'n' Roll — Joan Jett & the Blackhearts
+- I Can't Drive 55 — Sammy Hagar
+- Hysteria — Def Leppard
 
 ## Chapter 3: Strings
 - I Can't Drive 55 — Sammy Hagar
