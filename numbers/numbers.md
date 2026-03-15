@@ -241,7 +241,7 @@ int main() {
 Programs frequently need to convert between strings and numbers — reading user
 input, parsing files, or displaying results. C++ provides several functions for
 this, each with different strengths.
-When you see `"52"` and `52` they may appear to be the same number, but to C++, the former is a `std::string` and not a number at all while the later is an integer number.
+When you see `"52"` and `52` they may appear to be the same number, but to C++, the former is a `std::string` and not a number at all while the latter is an integer number.
 If we want to use `"52"` as a number, we need to convert the string to an integer.
 
 ### Strings to Integers
@@ -365,6 +365,43 @@ For more control over formatting, use `std::format` (introduced in Chapter 10):
 std::string s = std::format("{:.2f}", 3.14);   // "3.14"
 std::string h = std::format("{:#x}", 255);     // "0xff"
 ```
+
+### Manual Place-Value Math
+
+You can also convert a number from one base to another by hand using
+place-value arithmetic — no library functions needed. To convert from another
+base to decimal, multiply each digit by its place value and add:
+
+```
+Hex "2A" to decimal:
+  2 × 16^1 = 32
+  A × 16^0 = 10
+             --
+             42
+```
+
+```
+Binary "101010" to decimal:
+  1×32 + 0×16 + 1×8 + 0×4 + 1×2 + 0×1 = 42
+```
+
+You can write a loop to do this programmatically using Horner's method —
+process each digit left to right, multiplying the running total by the base
+before adding the next digit:
+
+```cpp
+std::string hex = "2A";
+int result = 0;
+for (char c : hex) {
+    int digit = (c >= 'A') ? (c - 'A' + 10) : (c - '0');
+    result = result * 16 + digit;
+}
+// result is 42
+```
+
+This is essentially what `std::stoi` does internally. Understanding the math
+helps you debug base-conversion issues and work with bases that library
+functions don't directly support.
 
 ### Try It: Strings and Numbers
 
@@ -626,8 +663,6 @@ unsigned char x = 255;
 x = x + 1;  // x is now 0 (wraps around)
 x = x - 2;  // x is now 254 (wraps around)
 ```
-
-    
 
 - **Signed overflow/underflow** is undefined behavior. The compiler can do anything:
 
@@ -921,6 +956,76 @@ Here are the key takeaways from this chapter:
 
 A number can wear many different outfits, but underneath, es el mismo numero.
 No te preocupes — you have got this. Nos vemos en el proximo capitulo!
+
+## Exercises
+
+1. Convert the decimal number `200` to binary, hexadecimal, and octal by hand.
+   Verify your answers by writing a C++ program that prints `200` in each base
+   using `std::println`.
+
+2. What does the following program print?
+
+    ```cpp
+    int x = 0b1100;
+    int y = 052;
+    std::println("{}", x + y);
+    ```
+
+3. In an 8-bit two's complement system, the most negative value is `-128` but
+   the most positive value is only `127`. Why isn't the range symmetric?
+
+4. This loop is supposed to count down from 10 to 0, but it never terminates.
+   Why?
+
+    ```cpp
+    unsigned int count = 10;
+    while (count >= 0) {
+        std::println("{}", count);
+        --count;
+    }
+    ```
+
+5. Using two's complement with 8 bits, compute `100 - 75` by hand. Show the
+   binary representation of `100`, the two's complement of `75`, and the binary
+   addition.
+
+6. What values do `a`, `b`, and `c` hold after these statements execute?
+
+    ```cpp
+    int a = 1 << 10;
+    int b = 100 >> 3;
+    int c = (1 << 4) - 1;
+    ```
+
+7. A programmer wrote this code and expected it to print `700`. What value does
+   it actually print, and why?
+
+    ```cpp
+    int permissions = 0700;
+    std::println("Permissions: {}", permissions);
+    ```
+
+8. What is wrong with this code? What happens when it runs?
+
+    ```cpp
+    int big = 2'000'000'000;
+    int doubled = big * 2;
+    std::println("{} * 2 = {}", big, doubled);
+    ```
+
+9. Write a program that reads a hexadecimal color code (like `"FF8000"`) from the
+   user, converts it to its red, green, and blue components (each 0–255), and
+   prints each component in decimal and binary. Use `std::stoi` with the base
+   parameter and `substr` to extract each pair of hex digits.
+
+10. Without running it, determine the output of this program:
+
+    ```cpp
+    uint8_t a = 250;
+    uint8_t b = 20;
+    uint8_t sum = a + b;
+    std::println("{} + {} = {}", a, b, sum);
+    ```
 
 ---
 
