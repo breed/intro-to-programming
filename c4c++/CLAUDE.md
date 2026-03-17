@@ -109,6 +109,13 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
         - unlike C++, only member variables allowed -- no member functions; although, you can use function pointers (described later)
         - members accessed with . operator
         - assignment does a copy
+8. Strings
+    - there is no std::string in C++. everything revolves around arrays of characters that end with a null '\0'
+    - using strings, you always have to careful have the right amount of memory allocated. (remember to include space for the null!)
+    - string manipulation routines: strlen(), strchr(), strrchr(), strstr(), strcat(), strdup(), strtok() (include any additional ones that students should know)
+    - recommend strtok_r (POSIX) or strtok_s (C11/Windows) over strtok for thread safety
+    - review the problems that can arise using strcat()
+    - point out that there are convenient ways to manipulate strings with sprintf() and sscanf that will be shown later in I/O
 3. Expressions
     - assignment operators
     - math operators
@@ -147,13 +154,6 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
     - static local variables have the scope of a local but the lifetime of a global
     - if we want to allocate memory, use it for a while and release it, we can use malloc() and free()
     - memcpy and memset for working with raw memory (memmove for overlapping regions)
-8. Strings
-    - there is no std::string in C++. everything revolves around arrays of characters that end with a null '\0'
-    - using strings, you always have to careful have the right amount of memory allocated. (remember to include space for the null!)
-    - string manipulation routines: strlen(), strchr(), strrchr(), strstr(), strcat(), strdup(), strtok() (include any additional ones that students should know)
-    - recommend strtok_r (POSIX) or strtok_s (C11/Windows) over strtok for thread safety
-    - review the problems that can arise using strcat()
-    - point out that there are convenient ways to manipulate strings with sprintf() and sscanf that will be shown later in I/O
 9. Numbers and casting
     - to the CPU everything is a number. the numbers can be different sizes and can be used for different things
         - different number bits gives a different range of values
