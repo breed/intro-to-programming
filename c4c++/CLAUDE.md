@@ -36,6 +36,7 @@ Write chapters to help beginning C++ programmers become beginning C programmers.
 - Use tip callouts (`::: {.tip}` divs) to highlight idioms, best practices, or warn of bad practices
 - Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` — do not use `wrapfigure`
 - Keep the tone professional but light
+- Preserve emojis and text emojis (e.g., `:'(`) in the text — do not remove them
 - Refer to the reader as `you`
 - do not wrap sentences in the markdown. every sentence gets its own line
 

@@ -1011,7 +1011,7 @@ What naming convention do you see?
 For absolute value: `abs` handles `int`, `labs` handles `long`, `llabs` handles `long long`, and `fabs` handles `double`.
 For math functions, the base name is for `double` (e.g., `sqrt`), an `f` suffix is for `float` (e.g., `sqrtf`), and an `l` suffix is for `long double` (e.g., `sqrtl`).
 
-This naming convention is consistent across the standard library: `printf` vs `fprintf` vs `sprintf`, `strtol` vs `strtod` vs `strtof`.
+This naming convention is consistent across the standard library: `strtol` vs `strtod` vs `strtof`, `abs` vs `labs` vs `llabs`.
 The type information that C++ encodes in overload resolution is encoded in the function name in C.
 The downside is more names to remember, but the upside is that the type being operated on is always visible at the call site.
 
