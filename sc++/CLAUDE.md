@@ -22,18 +22,19 @@ No previous programming experience is assumed.
 - For strings, use 90s references, lyrics from 90s songs, and Spanish occasionally. Keep it short.
 - avoid repeating lyrics in examples even across chapters
 - Validate examples to make sure syntax and result is correct
-- Compile examples with `cc -Wall -Wextra -pedantic` to verify correctness
+- Compile examples with `g++ -std=c++20 -Wall -Wextra -pedantic` to verify correctness
+- Always include the headers needed by every example (e.g., `#include <string>` when using `std::string`)
 - Create short example programs to illustrate the concepts covered
-- Use `%zu` for `size_t` (e.g., `strlen` return) and `%td` for `ptrdiff_t` (e.g., pointer subtraction)
 
 ## Format and Style
 
 - Use Pandoc markdown
 - Use correct grammar and capitalizations
-- Use tip callouts (`::: {.tip}` divs) to highlight idioms, best practices, or warn of bad practices
-    - `Tip` for highlight idioms, best practices
-    - `Trap` for common mistakes
-    - `Wut` unexpected or counterintuitive rules
+- All callouts use `::: {.tip}` as the div class — `callout.lua` only handles `.tip`
+- Differentiate callout types with a bold label on the first line inside the div:
+    - `**Tip:**` for idioms and best practices
+    - `**Trap:**` for common mistakes
+    - `**Wut:**` for unexpected or counterintuitive rules
 - Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` — do not use `wrapfigure`
 - Keep the tone professional but light
 - Preserve emojis and text emojis (e.g., `:'(`) in the text — do not remove them
@@ -54,7 +55,7 @@ No previous programming experience is assumed.
 - place `\index{term}` at the primary introduction/definition of a term, not inside code blocks
 - use `\index{parent!child}` for sub-entries (e.g., `\index{pointer!arithmetic}`)
 - in `\index{}`, escape double quotes by doubling them (e.g., `\index{extern ""C""}`)
-- `\printindex` at the end of the file generates the index page
+- `\printindex` goes only in ch12.md (the last chapter) — do not add it to other chapters
 
 ## 90s References
 
@@ -109,48 +110,32 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
         - break/continue
     - for loops
     - switch statements
-7. Functions
+6. Functions
     - declarations vs definitions, forward declarations, void parameter lists
     - pass-by-value and pass-by-reference
     - const parameters. why they are important
     - structures can be problematic to pass by value
     - recursive functions
     - function pointers (basics, typedef, callbacks)
-9. Numbers and casting
-    - to the CPU everything is a number. the numbers can be different sizes and can be used for different things
-        - different number bits gives a different range of values
-        - a char is just a number; assigning 'A' is the same as assigning 65
-        - a pointer is just a number as well, its just a number that represents a memory address; when we use a type and * we let the compiler know how to interpret the number
-    - the types we give to numbers indicates how we plan to use the number
-    - a pointer type tells the compiler that you want to use the number as an address
-    - C doesn't know about strings, it only knows about arrays of characters, and libraries allow us to work with them as strings
-    - converting numbers to string and strings to numbers
-    - casts
-        - (type) value
-        - simpler than C++ casts, but no magic happens
-        - you are asserting to the compiler that you know what you are doing
-        - TRAP: casting a char * to an int doesn't convert a string to an integer value, it converts the address to an integer value. use strtol() to convert a string to an integer value
-6. Containers
+7. Containers
     - std::array
     - std::vector
     - iterating through containers
-7. Ranges, algorithms, and lambdas
-8. Views
-10. Classes
+8. Ranges, algorithms, and lambdas
+9. Classes
     - constructors/destructors
     - member methods
-11. Memory Management
+10. Memory Management
     - new/delete
     - don't use new/delete use std::unique_ptr
     - std::shared_ptr
     - move
     - special members
-10. I/O streams
+11. I/O streams
     - string streams
     - file streams
-11. formatted I/O
-    - std::format
-    - std::print
+    - formatted I/O with std::format and std::print
 12. Odds and Ends
     - explain exit() and when it might be more useful than return
     - explain using extern "C" to use c functions from c++
+    - numbers and casting (chars as numbers, bit widths, static_cast, dynamic_cast, const_cast, reinterpret_cast)
