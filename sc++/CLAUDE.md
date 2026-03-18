@@ -61,6 +61,7 @@ No previous programming experience is assumed.
 - PLAYLIST.md tracks all songs and references used in the text, organized by chapter
 - do not repeat references already listed in PLAYLIST.md
 - when adding or changing a reference in the text, update PLAYLIST.md to match
+- avoid references to guns (including ammunition) and violence
 
 ## Cross-References Between Chapters
 
