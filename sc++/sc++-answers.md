@@ -2033,3 +2033,97 @@ Output:
 int 65 as char: A
 char 'Z' as int: 90
 ```
+
+**10. What does the following program print?**
+
+```cpp
+#include <chrono>
+#include <iostream>
+
+int main()
+{
+    using namespace std::chrono;
+
+    auto d = seconds(5) + milliseconds(750);
+    std::cout << duration_cast<seconds>(d).count() << std::endl;
+
+    return 0;
+}
+```
+
+It prints:
+
+```
+5
+```
+
+`seconds(5) + milliseconds(750)` produces a duration of 5750 milliseconds.
+`duration_cast<seconds>` truncates toward zero, giving 5 seconds (not 6).
+The fractional 750 milliseconds is discarded.
+
+**11. Why should you use `std::chrono::steady_clock` instead of `std::chrono::system_clock` when measuring how long a piece of code takes to run?**
+
+`steady_clock` is guaranteed to never be adjusted — it always moves forward at a constant rate.
+`system_clock` represents the system's wall clock, which can jump forward or backward when the clock is adjusted (e.g., NTP synchronization, daylight saving time changes, or manual adjustments).
+If `system_clock` jumps during your measurement, you could get a negative elapsed time or an incorrectly large one.
+`steady_clock` avoids this problem entirely.
+
+**12. What is wrong with this code for generating a random number between 1 and 100?**
+
+```cpp
+#include <cstdlib>
+#include <iostream>
+
+int main()
+{
+    int r = rand() % 100 + 1;
+    std::cout << r << std::endl;
+
+    return 0;
+}
+```
+
+There are two problems:
+
+1. `srand()` is never called, so `rand()` uses the same default seed every time the program runs, producing the same "random" number.
+2. Even with `srand()`, `rand() % 100` introduces bias — if `RAND_MAX` is not evenly divisible by 100, some values are slightly more likely than others.
+
+The proper C++ approach is to use `<random>` with `std::mt19937` and `std::uniform_int_distribution<int>(1, 100)`.
+
+**13. Write a program that uses `<random>` to simulate rolling two six-sided dice 10 times and prints each roll.**
+
+```cpp
+#include <iostream>
+#include <random>
+
+int main()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> die(1, 6);
+
+    for (int i = 0; i < 10; ++i) {
+        int d1 = die(gen);
+        int d2 = die(gen);
+        std::cout << "Roll " << (i + 1) << ": " << d1 << " + " << d2
+                  << " = " << (d1 + d2) << std::endl;
+    }
+
+    return 0;
+}
+```
+
+Sample output:
+
+```
+Roll 1: 3 + 5 = 8
+Roll 2: 1 + 6 = 7
+Roll 3: 4 + 4 = 8
+Roll 4: 2 + 1 = 3
+Roll 5: 6 + 3 = 9
+Roll 6: 5 + 2 = 7
+Roll 7: 1 + 4 = 5
+Roll 8: 3 + 6 = 9
+Roll 9: 2 + 2 = 4
+Roll 10: 4 + 5 = 9
+```

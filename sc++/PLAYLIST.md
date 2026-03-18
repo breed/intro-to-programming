@@ -67,3 +67,4 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - The Matrix (1999 film)
 - La Copa de la Vida — Ricky Martin
 - Believe — Cher
+- "Cinco tracks al azar" (Spanish phrase used in random numbers example)
