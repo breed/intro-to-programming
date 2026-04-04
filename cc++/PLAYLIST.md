@@ -36,6 +36,18 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Gold Digger — Kanye West
 - Single Ladies — Beyonce
 
+## Chapter 7: Utilities
+- Missy Elliott (artist)
+- In the End — Linkin Park
+- Yeah! — Usher
+- Breathe Me — Sia
+- Lollipop — Lil Wayne
+- Stacy's Mom — Fountains of Wayne
+- Float On — Modest Mouse
+- Take Me Out — Franz Ferdinand
+- Naive — The Kooks
+- Elephunk — Black Eyed Peas (album)
+
 ## Chapter 6: Advanced Strings
 - Nelly Furtado — Say It Right
 - The Strokes (band)
