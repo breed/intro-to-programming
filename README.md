@@ -1,6 +1,6 @@
 # Why?
 
-![another mid c++ book](images/midc++.png)
+![another mid c++ book](images/c++books++.png)
 
 There are lots of programming text books.
 Why in the world would we do another?!?!?!
@@ -11,7 +11,7 @@ I believe there will always be a niche for free programming textbooks that evolv
 
 We want the books we use the match our curricula needs, so having control over our books helps.
 
-![meh c++ book](images/mehc++.png)
+![meh c++ book](images/mehc++book.png)
 
 Perhaps, the book is *meh*.
 We are going for engaging, but meh can work as long as it conveys what we need.
