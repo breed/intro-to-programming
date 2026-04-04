@@ -2009,7 +2009,26 @@ The compiler-generated defaults will then do the right thing.
 You should prefer the **Rule of Zero** because it results in less code, fewer bugs, and classes that are easier to maintain.
 Only fall back to the Rule of Five when you have no choice but to manage a resource manually.
 
-**9. Write a program with `std::unique_ptr` that demonstrates moving ownership.**
+**9. Will this code compile? If so, what happens when `process()` is called?**
+
+```cpp
+void load_track(const std::string &filename) {
+    // might throw if file not found
+    throw std::runtime_error("file not found");
+}
+
+void process() noexcept {
+    load_track("track01.wav");
+}
+```
+
+Yes, it compiles.
+The compiler does not check whether a `noexcept` function actually avoids throwing — `noexcept` is a promise, not a compile-time guarantee.
+When `process()` is called, `load_track()` throws `std::runtime_error`.
+Because `process()` is marked `noexcept`, the exception cannot escape it, so the program calls `std::terminate()` and crashes immediately — no chance to catch the exception.
+The fix is either to remove `noexcept` from `process()`, or to wrap the call in a `try`/`catch` block inside `process()` so the exception never escapes.
+
+**10. Write a program with `std::unique_ptr` that demonstrates moving ownership.**
 
 ```cpp
 #include <iostream>
