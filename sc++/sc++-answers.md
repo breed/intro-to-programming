@@ -1088,196 +1088,7 @@ int main()
 }
 ```
 
-# Chapter 8: Ranges, Algorithms, and Lambdas
-
-**1. Think about it: Why does the standard library provide both `std::sort(v.begin(), v.end())` and `std::ranges::sort(v)`?**
-
-The iterator-based versions (`std::sort(v.begin(), v.end())`) were introduced in C++98 and have been part of the standard for decades.
-There is a massive amount of existing code that uses them.
-Removing them would break backward compatibility.
-
-The ranges versions (`std::ranges::sort(v)`) were added in C++20 as an improvement.
-They are simpler, safer (you cannot accidentally pass mismatched iterators from different containers), and provide better error messages.
-
-Both are kept so that old code continues to work while new code can use the cleaner ranges interface.
-Additionally, the iterator versions offer more flexibility for working with sub-ranges (e.g., sorting only part of a container).
-
-**2. What does this print?**
-
-```cpp
-std::vector<int> v = {5, 3, 8, 1, 9, 2};
-std::sort(v.begin(), v.end());
-auto it = std::find(v.begin(), v.end(), 8);
-std::cout << *it << " " << *(it - 1) << "\n";
-```
-
-It prints:
-
-```
-8 5
-```
-
-After sorting, `v` is `{1, 2, 3, 5, 8, 9}`.
-`std::find` finds `8` at index 4.
-`*it` is 8 and `*(it - 1)` is the element before it, which is 5.
-
-**3. What does this print?**
-
-```cpp
-std::vector<int> v = {1, 2, 3, 4, 5};
-auto result = std::count_if(v.begin(), v.end(),
-    [](int n) { return n % 2 != 0; });
-std::cout << result << "\n";
-```
-
-It prints:
-
-```
-3
-```
-
-The lambda checks for odd numbers (`n % 2 != 0`).
-The odd numbers in the vector are 1, 3, and 5, so the count is 3.
-
-**4. Where is the bug?**
-
-```cpp
-std::vector<int> nums = {10, 20, 30};
-std::vector<int> doubled;
-
-std::transform(nums.begin(), nums.end(), doubled.begin(),
-    [](int n) { return n * 2; });
-```
-
-`doubled` is empty (size 0), so writing to `doubled.begin()` writes past the end of the vector, which is undefined behavior.
-The destination container must already have enough space.
-The fix is to create `doubled` with the correct size:
-
-```cpp
-std::vector<int> doubled(nums.size());
-```
-
-**5. Calculation: What is the value of `x`?**
-
-```cpp
-std::vector<int> v = {4, 7, 2, 9, 1};
-int x = std::accumulate(v.begin(), v.end(), 10);
-```
-
-`x` is **33**.
-
-`std::accumulate` starts with the initial value 10, then adds each element: 10 + 4 + 7 + 2 + 9 + 1 = 33.
-
-**6. What does this print?**
-
-```cpp
-int factor = 3;
-auto multiply = [factor](int n) { return n * factor; };
-std::cout << multiply(5) << " " << multiply(10) << "\n";
-```
-
-It prints:
-
-```
-15 30
-```
-
-The lambda captures `factor` (which is 3) by value.
-`multiply(5)` returns 5 * 3 = 15.
-`multiply(10)` returns 10 * 3 = 30.
-
-**7. Where is the bug?**
-
-```cpp
-std::vector<int> nums = {1, 2, 3, 4, 5};
-int total = 0;
-
-std::for_each(nums.begin(), nums.end(), [total](int n) {
-    total += n;
-});
-
-std::cout << "Total: " << total << "\n";
-```
-
-The lambda captures `total` by value (`[total]`), but by-value captures are `const` by default.
-The line `total += n` tries to modify a const variable, so the code will not compile.
-The fix is to capture `total` by reference:
-
-```cpp
-std::for_each(nums.begin(), nums.end(), [&total](int n) {
-    total += n;
-});
-```
-
-**8. Think about it: Why is lazy evaluation an advantage for views? When would processing all elements upfront be better?**
-
-Lazy evaluation is an advantage because views only process elements as they are consumed.
-If you only need the first few results from a large collection (e.g., using `take(3)` on a million elements), lazy evaluation avoids processing the other 999,997 elements.
-This saves time and avoids creating intermediate containers.
-
-Processing all elements upfront would be better when you need to access the results multiple times or in random order.
-Views recompute on each traversal, so if you iterate through the same view multiple times, the work is repeated.
-In that case, materializing the results into a vector once and reusing it would be more efficient.
-
-**9. What does this print? (Assume C++20)**
-
-```cpp
-std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8};
-for (int n : v
-        | std::views::filter([](int n) { return n > 3; })
-        | std::views::take(3)) {
-    std::cout << n << " ";
-}
-std::cout << "\n";
-```
-
-It prints:
-
-```
-4 5 6
-```
-
-The filter keeps elements greater than 3: 4, 5, 6, 7, 8.
-The `take(3)` keeps only the first 3 of those: 4, 5, 6.
-
-**10. Write a program that stores test scores, sorts them, prints scores above 70, prints the average, and prints the highest and lowest scores.**
-
-```cpp
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <ranges>
-#include <vector>
-
-int main()
-{
-    std::vector<int> scores = {55, 92, 78, 65, 88, 71, 43, 95, 82, 70};
-
-    std::ranges::sort(scores);
-
-    std::cout << "Sorted scores: ";
-    for (int s : scores) {
-        std::cout << s << " ";
-    }
-    std::cout << "\n";
-
-    std::cout << "Scores above 70: ";
-    for (int s : scores | std::views::filter([](int s) { return s > 70; })) {
-        std::cout << s << " ";
-    }
-    std::cout << "\n";
-
-    int sum = std::accumulate(scores.begin(), scores.end(), 0);
-    std::cout << "Average: " << sum / static_cast<int>(scores.size()) << "\n";
-
-    std::cout << "Lowest: " << scores.front() << "\n";
-    std::cout << "Highest: " << scores.back() << "\n";
-
-    return 0;
-}
-```
-
-# Chapter 9: I/O Streams
+# Chapter 8: I/O Streams
 
 **1. What does the following program print?**
 
@@ -1437,7 +1248,7 @@ int main()
 }
 ```
 
-# Chapter 10: std::format and std::print
+# Chapter 9: std::format and std::print
 
 **1. What does `std::format("{:>8.2f}", 3.1)` produce? How many characters wide is the result?**
 
@@ -1533,7 +1344,7 @@ int main()
 }
 ```
 
-# Chapter 11: Exceptions
+# Chapter 10: Exceptions
 
 **1. What does the following program print?**
 
@@ -1746,7 +1557,7 @@ sqrt(25) = 5
 Error: cannot take square root of negative number
 ```
 
-# Chapter 12: Classes
+# Chapter 11: Classes
 
 **1. What is the difference between a `struct` and a `class` in C++? Why would you choose one over the other?**
 
@@ -2092,7 +1903,7 @@ int main()
 }
 ```
 
-# Chapter 13: Memory Management
+# Chapter 12: Memory Management
 
 **1. What is the difference between stack and heap memory? Give one situation where you would need to use the heap.**
 
@@ -2281,7 +2092,7 @@ second: Wannabe
 first is empty (nullptr)
 ```
 
-# Chapter 14: Odds and Ends
+# Chapter 13: Odds and Ends
 
 **1. What does the following program print if the file `data.txt` does not exist?**
 

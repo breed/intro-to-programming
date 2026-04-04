@@ -40,24 +40,19 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - No Diggity — Blackstreet
 - Oasis (band name used in example)
 
-## Chapter 8: Ranges, Algorithms, and Lambdas
-- Creep — Radiohead
-- Wonderwall — Oasis
-- Everybody (Backstreet's Back) — Backstreet Boys
-
-## Chapter 9: I/O Streams
+## Chapter 8: I/O Streams
 - Closing Time — Semisonic
 - Smooth — Santana ft. Rob Thomas
 - Tubthumping — Chumbawamba
 
-## Chapter 10: std::format and std::print
+## Chapter 9: std::format and std::print
 - Smooth — Santana ft. Rob Thomas
 - Closing Time — Semisonic
 - Tubthumping — Chumbawamba
 
-## Chapter 11: Exceptions
+## Chapter 10: Exceptions
 
-## Chapter 12: Classes
+## Chapter 11: Classes
 - Enter Sandman — Metallica
 - Black Hole Sun — Soundgarden
 - All Star — Smash Mouth
@@ -68,12 +63,12 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - I'll Be There for You — The Rembrandts
 - Vogue — Madonna
 
-## Chapter 13: Memory Management
+## Chapter 12: Memory Management
 - Under the Bridge — Red Hot Chili Peppers
 - Nothing Compares 2 U — Sinead O'Connor
 - Don't Speak — No Doubt
 
-## Chapter 14: Odds and Ends
+## Chapter 13: Odds and Ends
 - La Copa de la Vida — Ricky Martin
 - Believe — Cher
 - "Cinco tracks al azar" (Spanish phrase used in random numbers example)

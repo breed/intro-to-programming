@@ -57,7 +57,7 @@ No previous programming experience is assumed.
 - place `\index{term}` at the primary introduction/definition of a term, not inside code blocks
 - use `\index{parent!child}` for sub-entries (e.g., `\index{pointer!arithmetic}`)
 - in `\index{}`, escape double quotes by doubling them (e.g., `\index{extern ""C""}`)
-- `\printindex` goes only in ch14.md (the last chapter) — do not add it to other chapters
+- `\printindex` goes only in ch13.md (the last chapter) — do not add it to other chapters
 
 ## 90s References
 
@@ -123,11 +123,10 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
     - std::array
     - std::vector
     - iterating through containers
-8. Ranges, algorithms, and lambdas
-9. I/O streams
+8. I/O streams
     - string streams
     - file streams
-10. std::format and std::print
+9. std::format and std::print
     - formatted I/O with std::format and std::print
     - Header: `#include <format>` or `#include <print>`
     - Implicit: `std::format("{},{}", 1, "hi")` -> `1,hi`
@@ -145,7 +144,7 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
         - `width`: minimum field width
         - `prec`: fixed floats: # of digits after . else precision; strings: max len 
         - `type`: `d` (decimal), `x` (hex), `f` (fixed-point), `s` (string), `p` pointer, etc.
-11. Exceptions
+10. Exceptions
     - try/catch/throw
     - standard exception types (std::exception, std::runtime_error, std::logic_error)
     - throwing and catching exceptions
@@ -153,17 +152,16 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
     - noexcept
     - std::expected (C++23) as an alternative to exceptions
     - when to use exceptions vs std::expected
-12. Classes
+11. Classes
     - constructors/destructors
     - member methods
-13. Memory Management
+12. Memory Management
     - new/delete
     - don't use new/delete use std::unique_ptr
     - std::shared_ptr
     - move
     - special members
-
-14. Odds and Ends
+13. Odds and Ends
     - explain exit() and when it might be more useful than return
     - explain using extern "C" to use c functions from c++
     - numbers and casting (chars as numbers, bit widths, static_cast, dynamic_cast, const_cast, reinterpret_cast)
