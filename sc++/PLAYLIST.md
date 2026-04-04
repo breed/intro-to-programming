@@ -60,6 +60,7 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Torn — Natalie Imbruglia
 - Kiss from a Rose — Seal
 - Basket Case — Green Day
+- Virtual Insanity — Jamiroquai
 
 ## Chapter 12: Memory Management
 - Under the Bridge — Red Hot Chili Peppers
