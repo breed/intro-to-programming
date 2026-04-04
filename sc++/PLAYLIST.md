@@ -33,6 +33,8 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - I Want It That Way — Backstreet Boys
 - Return of the Mack — Mark Morrison
 - Semi-Charmed Life — Third Eye Blind
+- Fly — Sugar Ray
+- Intergalactic — Beastie Boys
 
 ## Chapter 7: Containers
 - Wannabe — Spice Girls

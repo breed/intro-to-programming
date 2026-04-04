@@ -857,7 +857,50 @@ It prints:
 `apply(add, 3, 4)` calls `add(3, 4)` which returns 3 + 4 = 7.
 `apply(mul, 3, 4)` calls `mul(3, 4)` which returns 3 * 4 = 12.
 
-**8. Write a program with `is_even` and `count_if` functions.**
+**8. What does this print?**
+
+```cpp
+struct Volume {
+    int level;
+};
+
+Volume operator+(const Volume &a, const Volume &b) {
+    return Volume{a.level + b.level};
+}
+
+bool operator>(const Volume &a, const Volume &b) {
+    return a.level > b.level;
+}
+
+int main() {
+    Volume a{5};
+    Volume b{6};
+    Volume c = a + b;
+    std::cout << c.level << std::endl;
+    std::cout << (a > b) << std::endl;
+    return 0;
+}
+```
+
+It prints:
+
+```
+11
+0
+```
+
+`a + b` calls `operator+`, which adds the levels: 5 + 6 = 11.
+`a > b` calls `operator>`, which compares 5 > 6, which is false (0).
+
+**9. Why should you not overload `&&` and `||`? What behavior do the built-in versions have that overloaded versions lose?**
+
+The built-in `&&` and `||` use **short-circuit evaluation**: the right operand is only evaluated if the left operand does not already determine the result.
+For example, `ptr != nullptr && ptr->valid()` is safe because if `ptr` is null, the right side is never evaluated.
+
+When you overload `&&` or `||`, both operands are always evaluated before the operator function is called, because function arguments are evaluated before the function runs.
+This means `ptr != nullptr && ptr->valid()` would crash if `ptr` is null, because `ptr->valid()` would be evaluated regardless.
+
+**10. Write a program with `is_even` and `count_if` functions.**
 
 ```cpp
 #include <iostream>
