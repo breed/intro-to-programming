@@ -39,6 +39,10 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Wannabe — Spice Girls
 - No Diggity — Blackstreet
 - Oasis (band name used in example)
+- Creep — Radiohead
+- No Rain — Blind Melon
+- Linger — The Cranberries
+- Possum Kingdom — Toadies
 
 ## Chapter 8: I/O Streams
 - Closing Time — Semisonic

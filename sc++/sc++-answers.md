@@ -238,6 +238,14 @@ int main()
 }
 ```
 
+**9. What does `std::numeric_limits<uint8_t>::max()` return? What about `std::numeric_limits<double>::min()` — is it a large negative number?**
+
+`std::numeric_limits<uint8_t>::max()` returns `255` — the largest value an 8-bit unsigned integer can hold.
+
+`std::numeric_limits<double>::min()` is *not* a large negative number.
+It returns the smallest *positive* normalized `double` value (approximately 2.2e-308).
+To get the most negative `double`, use `std::numeric_limits<double>::lowest()`.
+
 # Chapter 3: Strings
 
 **1. What is the difference between `std::cin >> str` and `std::getline(std::cin, str)`? When would you use each one?**
@@ -932,6 +940,24 @@ int main() {
 
 This prints `Even numbers: 5` because there are 5 even numbers (2, 4, 6, 8, 10) in the array.
 
+**11. Where is the bug?**
+
+The function `double_it` is defined (not just declared) in the header file.
+If two `.cpp` files both `#include "helpers.h"`, the linker sees two definitions of `double_it` and reports a "multiple definition" error, violating the one-definition rule.
+
+Fix it by adding the `inline` keyword:
+
+```cpp
+inline int double_it(int n) {
+    return n * 2;
+}
+```
+
+**12. What does the compiler do with the following code?**
+
+The compiler produces a warning because `compute` is marked `[[nodiscard]]` and the return value of `compute(6, 7)` is discarded.
+The program still compiles, but the warning tells you that ignoring the result is almost certainly a bug.
+
 # Chapter 7: Containers
 
 **1. Think about it: Why does `std::array` require the size as part of its type while `std::vector` does not? What trade-off does this create?**
@@ -1087,6 +1113,19 @@ int main()
     return 0;
 }
 ```
+
+**11. What does this print?**
+
+The vector starts as `{10, 20, 30, 40, 50}`.
+After `insert(v.begin() + 2, 25)`, it becomes `{10, 20, 25, 30, 40, 50}`.
+After `erase(v.begin())`, it becomes `{20, 25, 30, 40, 50}`.
+
+It prints: `20 25 30 40 50`
+
+**12. Calculation:** What is the size and capacity after calling `reserve(100)` on an empty `std::vector<int>`, then calling `push_back` 3 times?
+
+The size is 3 (three elements were added).
+The capacity is at least 100 (the `reserve` call preallocated room for 100 elements, and adding 3 elements does not exceed that, so no reallocation occurs).
 
 # Chapter 8: I/O Streams
 
@@ -1247,6 +1286,26 @@ int main()
     return 0;
 }
 ```
+
+**7. What does this program print?**
+
+It prints:
+
+```
+true
+3.1
+```
+
+`std::boolalpha` makes the `bool` value `true` print as `true` instead of `1`.
+`std::fixed` combined with `std::setprecision(1)` formats the `double` with exactly 1 digit after the decimal point.
+
+**8. What happens if you open an `std::ofstream` with `std::ios::app` and write to it? How does this differ from the default behavior?**
+
+With `std::ios::app`, new data is appended to the end of the file.
+The existing content is preserved.
+
+By default, `std::ofstream` opens with `std::ios::out | std::ios::trunc`, which truncates (erases) the file before writing.
+Any existing content is lost.
 
 # Chapter 9: std::format and std::print
 
@@ -2358,3 +2417,27 @@ Roll 8: 3 + 6 = 9
 Roll 9: 2 + 2 = 4
 Roll 10: 4 + 5 = 9
 ```
+
+**14. Write a program that generates 10 random values using `std::normal_distribution` with a mean of 100 and a standard deviation of 15.**
+
+```cpp
+#include <iostream>
+#include <random>
+
+int main()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::normal_distribution<double> dist(100.0, 15.0);
+
+    for (int i = 0; i < 10; ++i) {
+        std::cout << dist(gen) << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+Most values will be close to 100.
+About 68% of values should fall between 85 and 115 (within one standard deviation of the mean), and about 95% should fall between 70 and 130 (within two standard deviations).
