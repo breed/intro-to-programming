@@ -1733,7 +1733,7 @@ If a non-default parameter came after a default one, there would be no way to sk
 For example, `void f(int a = 10, int b)` would make `f(5)` ambiguous — is 5 the value for `a` or `b`?
 The compiler rejects this as an error.
 
-**11. Write a class called `Album` with private members, a parameterized constructor, a `const` print function, and an overloaded `<<` operator.**
+**11. Write a class called `Album` with private members, a parameterized constructor, a `const` print function, and an overloaded `==` operator.**
 
 ```cpp
 #include <iostream>
@@ -1754,10 +1754,9 @@ public:
                   << " (" << track_count << " tracks)" << std::endl;
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const Album &a) {
-        os << a.title << " by " << a.artist
-           << " (" << a.track_count << " tracks)";
-        return os;
+    bool operator==(const Album &other) const {
+        return title == other.title && artist == other.artist
+            && track_count == other.track_count;
     }
 };
 
@@ -1765,9 +1764,13 @@ int main()
 {
     Album a("Nevermind", "Nirvana", 12);
     Album b("Tragic Kingdom", "No Doubt", 14);
+    Album c("Nevermind", "Nirvana", 12);
 
     a.print();
-    std::cout << b << std::endl;
+    b.print();
+
+    std::cout << (a == b) << std::endl;  // 0 (false)
+    std::cout << (a == c) << std::endl;  // 1 (true)
 
     return 0;
 }
