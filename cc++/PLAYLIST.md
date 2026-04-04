@@ -36,6 +36,10 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Gold Digger — Kanye West
 - Single Ladies — Beyonce
 
+## Chapter 10: Concurrency
+- Hung Up — Madonna
+- Somewhere Only We Know — Keane
+
 ## Chapter 9: RAII and Resource Management
 - Somebody That I Used to Know — Gotye
 
