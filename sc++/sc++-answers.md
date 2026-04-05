@@ -1859,6 +1859,29 @@ If a non-default parameter came after a default one, there would be no way to sk
 For example, `void f(int a = 10, int b)` would make `f(5)` ambiguous — is 5 the value for `a` or `b`?
 The compiler rejects this as an error.
 
+**11. What is wrong with this code?**
+
+The `TrackNumber` constructor takes a single `int` and is not marked `explicit`.
+This means the compiler silently converts `7` to `TrackNumber(7)` when calling `play(7)`.
+The code compiles and runs, but the implicit conversion is surprising — the caller probably meant to pass an integer, not construct a `TrackNumber`.
+
+Fix it by adding `explicit`:
+
+```cpp
+explicit TrackNumber(int n) : number(n) {}
+```
+
+Now `play(7)` will not compile, and the caller must write `play(TrackNumber(7))`.
+
+**12. What does `explicit operator bool()` allow that a non-explicit `operator bool()` also allows? What does it prevent?**
+
+Both versions allow the object to be used in boolean contexts like `if (obj)`, `while (obj)`, and `!obj`.
+These are called "contextual conversions to `bool`" and work even with `explicit`.
+
+The `explicit` version prevents the object from being used in arithmetic, comparisons with integers, or other contexts that would silently convert it to `bool` (and then to `int`).
+For example, without `explicit`, `obj + 5` would compile — `obj` converts to `bool` (`true` = `1`), and then `1 + 5` gives `6`.
+With `explicit`, that expression is a compile error.
+
 # Chapter 12: Memory Management
 
 **1. What is the difference between stack and heap memory? Give one situation where you would need to use the heap.**
