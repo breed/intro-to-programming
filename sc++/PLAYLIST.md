@@ -50,9 +50,11 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Tubthumping — Chumbawamba
 
 ## Chapter 9: std::format and std::print
-- Smooth — Santana ft. Rob Thomas
-- Closing Time — Semisonic
-- Tubthumping — Chumbawamba
+- Santana (artist name reused from ch08 intro example)
+- Wonderwall — Oasis
+- Jumper — Third Eye Blind
+- Say My Name — Destiny's Child
+- You Get What You Give — New Radicals
 
 ## Chapter 10: Exceptions
 
