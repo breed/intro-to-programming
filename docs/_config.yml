@@ -1,0 +1,20 @@
+title: Intro to Programming
+description: Free, evolving C and C++ programming textbooks
+remote_theme: just-the-docs/just-the-docs
+
+url: https://breed.github.io
+baseurl: /intro-to-programming
+
+aux_links:
+  "GitHub":
+    - "https://github.com/breed/intro-to-programming"
+
+color_scheme: light
+
+footer_content: >-
+  Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+
+nav_sort: case_insensitive
+
+plugins:
+  - jekyll-remote-theme
