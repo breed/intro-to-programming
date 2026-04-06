@@ -1,3 +1,54 @@
+// PDF icon + chapter list
+.pdf-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: -3px;
+}
+
+h3 .pdf-icon,
+.book-pdf-link .pdf-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.book-pdf-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 0.5rem 0 1rem;
+}
+
+.book-pdf-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    text-decoration: none;
+}
+
+.chapter-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.5rem;
+}
+
+.chapter-list li {
+    padding: 0.35rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chapter-pdf-link {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    opacity: 0.6;
+}
+
+.chapter-pdf-link:hover {
+    opacity: 1;
+}
+
 // pandoc syntax highlighting (pygments)
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }

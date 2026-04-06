@@ -130,7 +130,7 @@ This is a bug if the intent was to check whether Charlie has a score — use `fi
 The set contains unique values only: {1, 3, 4, 5}.
 Duplicates (1, 5, 3) are ignored.
 
-**5.** log₂(1,000,000) ≈ 20.
+**5.** log$_2$(1,000,000) $\approx$ 20.
 A lookup requires approximately 20 comparisons.
 
 **6.** Use `std::map` when: (1) you need sorted iteration (e.g., printing entries in alphabetical order), or (2) you need range queries (e.g., "find all keys between A and M").
