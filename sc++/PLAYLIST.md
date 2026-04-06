@@ -57,6 +57,8 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - You Get What You Give — New Radicals
 
 ## Chapter 10: Exceptions
+- The Freshmen — The Verve Pipe
+- Save Tonight — Eagle-Eye Cherry
 
 ## Chapter 11: Classes
 - Enter Sandman — Metallica

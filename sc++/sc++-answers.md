@@ -153,8 +153,9 @@ The last valid element is `data[2]`.
 **4. Consider the following declarations:**
 
 ```cpp
-const int *p1;
-int *const p2;
+const int *p1 = nullptr;
+int x = 42;
+int *const p2 = &x;
 ```
 
 **Which one prevents you from changing the value being pointed to?**
@@ -164,6 +165,7 @@ You cannot write `*p1 = 42`.
 **Which one prevents you from changing where the pointer points?**
 `int *const p2` prevents you from changing where the pointer points.
 You cannot write `p2 = &other_variable`.
+Note that `p2` must be initialized when declared because it is a `const` pointer — it can never be reassigned.
 
 **5. What does the following program print?**
 
@@ -1307,6 +1309,12 @@ The existing content is preserved.
 By default, `std::ofstream` opens with `std::ios::out | std::ios::trunc`, which truncates (erases) the file before writing.
 Any existing content is lost.
 
+**9. Given the input string `"Closing Time 1998 Smooth 1999"`, how many times will this loop iterate? What is the final value of `count`?**
+
+The loop iterates **5** times, and the final value of `count` is **5**.
+`iss >> word` reads one whitespace-delimited token per iteration: "Closing", "Time", "1998", "Smooth", "1999".
+The `>>` operator splits on whitespace, so each word and number is a separate token.
+
 # Chapter 9: std::format and std::print
 
 **1. What does `std::format("{:>8.2f}", 3.1)` produce? How many characters wide is the result?**
@@ -1578,7 +1586,14 @@ Use exceptions when failure is *rare and should propagate* up several layers.
 For example, opening a configuration file that the program requires: if the file is missing, the error should propagate up to a high-level handler that can report the problem and shut down gracefully.
 Threading error codes through every intermediate function would be tedious and error-prone.
 
-**8. Write a function `safe_sqrt` that returns `std::expected<double, std::string>`.**
+**8. How many destructors run before the `catch` block executes?**
+
+Three destructors run before the `catch` block.
+When `inner()` throws, stack unwinding destroys `b` ("Vogue") and then `a` ("Torn") in reverse order of construction.
+Then `outer()`'s frame unwinds, destroying `c` ("Iris").
+Only after all three destructors complete does the `catch` block execute and print "caught".
+
+**9. Write a function `safe_sqrt` that returns `std::expected<double, std::string>`.**
 
 ```cpp
 #include <cmath>
@@ -1882,6 +1897,48 @@ The `explicit` version prevents the object from being used in arithmetic, compar
 For example, without `explicit`, `obj + 5` would compile — `obj` converts to `bool` (`true` = `1`), and then `1 + 5` gives `6`.
 With `explicit`, that expression is a compile error.
 
+**13. Write a class called `Counter`.**
+
+```cpp
+#include <iostream>
+
+class Counter {
+private:
+    int count;
+
+public:
+    Counter() : count(0) {}
+
+    void increment() { count++; }
+    void reset() { count = 0; }
+    int value() const { return count; }
+
+    bool operator==(const Counter &other) const {
+        return count == other.count;
+    }
+};
+
+int main()
+{
+    Counter a, b;
+    a.increment();
+    a.increment();
+    a.increment();
+    std::cout << "a: " << a.value() << std::endl;  // 3
+
+    b.increment();
+    b.increment();
+    b.increment();
+    std::cout << "a == b: " << (a == b) << std::endl;  // 1 (true)
+
+    a.reset();
+    std::cout << "a after reset: " << a.value() << std::endl;  // 0
+    std::cout << "a == b: " << (a == b) << std::endl;  // 0 (false)
+
+    return 0;
+}
+```
+
 # Chapter 12: Memory Management
 
 **1. What is the difference between stack and heap memory? Give one situation where you would need to use the heap.**
@@ -2175,7 +2232,14 @@ Friendship is not transitive.
 But that does not give `C` any access to `A`.
 For `C` to access `A`'s private members, `A` would need to declare `C` as a friend directly.
 
-**8. Write a class called `Album` with private members, a parameterized constructor, a `const` print function, an overloaded `==` operator, and a friend `operator<<`.**
+**8. How many of the five special member functions do you need to write?**
+
+Zero.
+All members (`std::string`, `std::vector<int>`, and `int`) are types that manage themselves.
+The compiler-generated destructor, copy constructor, copy assignment, move constructor, and move assignment all do the right thing.
+This is the Rule of Zero in action.
+
+**9. Write a class called `Album` with private members, a parameterized constructor, a `const` print function, an overloaded `==` operator, and a friend `operator<<`.**
 
 ```cpp
 #include <iostream>
