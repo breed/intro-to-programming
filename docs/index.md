@@ -18,17 +18,17 @@ We believe there will always be a niche for free programming textbooks that evol
 
 ## Books
 
-### [Starting C++](starting-cpp)
+### [Starting C++](starting-cpp) <a class="book-pdf-link" href="{{ '/starting-cpp/starting-cpp.pdf' | relative_url }}" title="Download full book PDF" aria-label="Download Starting C++ full book PDF"><svg class="pdf-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></a>
 
 Introduces the non-programmer to C++.
 Covers everything from variables and control flow through classes, memory management, and more.
 
-### [Continuing C++](continuing-cpp)
+### [Continuing C++](continuing-cpp) <a class="book-pdf-link" href="{{ '/continuing-cpp/continuing-cpp.pdf' | relative_url }}" title="Download full book PDF" aria-label="Download Continuing C++ full book PDF"><svg class="pdf-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></a>
 
 Picks up where Starting C++ left off.
 Covers object-oriented programming, templates, the STL, concurrency, and modern C++ idioms.
 
-### [C for C++ Programmers](c-for-cpp)
+### [C for C++ Programmers](c-for-cpp) <a class="book-pdf-link" href="{{ '/c-for-cpp/c-for-cpp.pdf' | relative_url }}" title="Download full book PDF" aria-label="Download C for C++ Programmers full book PDF"><svg class="pdf-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></a>
 
 Introduces C++ programmers to C.
 Good for an intro C/C++ class where students need both languages, or for an Operating Systems class where students know C++ but not C.
