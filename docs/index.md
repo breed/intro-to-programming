@@ -6,9 +6,9 @@ nav_order: 1
 
 # Intro to Programming
 
-<div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
-  <img src="{{ '/images/c++books++.png' | relative_url }}" alt="C++ Books" style="max-height: 300px;">
-  <img src="{{ '/images/mehc++book.png' | relative_url }}" alt="Meh C++ Book" style="max-height: 300px;">
+<div style="display: flex; justify-content: center; align-items: center; gap: 2rem; margin: 1rem 0;">
+  <img src="{{ '/images/c++books++.png' | relative_url }}" alt="C++ Books" style="width: 45%; max-width: 300px;">
+  <img src="{{ '/images/mehc++book.png' | relative_url }}" alt="Meh C++ Book" style="width: 45%; max-width: 300px;">
 </div>
 
 Free, evolving C and C++ programming textbooks.
