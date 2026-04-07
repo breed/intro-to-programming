@@ -1,5 +1,5 @@
 ---
-title: "Starting C++ — Answer Key"
+title: "Starting C++ --- Answer Key"
 toc: true
 toc-depth: 2
 colorlinks: true
@@ -165,7 +165,7 @@ You cannot write `*p1 = 42`.
 **Which one prevents you from changing where the pointer points?**
 `int *const p2` prevents you from changing where the pointer points.
 You cannot write `p2 = &other_variable`.
-Note that `p2` must be initialized when declared because it is a `const` pointer — it can never be reassigned.
+Note that `p2` must be initialized when declared because it is a `const` pointer --- it can never be reassigned.
 
 **5. What does the following program print?**
 
@@ -200,7 +200,7 @@ Modifying `b.x` does not affect `a.x` because `b` has its own copy of the data.
 
 An uninitialized variable contains whatever garbage data was previously in that memory location.
 Reading from an uninitialized `int` is undefined behavior.
-The value could be anything — zero, a large number, a negative number — and it may be different each time you run the program.
+The value could be anything --- zero, a large number, a negative number --- and it may be different each time you run the program.
 This makes bugs extremely hard to track down because the program may appear to work sometimes and fail other times.
 
 **7. If `short` is 2 bytes, what is the maximum value an `unsigned short` can hold? How does this differ from a signed `short`?**
@@ -240,9 +240,9 @@ int main()
 }
 ```
 
-**9. What does `std::numeric_limits<uint8_t>::max()` return? What about `std::numeric_limits<double>::min()` — is it a large negative number?**
+**9. What does `std::numeric_limits<uint8_t>::max()` return? What about `std::numeric_limits<double>::min()` --- is it a large negative number?**
 
-`std::numeric_limits<uint8_t>::max()` returns `255` — the largest value an 8-bit unsigned integer can hold.
+`std::numeric_limits<uint8_t>::max()` returns `255` --- the largest value an 8-bit unsigned integer can hold.
 
 `std::numeric_limits<double>::min()` is *not* a large negative number.
 It returns the smallest *positive* normalized `double` value (approximately 2.2e-308).
@@ -735,7 +735,7 @@ int main()
 **1. Think about it: Why does C++ pass arguments by value by default instead of by reference? What advantage does this give you?**
 
 Pass-by-value gives you a guarantee that the function cannot modify the caller's variable.
-When you pass by value, the function gets its own copy, so you can reason about your code locally — you know that calling a function will not change your variables unexpectedly.
+When you pass by value, the function gets its own copy, so you can reason about your code locally --- you know that calling a function will not change your variables unexpectedly.
 This makes code easier to understand and debug because you do not need to look inside a function to know whether it modifies its arguments.
 
 **2. What does this print?**
@@ -970,7 +970,7 @@ The size is part of the type, which means `std::array<int, 5>` and `std::array<i
 `std::vector` stores its elements on the heap, and the size can change at runtime with `push_back` and `pop_back`.
 It does not need the size in its type.
 
-The trade-off is that `std::array` is faster (no heap allocation) and has zero overhead, but it is inflexible — you must know the size at compile time.
+The trade-off is that `std::array` is faster (no heap allocation) and has zero overhead, but it is inflexible --- you must know the size at compile time.
 `std::vector` is more flexible but has a small overhead from heap allocation and potential reallocations.
 
 **2. What does this print?**
@@ -1465,12 +1465,12 @@ try {
 The `catch (const std::invalid_argument &e)` block will never execute.
 `std::invalid_argument` derives from `std::exception`, and `catch` blocks are tried in order.
 The `catch (const std::exception &e)` block matches any `std::exception` (including `std::invalid_argument`), so it catches the exception before the more specific handler gets a chance.
-The fix is to put more specific `catch` blocks before more general ones — move `std::invalid_argument` above `std::exception`.
+The fix is to put more specific `catch` blocks before more general ones --- move `std::invalid_argument` above `std::exception`.
 
 **3. Why should you always catch exceptions by `const` reference rather than by value?**
 
 Catching by value makes a copy of the exception object, which can **slice** it.
-If the thrown exception is a derived type (like `std::out_of_range`) and you catch by value as `std::exception`, the copy loses the derived class's data — you get only the base class portion.
+If the thrown exception is a derived type (like `std::out_of_range`) and you catch by value as `std::exception`, the copy loses the derived class's data --- you get only the base class portion.
 Catching by `const` reference avoids the copy and preserves the full object, including any derived-class behavior.
 The `const` part signals that you do not intend to modify the exception.
 
@@ -1519,7 +1519,7 @@ handled
 ```
 
 The two `Amp` objects are constructed in order.
-When the exception is thrown, the stack unwinds and destroys them in reverse order — `Fender` first, then `Marshall`.
+When the exception is thrown, the stack unwinds and destroys them in reverse order --- `Fender` first, then `Marshall`.
 After stack unwinding, the `catch (...)` block runs.
 
 **5. Will this code compile? If so, what happens when `play()` is called?**
@@ -1535,9 +1535,9 @@ void play() noexcept {
 ```
 
 Yes, it compiles.
-The compiler does not check whether a `noexcept` function actually avoids throwing — `noexcept` is a promise, not a compile-time guarantee.
+The compiler does not check whether a `noexcept` function actually avoids throwing --- `noexcept` is a promise, not a compile-time guarantee.
 When `play()` is called, `load()` throws `std::runtime_error`.
-Because `play()` is marked `noexcept`, the exception cannot escape it, so the program calls `std::terminate()` and crashes immediately — no chance to catch the exception.
+Because `play()` is marked `noexcept`, the exception cannot escape it, so the program calls `std::terminate()` and crashes immediately --- no chance to catch the exception.
 
 **6. What is the output of this program?**
 
@@ -1579,7 +1579,7 @@ The boolean check `if (r1)` is true because `r1` holds a value; `if (!r2)` is tr
 **7. When would you use `std::expected` instead of throwing an exception? Give an example scenario for each.**
 
 Use `std::expected` when failure is a *normal, expected outcome* that the caller will handle immediately.
-For example, parsing user input: if you ask the user for a number and they type "abc", that is not exceptional — it is a routine case.
+For example, parsing user input: if you ask the user for a number and they type "abc", that is not exceptional --- it is a routine case.
 Returning `std::expected<int, std::string>` lets the caller inspect the error and try again.
 
 Use exceptions when failure is *rare and should propagate* up several layers.
@@ -1639,7 +1639,7 @@ The only technical difference is the default access level.
 Members of a `struct` are `public` by default, while members of a `class` are `private` by default.
 
 By convention, `struct` is used for simple data holders with public members (plain old data).
-`class` is used when you want to encapsulate data with behavior — bundling private data with public member functions that control access.
+`class` is used when you want to encapsulate data with behavior --- bundling private data with public member functions that control access.
 
 **2. What does the following program print?**
 
@@ -1792,7 +1792,7 @@ public:
 ```
 
 The constructor parameters have the same names as the member variables, so the parameters shadow the members.
-The line `name = name` will not compile because the parameter `name` is `const std::string &` — you cannot assign to a const reference.
+The line `name = name` will not compile because the parameter `name` is `const std::string &` --- you cannot assign to a const reference.
 Even if both parameters were non-const, the assignments would just assign each parameter to itself without ever setting the members.
 
 The fix is to use `this->` or, better yet, a member initializer list:
@@ -1871,14 +1871,14 @@ The fix is to remove one of the overloads or change the default parameter design
 Default parameters must appear at the end because the compiler fills in defaults from right to left.
 If a non-default parameter came after a default one, there would be no way to skip the default and supply the later argument.
 
-For example, `void f(int a = 10, int b)` would make `f(5)` ambiguous — is 5 the value for `a` or `b`?
+For example, `void f(int a = 10, int b)` would make `f(5)` ambiguous --- is 5 the value for `a` or `b`?
 The compiler rejects this as an error.
 
 **11. What is wrong with this code?**
 
 The `TrackNumber` constructor takes a single `int` and is not marked `explicit`.
 This means the compiler silently converts `7` to `TrackNumber(7)` when calling `play(7)`.
-The code compiles and runs, but the implicit conversion is surprising — the caller probably meant to pass an integer, not construct a `TrackNumber`.
+The code compiles and runs, but the implicit conversion is surprising --- the caller probably meant to pass an integer, not construct a `TrackNumber`.
 
 Fix it by adding `explicit`:
 
@@ -1894,7 +1894,7 @@ Both versions allow the object to be used in boolean contexts like `if (obj)`, `
 These are called "contextual conversions to `bool`" and work even with `explicit`.
 
 The `explicit` version prevents the object from being used in arithmetic, comparisons with integers, or other contexts that would silently convert it to `bool` (and then to `int`).
-For example, without `explicit`, `obj + 5` would compile — `obj` converts to `bool` (`true` = `1`), and then `1 + 5` gives `6`.
+For example, without `explicit`, `obj + 5` would compile --- `obj` converts to `bool` (`true` = `1`), and then `1 + 5` gives `6`.
 With `explicit`, that expression is a compile error.
 
 **13. Write a class called `Counter`.**
@@ -1943,7 +1943,7 @@ int main()
 
 **1. What is the difference between stack and heap memory? Give one situation where you would need to use the heap.**
 
-Stack memory is automatically managed — variables are created when declared and destroyed when they go out of scope.
+Stack memory is automatically managed --- variables are created when declared and destroyed when they go out of scope.
 Stack allocation is fast but limited in size and lifetime.
 
 Heap memory is manually managed (or managed through smart pointers).
@@ -2143,7 +2143,7 @@ public:
 
 The move constructor is missing `noexcept`.
 `std::vector` will only move elements during reallocation if the move constructor promises not to throw.
-Without `noexcept`, the vector falls back to copying because a failed move mid-reallocation would leave the vector in a broken state — some elements moved, others lost.
+Without `noexcept`, the vector falls back to copying because a failed move mid-reallocation would leave the vector in a broken state --- some elements moved, others lost.
 The fix:
 
 ```cpp
@@ -2332,7 +2332,7 @@ Neither `"B"` nor `"C"` is ever printed.
 Name mangling is the process by which the C++ compiler encodes a function's name along with its parameter types into a unique symbol in the compiled output.
 For example, `void play(int)` might become `_Z4playi`.
 
-C++ does this because it supports function overloading — multiple functions can have the same name but different parameter types.
+C++ does this because it supports function overloading --- multiple functions can have the same name but different parameter types.
 The mangled names ensure each overload has a unique symbol so the linker can tell them apart.
 
 C does not mangle names because C does not support function overloading.
@@ -2492,7 +2492,7 @@ The fractional 750 milliseconds is discarded.
 
 **11. Why should you use `std::chrono::steady_clock` instead of `std::chrono::system_clock` when measuring how long a piece of code takes to run?**
 
-`steady_clock` is guaranteed to never be adjusted — it always moves forward at a constant rate.
+`steady_clock` is guaranteed to never be adjusted --- it always moves forward at a constant rate.
 `system_clock` represents the system's wall clock, which can jump forward or backward when the clock is adjusted (e.g., NTP synchronization, daylight saving time changes, or manual adjustments).
 If `system_clock` jumps during your measurement, you could get a negative elapsed time or an incorrectly large one.
 `steady_clock` avoids this problem entirely.
@@ -2515,7 +2515,7 @@ int main()
 There are two problems:
 
 1. `srand()` is never called, so `rand()` uses the same default seed every time the program runs, producing the same "random" number.
-2. Even with `srand()`, `rand() % 100` introduces bias — if `RAND_MAX` is not evenly divisible by 100, some values are slightly more likely than others.
+2. Even with `srand()`, `rand() % 100` introduces bias --- if `RAND_MAX` is not evenly divisible by 100, some values are slightly more likely than others.
 
 The proper C++ approach is to use `<random>` with `std::mt19937` and `std::uniform_int_distribution<int>(1, 100)`.
 

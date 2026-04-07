@@ -168,7 +168,7 @@ int other  = (2 + 3) * 4;    // 20
 
 ## 2. Comparison Operators
 
-You have seen these since Chapter 2. Each comparison returns a `bool` — either
+You have seen these since Chapter 2. Each comparison returns a `bool` --- either
 `true` or `false`:
 
 ```cpp
@@ -195,7 +195,7 @@ conditions.
 ::: {.tip}
 **Tip:** C++20 introduced the **three-way comparison operator** `<=>`, sometimes
 called the "spaceship operator." It compares two values and tells you whether the
-left side is less than, equal to, or greater than the right side — all in one operation.
+left side is less than, equal to, or greater than the right side --- all in one operation.
 You can safely ignore it for now, but you may see it in modern C++ code.
 :::
 
@@ -347,7 +347,7 @@ two's complement, and how numbers are stored, see the Numbers chapter.
 
 ### Binary Numbers
 
-Computers store numbers in binary — base 2. Each digit is a **bit** that is either `0`
+Computers store numbers in binary --- base 2. Each digit is a **bit** that is either `0`
 or `1`. An 8-bit number looks like this:
 
 ```
@@ -372,7 +372,7 @@ Each bit in the result is `1` only if both corresponding bits are `1`.
 int masked = 42 & 0x0F;  // 10
 ```
 
-**Common use:** masking — extracting specific bits from a value. You can also
+**Common use:** masking --- extracting specific bits from a value. You can also
 use `&` to check whether a particular bit is set:
 
 ```cpp
@@ -461,7 +461,7 @@ flags >>= 1;            // shift right by 1
 ```
 
 ::: {.tip}
-**Tip:** Bitwise operators have surprisingly low precedence — lower than `==`.
+**Tip:** Bitwise operators have surprisingly low precedence --- lower than `==`.
 The expression `x & 0xFF == 0` is parsed as `x & (0xFF == 0)`, which is almost
 certainly not what you want. Always use parentheses with bitwise operators:
 `(x & 0xFF) == 0`.
@@ -472,14 +472,14 @@ certainly not what you want. Always use parentheses with bitwise operators:
 You will encounter a few more operators as you progress through the textbook.
 Here is a brief overview:
 
-- **`sizeof`** — returns the size of a type or variable in bytes: `sizeof(int)`
-- **`()`** — function call (Chapter 1) and grouping for precedence
-- **`[]`** — array subscript (Chapter 4): `numbers[0]`
-- **`.`** and **`->`** — member access (Chapter 10): `stock.price` or `ptr->price`
-- **`*`** and **`&`** (unary) — dereference and address-of (Chapter 12)
-- **`,`** — the comma operator evaluates two expressions and returns the second.
+- **`sizeof`** --- returns the size of a type or variable in bytes: `sizeof(int)`
+- **`()`** --- function call (Chapter 1) and grouping for precedence
+- **`[]`** --- array subscript (Chapter 4): `numbers[0]`
+- **`.`** and **`->`** --- member access (Chapter 10): `stock.price` or `ptr->price`
+- **`*`** and **`&`** (unary) --- dereference and address-of (Chapter 12)
+- **`,`** --- the comma operator evaluates two expressions and returns the second.
   You will rarely need it, and it can make code confusing. Avoid it.
-- **`::`** — scope resolution (Chapter 1): `std::println`
+- **`::`** --- scope resolution (Chapter 1): `std::println`
 
 Each of these will be covered in detail when you reach the relevant chapter.
 
@@ -597,9 +597,9 @@ from this chapter:
   types.
 
 You now have a solid understanding of how C++ operators work. As you continue
-through the textbook, you will see these operators everywhere — in loops, conditions,
+through the textbook, you will see these operators everywhere --- in loops, conditions,
 function calls, and class definitions. With practice, reading and writing expressions will become second nature.
-No te preocupes — you have got this. Nos vemos en el próximo capítulo!
+No te preocupes --- you have got this. Nos vemos en el próximo capítulo!
 
 ---
 

@@ -33,9 +33,9 @@ Chapters to help beginning C++ programmers become beginning C programmers.
     - `Tip` for highlight idioms, best practices
     - `Trap` for common mistakes
     - `Wut` unexpected or counterintuitive rules
-- Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` — do not use `wrapfigure`
+- Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` --- do not use `wrapfigure`
 - Keep the tone professional but light
-- Preserve emojis and text emojis (e.g., `:'(`) in the text — do not remove them
+- Preserve emojis and text emojis (e.g., `:'(`) in the text --- do not remove them
 - Refer to the reader as `you`
 - do not wrap sentences in the markdown. every sentence gets its own line
 
@@ -66,7 +66,7 @@ Chapters to help beginning C++ programmers become beginning C programmers.
 
 the next 80s songs to use
 
-(all used — add more here)
+(all used --- add more here)
 
 ## Cross-References Between Chapters
 
@@ -132,12 +132,12 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
     - you can get the address of a variable using & (including addresses of a pointer variable)
     - create a figure of a small program with a couple of variables and pointers to those variables and one pointer to one of the pointers and then show a memory diagram and label addresses of those variable
     - explain that a pointer can point to a single value stored in memory or the first element of an array of elements
-    - pointer arithmetic and explain that a[i] is much more convenient to write than *(a+i) — reference Ch 2 for array decay basics
-    - show the -> operator for accessing struct members through pointers — reference Ch 2 for struct basics
+    - pointer arithmetic and explain that a[i] is much more convenient to write than *(a+i) --- reference Ch 2 for array decay basics
+    - show the -> operator for accessing struct members through pointers --- reference Ch 2 for struct basics
     - pass by value with pointer workaround
 7. Functions
     - declarations vs definitions, forward declarations, void parameter lists
-    - all function parameters are `pass by value` (no `pass by reference`) — reference Ch 6 rather than re-explaining
+    - all function parameters are `pass by value` (no `pass by reference`) --- reference Ch 6 rather than re-explaining
     - const parameters. why they are important
     - structures can be problematic to pass by value, why const struct type *var is useful
     - recursive functions
@@ -183,4 +183,4 @@ DO NOT MODIFY THE AUTHOR INTRO section before chapter 0. it is written in lowerc
     - explain using extern "C" to use c functions from c++
     - explain why they should always wonder about ownership when the receive a pointer from the function they just called (should they free it?)
     - explain error handling without exceptions: return codes, errno/perror, and goto cleanup pattern for releasing multiple resources
-    - qsort as a practical example of function pointers — reference Ch 7 for function pointer basics
+    - qsort as a practical example of function pointers --- reference Ch 7 for function pointer basics
