@@ -13,7 +13,7 @@ This appendix covers CMake (the most widely used C++ build system), compiler fla
 
 \index{CMake}
 
-CMake is a **build system generator** — it reads a `CMakeLists.txt` file and generates the actual build files (Makefiles on Linux/macOS, Visual Studio projects on Windows).
+CMake is a **build system generator** --- it reads a `CMakeLists.txt` file and generates the actual build files (Makefiles on Linux/macOS, Visual Studio projects on Windows).
 
 ### A Minimal Project
 
@@ -217,7 +217,7 @@ g++ -fsanitize=thread -g main.cpp -o main -pthread
 
 ::: {.tip}
 **Tip:** Run your tests with sanitizers regularly.
-Many bugs — especially memory and threading bugs — are silent until they corrupt data or crash under production load.
+Many bugs --- especially memory and threading bugs --- are silent until they corrupt data or crash under production load.
 Sanitizers catch them early.
 :::
 
@@ -229,7 +229,7 @@ You can combine ASan and UBSan:
 g++ -fsanitize=address,undefined -g main.cpp
 ```
 
-But ASan and TSan cannot be used together — they instrument memory differently.
+But ASan and TSan cannot be used together --- they instrument memory differently.
 
 ## Static Analysis
 

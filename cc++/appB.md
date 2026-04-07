@@ -15,7 +15,7 @@ This appendix covers unit testing concepts, two popular frameworks (Google Test 
 
 \index{unit test}
 
-A **unit test** tests one small piece of code — a function, a class method, or a small module — in isolation.
+A **unit test** tests one small piece of code --- a function, a class method, or a small module --- in isolation.
 
 ### Arrange, Act, Assert
 
@@ -23,9 +23,9 @@ A **unit test** tests one small piece of code — a function, a class method, or
 
 Most unit tests follow the **Arrange-Act-Assert** pattern:
 
-1. **Arrange** — set up the test data and dependencies.
-2. **Act** — call the function or method under test.
-3. **Assert** — check that the result matches what you expect.
+1. **Arrange** --- set up the test data and dependencies.
+2. **Act** --- call the function or method under test.
+3. **Assert** --- check that the result matches what you expect.
 
 ```cpp
 // Arrange
@@ -112,7 +112,7 @@ The suite name groups related tests.
 | `ASSERT_EQ(a, b)` | `a == b` | Stops test |
 
 `EXPECT_*` macros report failures but continue the test.
-`ASSERT_*` macros abort the test immediately — use them when continuing would cause a crash (e.g., after a null check).
+`ASSERT_*` macros abort the test immediately --- use them when continuing would cause a crash (e.g., after a null check).
 
 ### Fixtures
 
@@ -147,7 +147,7 @@ TEST_F(PlaylistTest, ContainsToxic)
 
 `TEST_F` uses the fixture class.
 `SetUp()` runs before each test; `TearDown()` (optional) runs after each test.
-Each test gets a fresh instance — tests do not share state.
+Each test gets a fresh instance --- tests do not share state.
 
 ### Running Tests
 
@@ -216,14 +216,14 @@ TEST_CASE("Playlist operations", "[playlist]")
 }
 ```
 
-Each `SECTION` runs independently — the `playlist` vector is reset between sections.
+Each `SECTION` runs independently --- the `playlist` vector is reset between sections.
 
 ### Assertions
 
 | Catch2 | Behavior |
 |--------|----------|
-| `REQUIRE(expr)` | Fatal — stops test on failure |
-| `CHECK(expr)` | Non-fatal — reports but continues |
+| `REQUIRE(expr)` | Fatal --- stops test on failure |
+| `CHECK(expr)` | Non-fatal --- reports but continues |
 | `REQUIRE_THROWS_AS(expr, type)` | Checks that `expr` throws `type` |
 
 ### Google Test vs. Catch2
@@ -251,7 +251,7 @@ Google Test is more common in industry; Catch2 is often preferred for smaller pr
 \index{red-green-refactor}
 
 1. **Red**: Write a test for a feature that does not exist yet.
-   Run it — it fails (red).
+   Run it --- it fails (red).
 2. **Green**: Write the simplest code that makes the test pass (green).
 3. **Refactor**: Clean up the code while keeping the tests green.
 
@@ -259,7 +259,7 @@ Repeat for each new feature or behavior.
 
 ### Example
 
-**Step 1 — Red:**
+**Step 1 --- Red:**
 
 ```cpp
 TEST(Factorial, BaseCase)
@@ -271,7 +271,7 @@ TEST(Factorial, BaseCase)
 
 This fails because `factorial` does not exist.
 
-**Step 2 — Green:**
+**Step 2 --- Green:**
 
 ```cpp
 int factorial(int n)
@@ -283,7 +283,7 @@ int factorial(int n)
 
 Tests pass.
 
-**Step 3 — Refactor:** The code is already clean, so nothing to change.
+**Step 3 --- Refactor:** The code is already clean, so nothing to change.
 Add the next test:
 
 ```cpp

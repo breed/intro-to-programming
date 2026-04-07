@@ -1,5 +1,5 @@
 ---
-title: "C for C++ Programmers — Exercise Answers"
+title: "C for C++ Programmers --- Exercise Answers"
 header-includes:
   - \usepackage[most]{tcolorbox}
 ---
@@ -12,7 +12,7 @@ What advantage does the format string approach give you when writing output to a
 What is a disadvantage?
 
 **Answer:** The format string approach lets you define the entire output layout in a single, readable string.
-This is especially useful for log files where you want a consistent format — you can see the pattern at a glance:
+This is especially useful for log files where you want a consistent format --- you can see the pattern at a glance:
 
 ```c
 fprintf(log, "[%04d-%02d-%02d %02d:%02d:%02d] %s: %s\n",
@@ -77,7 +77,7 @@ scanf("%d", count);
 ```
 
 **Answer:** `scanf` needs the **address** of the variable, not its value.
-Without `&`, `scanf` interprets the uninitialized value of `count` as a memory address and writes to it — undefined behavior.
+Without `&`, `scanf` interprets the uninitialized value of `count` as a memory address and writes to it --- undefined behavior.
 The fix:
 
 ```c
@@ -150,7 +150,7 @@ What advantage does requiring explicit types give to someone reading unfamiliar 
 
 **Answer:** When every variable has an explicit type, you can read a function and immediately know the size, range, and semantics of each variable without tracing through initializers or return types.
 In C++ with `auto`, you sometimes need to figure out the return type of a function or the result of a complex expression to know what type a variable is.
-In C, `int count = 0;` tells you everything at a glance — it is a 4-byte (typically) signed integer.
+In C, `int count = 0;` tells you everything at a glance --- it is a 4-byte (typically) signed integer.
 This is especially helpful in large codebases where you may be reading code written by someone else.
 The trade-off is more typing and more verbosity, but the explicitness reduces cognitive load when reading.
 
@@ -238,10 +238,10 @@ bytes.
 What problem could this cause if the struct contains a `char *` member that points to dynamically allocated memory (via `malloc`)?
 How is this different from what C++ does by default?
 
-**Answer:** If the struct contains a `char *` pointing to `malloc`-ed memory, the byte-for-byte copy duplicates the pointer value — both structs now point to the same dynamically allocated memory.
+**Answer:** If the struct contains a `char *` pointing to `malloc`-ed memory, the byte-for-byte copy duplicates the pointer value --- both structs now point to the same dynamically allocated memory.
 This creates two problems: (1) if one struct is used to `free` the memory, the other struct's pointer becomes a dangling pointer, and (2) if both try to `free` the memory, you get a double-free bug.
 
-In C++, the compiler generates a default copy constructor and `operator=` that perform a member-wise copy — which has the same shallow-copy problem for raw pointers.
+In C++, the compiler generates a default copy constructor and `operator=` that perform a member-wise copy --- which has the same shallow-copy problem for raw pointers.
 However, C++ lets you define custom copy constructors and assignment operators to perform a deep copy.
 C++ also provides `std::string` and smart pointers that handle this automatically.
 In C, you must write a manual copy function that allocates new memory and copies the string data.
@@ -315,8 +315,8 @@ printf("%zu %zu\n", strlen(s), sizeof(s));
 12 13
 ```
 
-`strlen(s)` returns 12 — the number of characters before the null terminator.
-`sizeof(s)` returns 13 — the total size of the array in bytes, including the null terminator.
+`strlen(s)` returns 12 --- the number of characters before the null terminator.
+`sizeof(s)` returns 13 --- the total size of the array in bytes, including the null terminator.
 
 ---
 
@@ -424,7 +424,7 @@ printf("%s\n", greeting);
 ```
 
 **Answer:** `greeting` is a pointer to a string literal, which is stored in read-only memory.
-Writing to `greeting[0]` is undefined behavior — it will likely crash with a segmentation fault.
+Writing to `greeting[0]` is undefined behavior --- it will likely crash with a segmentation fault.
 Fix: declare it as `char greeting[] = "We Got the Beat";` to create a modifiable copy on the stack, or use `const char *greeting` to make the read-only intent explicit.
 
 ---
@@ -519,7 +519,7 @@ What advantage does this give you when reading unfamiliar C code?
 Can you think of a situation where operator overloading would have been genuinely useful in C?
 
 **Answer:** Without operator overloading, every operator in C has exactly one meaning.
-When you see `a + b`, you know it is arithmetic addition — never a string concatenation, a matrix addition, or something a library author decided it should mean.
+When you see `a + b`, you know it is arithmetic addition --- never a string concatenation, a matrix addition, or something a library author decided it should mean.
 This makes C code easier to read and reason about, especially in unfamiliar codebases.
 You never have to look up what `+` does for a particular type.
 
@@ -537,11 +537,11 @@ int y = x++ + ++x;
 printf("%d %d\n", x, y);
 ```
 
-(Be careful — is the answer even defined?)
+(Be careful --- is the answer even defined?)
 
 **Answer:** This is **undefined behavior**.
 The variable `x` is modified twice (`x++` and `++x`) without a sequence point between the modifications.
-The C standard says the result is undefined — the compiler is free to produce any output.
+The C standard says the result is undefined --- the compiler is free to produce any output.
 Different compilers, or the same compiler with different optimization levels, may give different results.
 The correct approach is to never modify a variable more than once in the same expression.
 Use separate statements:
@@ -592,7 +592,7 @@ if (status & 0x04 == 0x04) {
 **Answer:** Operator precedence.
 The `==` operator has higher precedence than `&`.
 So this evaluates as `status & (0x04 == 0x04)`, which is `status & 1`, which is `0x07 & 0x01` = `1`.
-This happens to be nonzero (true), so the message prints — but for the wrong reason.
+This happens to be nonzero (true), so the message prints --- but for the wrong reason.
 If `status` were `0x06` (bit 2 set, bit 0 not set), `0x06 & 1` would be `0` (false), even though bit 2 *is* set.
 The fix is to add parentheses:
 
@@ -644,7 +644,7 @@ if (count = 0) {
 
 **Answer:** The condition uses `=` (assignment) instead of `==` (comparison).
 `count = 0` assigns `0` to `count` and then evaluates to `0`, which is false.
-So the `else` branch always executes, printing `"El contador no es cero"` — the opposite of what was intended.
+So the `else` branch always executes, printing `"El contador no es cero"` --- the opposite of what was intended.
 The fix:
 
 ```c
@@ -918,7 +918,7 @@ What does this simplify in the language?
 **Answer:** Pass by value only simplifies the language and its calling conventions.
 Every function call copies its arguments, so you always know that a function cannot modify your local variables unless you explicitly give it a pointer.
 This makes reasoning about code simpler: if you see `f(x)`, you know `x` cannot change (unless `x` is already a pointer).
-It also simplifies the compiler — there is no need for reference semantics, no hidden indirection, and no ambiguity about whether an argument is an alias for another variable.
+It also simplifies the compiler --- there is no need for reference semantics, no hidden indirection, and no ambiguity about whether an argument is an alias for another variable.
 When you do want a function to modify a variable, you explicitly pass `&x`, making the intent clear at the call site.
 
 ---
@@ -1258,7 +1258,7 @@ Negated:  -2 -4 -6 -8 -10
 `memset` to zero?
 
 **Answer:** `calloc` combines allocation and zeroing in a single call, which is simpler and less error-prone.
-It also takes the element count and size as separate arguments (`calloc(n, sizeof(int))`), which protects against integer overflow — `calloc` checks whether `n * size` overflows before allocating, while `malloc(n * sizeof(int))` silently overflows if `n` is very large.
+It also takes the element count and size as separate arguments (`calloc(n, sizeof(int))`), which protects against integer overflow --- `calloc` checks whether `n * size` overflows before allocating, while `malloc(n * sizeof(int))` silently overflows if `n` is very large.
 Using `calloc` is also clearer about intent: "I want `n` zero-initialized elements."
 
 ---
@@ -1310,7 +1310,7 @@ printf("%d\n", p[0]);
 ```
 
 **Answer:** The code accesses `p[0]` after calling `free(p)`.
-This is a **use-after-free** bug — undefined behavior.
+This is a **use-after-free** bug --- undefined behavior.
 Once memory is freed, the pointer becomes invalid and must not be dereferenced.
 The `printf` must be moved before the `free`, or the code should be restructured so the data is no longer needed after freeing.
 
@@ -1560,7 +1560,7 @@ Why?
 
 **Answer:** The `>` operator redirects `stdout` to `output.txt`, so all `printf` output (which goes to `stdout`) ends up in the file.
 `stderr` is **not** redirected by `>`, so `fprintf(stderr, ...)` messages still appear on the screen.
-This is by design — error messages should remain visible even when normal output is redirected.
+This is by design --- error messages should remain visible even when normal output is redirected.
 To redirect `stderr` as well, you would use `2> errors.txt` or `2>&1` to merge it with `stdout`.
 
 ---
@@ -1622,7 +1622,7 @@ When would `stdio` be the better choice?
 **Answer:** Low-level I/O is useful when you need precise control: writing binary data without translation, avoiding buffering overhead, working with file descriptors from system calls (e.g., `pipe`, `socket`), or performing atomic operations with `pread`/`pwrite`.
 It is also necessary when interacting with devices or special files.
 
-`stdio` is the better choice for formatted text I/O — it provides convenient formatting with `printf`/`scanf`, handles buffering automatically for better performance on many small writes, and is portable across all platforms.
+`stdio` is the better choice for formatted text I/O --- it provides convenient formatting with `printf`/`scanf`, handles buffering automatically for better performance on many small writes, and is portable across all platforms.
 For most programs that read and write text files, `stdio` is simpler and sufficient.
 
 ---
@@ -1679,11 +1679,11 @@ int fd = open("newfile.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 and `lseek(fd, -1, SEEK_END)`.
 What does each return?
 
-**Answer:** `lseek(fd, 0, SEEK_END)` moves the file position to exactly the end of the file — one byte past the last byte.
+**Answer:** `lseek(fd, 0, SEEK_END)` moves the file position to exactly the end of the file --- one byte past the last byte.
 It returns the file size in bytes.
 For a 100-byte file, it returns 100 and positions at byte 100 (where a subsequent `read` would return 0 since there is no data past the end).
 
-`lseek(fd, -1, SEEK_END)` moves to one byte *before* the end — the position of the last byte in the file.
+`lseek(fd, -1, SEEK_END)` moves to one byte *before* the end --- the position of the last byte in the file.
 It returns the file size minus 1.
 For a 100-byte file, it returns 99 and positions at byte 99 (the last byte).
 A subsequent `read` would read that one last byte.
@@ -1766,7 +1766,7 @@ When is `exit` appropriate and when is it not?
   This is C's version of RAII.
 - **`exit`:** Terminates the program immediately.
 
-`exit` is appropriate for truly fatal errors where there is no reasonable recovery — for example, failing to open a required configuration file at startup, or running out of memory for a critical allocation.
+`exit` is appropriate for truly fatal errors where there is no reasonable recovery --- for example, failing to open a required configuration file at startup, or running out of memory for a critical allocation.
 It is not appropriate in libraries (which should let the caller decide how to handle errors) or when partial cleanup is needed (since `exit` bypasses the normal unwinding of the call stack).
 
 ---
@@ -1858,7 +1858,7 @@ printf("%s\n", alias);
 
 **Answer:** `alias` is assigned the same address as `name`.
 After `free(name)`, both `name` and `alias` point to freed memory.
-The `printf` dereferences `alias`, which is a **use-after-free** — undefined behavior.
+The `printf` dereferences `alias`, which is a **use-after-free** --- undefined behavior.
 The fix is to either print before freeing, or duplicate the string for `alias`:
 
 ```c
@@ -2005,7 +2005,7 @@ printf("%.2f\n", v.f);
 
 **Answer:** The code writes to `v.i` but reads from `v.f`.
 Reading a union member that was not the last one written is undefined behavior (with a few narrow exceptions for type punning).
-The bits of the integer `42` are reinterpreted as a `float`, which will not produce the value `42.0` — it will print something like `0.00` or garbage.
+The bits of the integer `42` are reinterpreted as a `float`, which will not produce the value `42.0` --- it will print something like `0.00` or garbage.
 The fix is to read the same member that was written, or use the union for intentional type punning only when you understand the underlying representation.
 
 ---
@@ -2074,7 +2074,7 @@ Why does C still rely on macros despite these problems?
 - **No recursion.** Macros cannot call themselves recursively.
 
 C still relies on macros because it lacks alternatives.
-C has no `constexpr` (until C23's limited version), no templates, and `inline` is only a hint — the compiler may ignore it.
+C has no `constexpr` (until C23's limited version), no templates, and `inline` is only a hint --- the compiler may ignore it.
 Macros remain the only way to do conditional compilation (`#ifdef`), include guards, and compile-time code generation like X-macros.
 
 ---
@@ -2092,7 +2092,7 @@ printf("%d\n", DOUBLE(i++));
 This modifies `i` twice without a sequence point between the modifications, which is undefined behavior in C.
 The compiler is free to produce any result.
 In practice, many compilers will produce `11` (5 + 6) or `10` (5 + 5), but you cannot rely on any particular output.
-This is the classic double-evaluation trap — never pass expressions with side effects to function-like macros.
+This is the classic double-evaluation trap --- never pass expressions with side effects to function-like macros.
 
 ---
 
@@ -2102,7 +2102,7 @@ Why is the `+ 1` a common pattern?
 
 **Answer:** **257 bytes.** The preprocessor substitutes `BUFSIZE` with `256`, giving `char buf[256 + 1]`, which is `char buf[257]`.
 The `+ 1` is a common pattern because C strings need a null terminator `'\0'`.
-If you want to store strings of up to 256 characters, you need 257 bytes — 256 for the characters plus 1 for the null terminator.
+If you want to store strings of up to 256 characters, you need 257 bytes --- 256 for the characters plus 1 for the null terminator.
 
 ---
 
@@ -2176,7 +2176,7 @@ else
 ```
 
 The `else` binds to the inner `if` (from the macro), not the outer `if`.
-Also, the semicolon after `LOG_IF(...)` becomes a separate empty statement, which terminates the outer `if` before the `else` — causing a syntax error.
+Also, the semicolon after `LOG_IF(...)` becomes a separate empty statement, which terminates the outer `if` before the `else` --- causing a syntax error.
 The fix is to wrap the macro body in `do { ... } while (0)`:
 
 ```c

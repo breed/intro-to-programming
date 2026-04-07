@@ -20,7 +20,7 @@ A chapter to supplement the textbook about representation and storage of numbers
 - Use Pandoc markdown
 - Use correct grammar and capitalizations
 - Use tip callouts (`::: {.tip}` divs) to highlight idioms, best practices, or warn of bad practices
-- Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` — do not use `wrapfigure`
+- Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` --- do not use `wrapfigure`
 - Keep the tone professional but light
 - Refer to the reader as `you`
 - Put jokes in italics
@@ -59,7 +59,7 @@ A chapter to supplement the textbook about representation and storage of numbers
     - tip about base 0 auto-detection and `"010"` being octal
     - manual place-value math
 6. Two's complement
-    - one's complement (we don't use it — double zero problem)
+    - one's complement (we don't use it --- double zero problem)
     - two's complement (flip bits and add 1)
     - how addition and subtraction just works with two's complement
 7. Integer sizes and ranges

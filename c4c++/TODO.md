@@ -3,13 +3,13 @@
 ## should fix
 
 - [ ] ch04 line 179: "the pointer `0x7fff`" is an integer literal, not a pointer
-- [ ] ch06 line 98: `argv` described as "a pointer to an array of string pointers" — should be "pointer to the first element of an array of string pointers" or similar
+- [ ] ch06 line 98: `argv` described as "a pointer to an array of string pointers" --- should be "pointer to the first element of an array of string pointers" or similar
 - [ ] ch07: term "forward declaration" never explicitly used despite being in the content outline
 - [ ] ch08 line 117-118: "heap persists" should say the *allocation* persists
-- [ ] ch08 lines 147-150: awkward phrasing about NULL checks / "CPU will do the check for you" means SIGSEGV — clarify
+- [ ] ch08 lines 147-150: awkward phrasing about NULL checks / "CPU will do the check for you" means SIGSEGV --- clarify
 - [ ] ch08 line 232: comment assumes `sizeof(int) == 4` without qualification
-- [ ] ch11: `write()` return values ignored in examples — will warn with `-Wall -Wextra`
-- [ ] ch05: "Wind of Change" (Scorpions) is 1990/1991, not 80s — no CLAUDE.md exception like Nirvana has
+- [ ] ch11: `write()` return values ignored in examples --- will warn with `-Wall -Wextra`
+- [ ] ch05: "Wind of Change" (Scorpions) is 1990/1991, not 80s --- no CLAUDE.md exception like Nirvana has
 
 ## consider
 
@@ -28,4 +28,4 @@
 - [ ] ch11: no partial read/write loop pattern
 - [ ] ch11: no `errno`/`perror` forward reference to ch12
 - [ ] ch12: `EXIT_SUCCESS`/`EXIT_FAILURE` not mentioned
-- [ ] ch12: `errno` must be checked immediately after a failing call — worth a trap callout
+- [ ] ch12: `errno` must be checked immediately after a failing call --- worth a trap callout

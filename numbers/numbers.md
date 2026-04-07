@@ -11,9 +11,9 @@ those who don't.*
 
 If that joke doesn't make sense yet, it will by the end of this chapter.
 
-At its heart, a CPU is a super-fast glorified calculator. Everything it does —
+At its heart, a CPU is a super-fast glorified calculator. Everything it does ---
 drawing pixels on your screen, playing your favorite Depeche Mode track, sending
-a message — ultimately boils down to operations on numbers. When we think about
+a message --- ultimately boils down to operations on numbers. When we think about
 the number five, we might write `5`, or `V`, or `|||||`, but they all represent
 the same thing. You already saw in Chapter 9 that the character `'5'` is actually
 stored as the ASCII code `53`. There are many ways to represent a number, and in
@@ -45,13 +45,13 @@ Each position represents a power of 10:
 
 A number is divisible by 10 when its last digit is `0`. You can tell if a number
 is divisible by 2 by checking whether its last digit is even. Divisibility by 8
-is trickier — you have to check the last three digits. These rules come directly
+is trickier --- you have to check the last three digits. These rules come directly
 from how place values work.
 
 ### Binary (Base 2)
 
 It is often said that computers think in 1s and 0s. That is not entirely
-accurate, but at the lowest level, data is stored in **bits** — each one either
+accurate, but at the lowest level, data is stored in **bits** --- each one either
 `0` or `1`. Binary is base 2, so each position represents a power of 2:
 
 ```
@@ -74,7 +74,7 @@ Decimal:  0   1   2   3   4   5   6   7   8
 Binary:   0   1  10  11 100 101 110 111 1000
 ```
 
-In binary, you can tell if a number is divisible by 2 by checking the last bit —
+In binary, you can tell if a number is divisible by 2 by checking the last bit ---
 if it is `0`, the number is even. Divisible by 8? Check the last three bits. But
 divisibility by 10 is no longer obvious at a glance.
 
@@ -86,9 +86,9 @@ system makes certain things easy and others hard.
 
 ### Hexadecimal (Base 16)
 
-Binary numbers get long quickly. The number `255` is `11111111` in binary — eight
+Binary numbers get long quickly. The number `255` is `11111111` in binary --- eight
 digits for what decimal handles in three. **Hexadecimal** (hex) uses sixteen
-digits: `0`–`9` and `A`–`F` (where `A` = 10, `B` = 11, ... `F` = 15). Each hex
+digits: `0`--`9` and `A`--`F` (where `A` = 10, `B` = 11, ... `F` = 15). Each hex
 digit represents exactly four bits:
 
 ```
@@ -102,7 +102,7 @@ used frequently for colors, memory addresses, and bit masks.
 
 ### Octal (Base 8)
 
-**Octal** uses eight digits: `0`–`7`. Each octal digit represents exactly three
+**Octal** uses eight digits: `0`--`7`. Each octal digit represents exactly three
 bits:
 
 ```
@@ -134,7 +134,7 @@ int main() {
 
 C++ lets you write integer literals in binary, hexadecimal, and octal using
 prefixes. You first used integer literals in Chapter 2 when you initialized
-variables like `int x = 42;` — that `42` is a decimal literal.
+variables like `int x = 42;` --- that `42` is a decimal literal.
 
 ```cpp
 int dec = 42;         // decimal (no prefix)
@@ -147,7 +147,7 @@ All four variables hold exactly the same value: `42`. The prefix only affects ho
 you write the number in your source code, not how it is stored.
 
 ::: {.tip}
-**Tip:** Be careful with leading zeros. `052` is **not** decimal `52` — it is
+**Tip:** Be careful with leading zeros. `052` is **not** decimal `52` --- it is
 octal `52`, which equals decimal `42`. This is a common source of confusion. If
 you want decimal 52, write `52` without a leading zero.
 :::
@@ -163,7 +163,7 @@ int bits       = 0b1010'1100;      // group binary by nibbles (4 bits)
 int color      = 0xFF'80'00;       // group hex by byte
 ```
 
-The separator has no effect on the value — the compiler ignores it completely.
+The separator has no effect on the value --- the compiler ignores it completely.
 
 ### Try It: Same Value, Different Spellings
 
@@ -213,7 +213,7 @@ std::println("Octal:   {:#o}", val);   // 052
 ::: {.tip}
 **Tip:** The format specifiers `{:b}`, `{:x}`, and `{:o}` display the value in a
 different base, but they do not change the value itself. The variable still holds
-the same number — you are just looking at it from a different angle.
+the same number --- you are just looking at it from a different angle.
 :::
 
 ### Try It: Number Viewer
@@ -238,7 +238,7 @@ int main() {
 
 ## 4. Strings and Numbers
 
-Programs frequently need to convert between strings and numbers — reading user
+Programs frequently need to convert between strings and numbers --- reading user
 input, parsing files, or displaying results. C++ provides several functions for
 this, each with different strengths.
 When you see `"52"` and `52` they may appear to be the same number, but to C++, the former is a `std::string` and not a number at all while the latter is an integer number.
@@ -321,7 +321,7 @@ long d = std::stol("7C1", nullptr, 16);    // hex -> 1985
 
 ::: {.tip}
 **Tip:** Pass base `0` and `std::stoi` will auto-detect the base from the
-prefix — `0x` for hex, `0b` for binary, and a leading `0` for octal:
+prefix --- `0x` for hex, `0b` for binary, and a leading `0` for octal:
 
 ```
 std::stoi("0x2A", nullptr, 0);      // hex -> 42
@@ -345,7 +345,7 @@ double d = std::stod("2.71828");    // 2.71828
 double e = std::stod("1.5e3");      // 1500.0 (scientific notation)
 ```
 
-These follow the same pattern as the integer functions — they skip leading
+These follow the same pattern as the integer functions --- they skip leading
 whitespace, stop at the first character that doesn't fit the number format, and
 throw the same exceptions for bad input.
 
@@ -369,7 +369,7 @@ std::string h = std::format("{:#x}", 255);     // "0xff"
 ### Manual Place-Value Math
 
 You can also convert a number from one base to another by hand using
-place-value arithmetic — no library functions needed. To convert from another
+place-value arithmetic --- no library functions needed. To convert from another
 base to decimal, multiply each digit by its place value and add:
 
 ```
@@ -385,7 +385,7 @@ Binary "101010" to decimal:
   1×32 + 0×16 + 1×8 + 0×4 + 1×2 + 0×1 = 42
 ```
 
-You can write a loop to do this programmatically using Horner's method —
+You can write a loop to do this programmatically using Horner's method ---
 process each digit left to right, multiplying the running total by the base
 before adding the next digit:
 
@@ -447,7 +447,7 @@ int main() {
 
 So far we have only talked about positive numbers. But how does the computer
 represent negative numbers? You can't just put a minus sign in front of a binary
-number — there are only 1s and 0s.
+number --- there are only 1s and 0s.
 
 ### One's Complement (and Why We Don't Use It)
 
@@ -496,11 +496,11 @@ Now there is only one zero:
 In two's complement, the highest bit (the **sign bit**) tells you whether the
 number is negative. For an 8-bit signed integer:
 
-- `0xxx xxxx` — positive (0 to 127)
-- `1xxx xxxx` — negative (-128 to -1)
+- `0xxx xxxx` --- positive (0 to 127)
+- `1xxx xxxx` --- negative (-128 to -1)
 
 This gives 8-bit signed integers a range of **-128 to 127**. Notice that there is
-one more negative value than positive — that's because zero takes one of the
+one more negative value than positive --- that's because zero takes one of the
 "positive" slots.
 
 ::: {.tip}
@@ -513,7 +513,7 @@ complement representation.
 
 The beauty of two's complement is that addition and subtraction **just work**
 with the same hardware used for unsigned numbers. The CPU does not need separate
-circuitry for signed math — it uses the same adder for both.
+circuitry for signed math --- it uses the same adder for both.
 
 ### Try It: Seeing Two's Complement
 
@@ -548,14 +548,14 @@ Output:
 ## 6. Integer Sizes and Ranges
 
 You saw that an 8-bit signed integer can hold values from -128 to 127. But
-`int` is not 8 bits — so how big is it, and what range can it hold?
+`int` is not 8 bits --- so how big is it, and what range can it hold?
 
 ### Bytes
 
 A group of 8 bits is called a **byte**, and it is the basic unit of measurement
 for computer memory. When you buy a computer with 16 GB of RAM, you are buying
 roughly 16 billion bytes of memory. More precisely, 1 GB (gigabyte) is 2^30^
-bytes, which equals 1,073,741,824 — just over a billion. So 16 GB is
+bytes, which equals 1,073,741,824 --- just over a billion. So 16 GB is
 17,179,869,184 bytes. Close enough to 16 billion for casual conversation, but
 the difference matters when you are counting precisely.
 
@@ -740,7 +740,7 @@ Let's add `42 + 15` in 8-bit binary:
 To subtract, you negate the second number (using two's complement) and add.
 Let's compute `42 - 15`:
 
-Step 1 — find `-15` using two's complement:
+Step 1 --- find `-15` using two's complement:
 
 ```
   15 = 0000 1111
@@ -750,7 +750,7 @@ Step 1 — find `-15` using two's complement:
  -15 = 1111 0001
 ```
 
-Step 2 — add `42 + (-15)`:
+Step 2 --- add `42 + (-15)`:
 
 ```
     0010 1010   (42)
@@ -767,7 +767,7 @@ automatically.
 
 Let's also try a negative result: `15 - 42`:
 
-Step 1 — find `-42`:
+Step 1 --- find `-42`:
 
 ```
   42 = 0010 1010
@@ -777,7 +777,7 @@ Step 1 — find `-42`:
  -42 = 1101 0110
 ```
 
-Step 2 — add `15 + (-42)`:
+Step 2 --- add `15 + (-42)`:
 
 ```
     0000 1111   (15)
@@ -792,7 +792,7 @@ bits (`0001 1010`), add 1 (`0001 1011` = 27), so the answer is `-27`. Perfecto.
 ::: {.tip}
 **Tip:** Overflow can happen when the result is too large (or too small) for the
 number of bits. Adding two large positive numbers can wrap around to a negative
-value. In C++, signed integer overflow is **undefined behavior** — the compiler
+value. In C++, signed integer overflow is **undefined behavior** --- the compiler
 is free to do anything. Be careful with arithmetic near the limits of a type.
 :::
 
@@ -823,7 +823,7 @@ int main() {
 ## 8. Shift Operators
 
 The shift operators `<<` and `>>` move bits left or right by a specified number
-of positions. You first saw `<<` and `>>` used for stream I/O — here we are
+of positions. You first saw `<<` and `>>` used for stream I/O --- here we are
 talking about their original purpose as bitwise operators. For a deeper look at
 all the bitwise operators, see the Operators chapter.
 
@@ -878,7 +878,7 @@ int div8      = y >> 3;   // 5   (40 / 8)
 
 ### What About Odd Numbers?
 
-When you right-shift an odd number, the lowest bit is lost — just like integer
+When you right-shift an odd number, the lowest bit is lost --- just like integer
 division discards the remainder:
 
 ```cpp
@@ -904,7 +904,7 @@ flags >>= 2;   // flags is now 4   (16 shifted right 2)
 ::: {.tip}
 **Tip:** Modern compilers optimize multiplication and division by powers of two
 into shift operations automatically. Write `x * 4` rather than `x << 2` unless
-you are doing actual bit manipulation — it is clearer, and the compiler will
+you are doing actual bit manipulation --- it is clearer, and the compiler will
 generate the same code.
 :::
 
@@ -943,7 +943,7 @@ Here are the key takeaways from this chapter:
 - **Converting between strings and numbers** is straightforward with `std::stoi`,
   `std::stod`, and `std::to_string`. The `pos` parameter tells you where
   parsing stopped, and the base parameter lets you parse hex, binary, and octal.
-- **A byte is 8 bits**, and integer types come in different sizes — from 1-byte
+- **A byte is 8 bits**, and integer types come in different sizes --- from 1-byte
   `char` to 8-byte `long long`. The number of bits determines the range of
   values a type can hold.
 - **Two's complement** is how computers represent negative integers. It
@@ -955,7 +955,7 @@ Here are the key takeaways from this chapter:
   and dividing by powers of two.
 
 A number can wear many different outfits, but underneath, es el mismo numero.
-No te preocupes — you have got this. Nos vemos en el proximo capitulo!
+No te preocupes --- you have got this. Nos vemos en el proximo capitulo!
 
 ## Exercises
 
@@ -1014,7 +1014,7 @@ No te preocupes — you have got this. Nos vemos en el proximo capitulo!
     ```
 
 9. Write a program that reads a hexadecimal color code (like `"FF8000"`) from the
-   user, converts it to its red, green, and blue components (each 0–255), and
+   user, converts it to its red, green, and blue components (each 0--255), and
    prints each component in decimal and binary. Use `std::stoi` with the base
    parameter and `substr` to extract each pair of hex digits.
 

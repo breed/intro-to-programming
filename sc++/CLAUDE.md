@@ -31,14 +31,14 @@ No previous programming experience is assumed.
 
 - Use Pandoc markdown
 - Use correct grammar and capitalizations
-- All callouts use `::: {.tip}` as the div class — `callout.lua` only handles `.tip`
+- All callouts use `::: {.tip}` as the div class --- `callout.lua` only handles `.tip`
 - Differentiate callout types with a bold label on the first line inside the div:
     - `**Tip:**` for idioms and best practices
     - `**Trap:**` for common mistakes
     - `**Wut:**` for unexpected or counterintuitive rules
-- Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` — do not use `wrapfigure`
+- Callouts are rendered as full-width `tcolorbox` boxes via `callout.lua` --- do not use `wrapfigure`
 - Keep the tone professional but light
-- Preserve emojis and text emojis (e.g., `:'(`) in the text — do not remove them
+- Preserve emojis and text emojis (e.g., `:'(`) in the text --- do not remove them
 - Refer to the reader as `you`
 - do not wrap sentences in the markdown. every sentence gets its own line
 - the first time a fuction or operator is mentioned show it's signature
@@ -58,7 +58,7 @@ No previous programming experience is assumed.
 - place `\index{term}` at the primary introduction/definition of a term, not inside code blocks
 - use `\index{parent!child}` for sub-entries (e.g., `\index{pointer!arithmetic}`)
 - in `\index{}`, escape double quotes by doubling them (e.g., `\index{extern ""C""}`)
-- `\printindex` goes only in ch14.md (the last chapter) — do not add it to other chapters
+- `\printindex` goes only in ch14.md (the last chapter) --- do not add it to other chapters
 
 ## 90s References
 
