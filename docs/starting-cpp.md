@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Starting C++"
+title: "Gorgo Starting C++"
 nav_order: 2
 has_children: true
 has_toc: false
 ---
 
-# Starting C++
+# Gorgo Starting C++
 
 <div style="float: right; margin: 0 0 1rem 1.5rem; max-width: 200px;">
   <img src="{{ '/images/gorgo-with-badge.png' | relative_url }}" alt="Gorgo, Queen of Sparta, holding a C++ book" style="width: 100%;">

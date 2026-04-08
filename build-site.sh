@@ -264,10 +264,10 @@ build_lectures() {
     } > "$index_dest"
 }
 
-build_book sc++  starting-cpp   "Starting C++"          "sc++"
-build_lectures sc++/lectures starting-cpp/lectures "Starting C++"
-build_book cc++  continuing-cpp "Continuing C++"        "cc++"
-build_book c4c++ c-for-cpp      "C for C++ Programmers" "c4c++"
+build_book sc++  starting-cpp   "Gorgo Starting C++"          "sc++"
+build_lectures sc++/lectures starting-cpp/lectures "Gorgo Starting C++"
+build_book cc++  continuing-cpp "Gorgo Continuing C++"        "cc++"
+build_book c4c++ c-for-cpp      "Gorgo C for C++ Programmers" "c4c++"
 
 # extras
 for name in operators numbers; do
