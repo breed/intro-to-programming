@@ -170,32 +170,30 @@ auto b = std::move(a);
 ]
 
 ---
-# Try It --- Full Example
+# Try It --- Shared Ownership in Action
 .lc[
 ```cpp
-class Song {
-public:
-    Song(const std::string &t)
-        : title(t) {
-        std::cout << "on: "
-                  << title << "\n";
-    }
-    ~Song() {
-        std::cout << "off: "
-                  << title << "\n";
-    }
-    std::string title;
-};
+std::shared_ptr<Song> s1;
+{
+    auto s2 = std::make_shared<Song>(
+        "Under the Bridge");
+    s1 = s2;
+    std::cout << s1.use_count();
+    // 2
+}
+// s2 destroyed, Song lives on
+std::cout << s1.use_count();
+// 1
+s1->print();
+// end of outer scope:
+// s1 destroyed, Song finally freed
 ```
 ]
 .rc[
-Walk through scopes carefully:
-
-- `unique_ptr` frees when it leaves the scope
-- `shared_ptr` frees when the last one leaves
-- Destructor output tells you exactly when
-
-Full program in lecture18+19.md.
+- `s2` in the inner scope; `s1` in the outer
+- `s1 = s2` makes both share the same `Song`
+- When `s2` goes out of scope, the Song does **not** die --- `s1` still holds it
+- Only when `s1` is destroyed does the Song's destructor run
 ]
 
 ---
