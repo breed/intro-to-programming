@@ -171,10 +171,9 @@ public:
 ---
 # Rule of Zero
 
-**If your class does not manage a resource directly, do not write any of the five. Let the compiler generate them.**
+**If your class does not manage a resource directly, do not write any of the five.**
 
-Rewrite `Lyric` with `std::string`:
-
+.lc[
 ```cpp
 class Lyric {
     std::string text;
@@ -186,8 +185,13 @@ public:
     }
 };
 ```
+]
+.rc[
+Rewrite `Lyric` with `std::string`:
 
-Zero special members. `std::string` already knows how to copy, move, and clean up.
+- **Zero** special members needed
+- `std::string` already knows how to copy, move, and clean up
+]
 
 ---
 # Rule of Zero Tip
