@@ -1,4 +1,4 @@
-# 80s References Used in C for C++ Programmers
+# 80s References Used in Gorgo C for C++ Programmers
 
 Songs, movies, and cultural references appearing in the text, organized by chapter.
 

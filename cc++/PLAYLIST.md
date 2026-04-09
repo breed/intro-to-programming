@@ -1,4 +1,4 @@
-# 2000s References Used in Continuing C++
+# 2000s References Used in Gorgo Continuing C++
 
 Songs, movies, and cultural references appearing in the text, organized by chapter.
 

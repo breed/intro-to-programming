@@ -478,7 +478,7 @@ E. Ben got this wrong
 
 ## 7. Assignment / Reading (5 min)
 
-- **Read:** chapter 9 of *Starting C++* (I/O streams --- string streams, file streams, stream manipulators)
+- **Read:** chapter 9 of *Gorgo Starting C++* (I/O streams --- string streams, file streams, stream manipulators)
 - **Do:** all 9 exercises at the end of chapter 9
 - **Bring:** a plain-text file with 3-5 lines for next lecture's file-reading demo
 

@@ -550,7 +550,7 @@ E. Ben got this wrong
 
 ## 10. Assignment / Reading (2 min)
 
-- **Read:** chapter 8 of *Starting C++*, sections on `std::array` and `std::vector` basics (through size/capacity/empty/clear)
+- **Read:** chapter 8 of *Gorgo Starting C++*, sections on `std::array` and `std::vector` basics (through size/capacity/empty/clear)
 - **Do:** chapter 8 exercises 1, 2, 3, 5, 8, 10 (container basics, copy costs, clear vs capacity)
 - **Bring:** questions about bit manipulation --- there will be time to dig deeper if needed
 

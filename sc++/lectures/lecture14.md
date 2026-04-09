@@ -246,7 +246,7 @@ E. Ben got this wrong
 
 ## 10. Assignment / Reading (2 min)
 
-- **Read:** chapter 11 of *Starting C++* (Exceptions, `std::expected`)
+- **Read:** chapter 11 of *Gorgo Starting C++* (Exceptions, `std::expected`)
 - **Do:** all 9 exercises at the end of chapter 11
 - **Bring:** any program from this term that could benefit from `std::format` --- we may use it as an example
 

@@ -298,7 +298,7 @@ E. 0
 
 This is the final lecture of the course.
 
-- **Read (optional):** chapter 15 of *Starting C++* as reference material. It covers `exit()`, `extern "C"`, casting (`static_cast`, `dynamic_cast`, `const_cast`, `reinterpret_cast`), `<chrono>` for time, and `<random>` for random numbers. None of this is required for the final exam, but you will see all of it in real C++ code.
+- **Read (optional):** chapter 15 of *Gorgo Starting C++* as reference material. It covers `exit()`, `extern "C"`, casting (`static_cast`, `dynamic_cast`, `const_cast`, `reinterpret_cast`), `<chrono>` for time, and `<random>` for random numbers. None of this is required for the final exam, but you will see all of it in real C++ code.
 - Review all prior chapters for the final exam.
 - Bring your end-of-term questions --- we will hold an open Q&A session next class period.
 

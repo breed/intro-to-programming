@@ -1,9 +1,9 @@
 # Project Description
 
-Continuing C++ book for programming which continues from the point that `Starting C++` left off.
+Gorgo Continuing C++ book for programming which continues from the point that `Gorgo Starting C++` left off.
 This book covers all the topics that a good C++ programmer uses in daily life in industry.
 
-## Starting C++
+## Gorgo Starting C++
 
 - `Startign C++` is the previous book
 - it can be found in `../sc++`

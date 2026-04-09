@@ -554,7 +554,7 @@ E. Ben got this wrong
 
 ## 7. Assignment / Reading (1 min)
 
-- **Read:** chapter 7 of *Starting C++*, sections on bases, integer literals, printing in other bases, and string-to-number conversions (first half)
+- **Read:** chapter 7 of *Gorgo Starting C++*, sections on bases, integer literals, printing in other bases, and string-to-number conversions (first half)
 - **Do:** chapter 7 exercises 1, 2, 7 (base conversions, literals, octal trap)
 - **Bring:** a guess at how `std::stoi("42abc")` behaves
 

@@ -300,7 +300,7 @@ E. Ben got this wrong
 
 ## 12. Assignment / Reading (1 min)
 
-- **Read:** chapter 5 of *Starting C++*, **sections on `if` and `while` only** (we cover `do-while`/`for`/`switch` next week)
+- **Read:** chapter 5 of *Gorgo Starting C++*, **sections on `if` and `while` only** (we cover `do-while`/`for`/`switch` next week)
 - **Do:** chapter 5 exercises 1, 5, 7 (decision-making and while loops)
 - **Bring:** a program that reads a number and classifies it even/odd and positive/negative/zero
 

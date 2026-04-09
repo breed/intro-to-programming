@@ -567,7 +567,7 @@ E. Ben got this wrong
 
 ## 9. Assignment / Reading (3 min)
 
-- **Read:** chapter 13 of *Starting C++*, sections on stack vs heap, pointers, `new`/`delete`, memory leaks, and intro to `std::unique_ptr` (first half)
+- **Read:** chapter 13 of *Gorgo Starting C++*, sections on stack vs heap, pointers, `new`/`delete`, memory leaks, and intro to `std::unique_ptr` (first half)
 - **Do:** chapter 13 exercises 1, 3, 9, 10 (stack/heap, new/delete, pointer basics)
 - **Bring:** a guess at the difference between `new` and `delete`
 

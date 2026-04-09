@@ -305,7 +305,7 @@ E. Ben got this wrong
 
 ## 10. Assignment / Reading (2 min)
 
-- **Read:** chapter 12 of *Starting C++*, sections on struct-to-class, access specifiers, constructors, and destructors (first half)
+- **Read:** chapter 12 of *Gorgo Starting C++*, sections on struct-to-class, access specifiers, constructors, and destructors (first half)
 - **Do:** chapter 12 exercises 1, 2, 4, 5, 10, 11, 12 (struct vs class, constructor ordering, initializer lists, explicit)
 - **Bring:** a struct from a previous lecture that you would like to turn into a class
 

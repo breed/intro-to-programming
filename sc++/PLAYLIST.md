@@ -1,4 +1,4 @@
-# 90s References Used in Starting C++
+# 90s References Used in Gorgo Starting C++
 
 Songs, movies, and cultural references appearing in the text, organized by chapter.
 
