@@ -1,6 +1,6 @@
 # Project Description
 
-Starting C++ book for programming just starting C++ entitled `Starting C++`
+Gorgo Starting C++ book for programming just starting C++ entitled `Gorgo Starting C++`
 No previous programming experience is assumed.
 
 ## Chapters

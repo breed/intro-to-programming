@@ -500,7 +500,7 @@ E. Ben got this wrong
 
 ## 6. Assignment / Reading (2 min)
 
-- **Read:** chapter 14 of *Starting C++* (Special Members and Friends)
+- **Read:** chapter 14 of *Gorgo Starting C++* (Special Members and Friends)
 - **Do:** all 9 exercises at the end of chapter 14
 - **Bring:** your `unique_ptr`/`shared_ptr` questions --- we build on these concepts next lecture
 

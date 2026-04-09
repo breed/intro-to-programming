@@ -299,7 +299,7 @@ E. Ben got this wrong
 
 ## 10. Assignment / Reading (1 min)
 
-- **Read:** chapter 3 of *Starting C++*
+- **Read:** chapter 3 of *Gorgo Starting C++*
 - **Do:** all 9 exercises at the end of chapter 3
 - **Bring:** a working program that declares a `struct` and prints it --- we will reuse it next lecture
 

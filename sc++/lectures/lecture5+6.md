@@ -222,7 +222,7 @@ E. Ben got this wrong
 
 ## 6. Assignment / Reading (3 min)
 
-- **Read:** chapter 5 of *Starting C++*, sections on `do-while`, `break`/`continue`, `for`, and `switch` (the rest of the chapter)
+- **Read:** chapter 5 of *Gorgo Starting C++*, sections on `do-while`, `break`/`continue`, `for`, and `switch` (the rest of the chapter)
 - **Do:** chapter 5 exercises 2, 3, 4, 6, 8 (loop control, `for`, `switch`, fall-through, day-of-week program)
 - **Bring:** questions about today's guessing game if anything is unclear
 
@@ -530,7 +530,7 @@ E. Ben got this wrong
 
 ## 7. Assignment / Reading (3 min)
 
-- **Read:** chapter 6 of *Starting C++*, sections on declarations, parameters, pass-by-value, pass-by-reference, `const` parameters, and default parameters (first half of the chapter)
+- **Read:** chapter 6 of *Gorgo Starting C++*, sections on declarations, parameters, pass-by-value, pass-by-reference, `const` parameters, and default parameters (first half of the chapter)
 - **Do:** chapter 6 exercises 1, 2, 6, 11 (pass-by semantics, default params, ODR rule)
 - **Bring:** a `for` loop that surprises you if anything from today is unclear
 

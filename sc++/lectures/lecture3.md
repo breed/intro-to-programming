@@ -302,7 +302,7 @@ E. Ben got this wrong
 
 ## 13. Assignment / Reading (1 min)
 
-- **Read:** chapter 4 of *Starting C++*
+- **Read:** chapter 4 of *Gorgo Starting C++*
 - **Do:** all 9 exercises at the end of chapter 4
 - **Bring:** next time we will build expressions from strings and numbers together
 

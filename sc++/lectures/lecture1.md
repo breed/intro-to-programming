@@ -301,7 +301,7 @@ E. 5 --- Ben got this wrong
 
 ## 11. Assignment / Reading (1 min)
 
-- **Read:** chapter 1 of *Starting C++*
+- **Read:** chapter 1 of *Gorgo Starting C++*
 - **Do:** exercises 1-7 at the end of chapter 1
 - **Bring:** a working `hello.cpp` to next lecture --- you will be modifying it
 

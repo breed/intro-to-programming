@@ -81,7 +81,7 @@ Use `sc++/lectures/lecture1/lecture1.html` as the canonical template. The struct
 The last slide of each lecture assigns the reading and exercises for the **next** lecture (not the current one), so students come prepared. Use the lecture-to-chapter mapping above to find the next chapter, then reference it like this:
 
 ```
-**Read:** chapter N of *Starting C++*. **Do:** exercises X, Y, Z.
+**Read:** chapter N of *Gorgo Starting C++*. **Do:** exercises X, Y, Z.
 ```
 
 - `Read:` is the chapter the next lecture covers

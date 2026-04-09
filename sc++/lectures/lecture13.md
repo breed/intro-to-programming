@@ -317,7 +317,7 @@ E. Ben got this wrong
 
 ## 11. Assignment / Reading (2 min)
 
-- **Read:** chapter 10 of *Starting C++* (`std::format` and `std::print`)
+- **Read:** chapter 10 of *Gorgo Starting C++* (`std::format` and `std::print`)
 - **Do:** all 6 exercises at the end of chapter 10
 - **Bring:** any file that you want to process programmatically next week
 
