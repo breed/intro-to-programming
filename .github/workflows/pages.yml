@@ -31,6 +31,10 @@ jobs:
             texlive-fonts-recommended \
             texlive-fonts-extra \
             texlive-xetex \
+            texlive-luatex \
+            fonts-noto-cjk \
+            fonts-noto-color-emoji \
+            fonts-dejavu \
             lmodern
 
       - name: Build chapter HTML and PDFs

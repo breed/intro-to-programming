@@ -3,6 +3,8 @@ title: "Gorgo Starting C++"
 toc: true
 toc-depth: 2
 colorlinks: true
+mainfont: "Noto Serif CJK JP"
+monofont: "Noto Sans Mono CJK JP"
 header-includes:
   - \usepackage[most]{tcolorbox}
   - \usepackage{makeidx}
@@ -10,4 +12,13 @@ header-includes:
   - \usepackage{titling}
   - \pretitle{\begin{center}\includegraphics[width=0.35\textwidth]{../images/gorgo-with-badge.png}\par\vspace{1em}\LARGE}
   - \posttitle{\par\end{center}\vskip 0.5em}
+  - |
+    ```{=latex}
+    \directlua{luaotfload.add_fallback("unicode_fallback", {
+      "DejaVuSerif:mode=harf;",
+      "NotoColorEmoji:mode=harf;",
+    })}
+    \setmainfont{Noto Serif CJK JP}[RawFeature={fallback=unicode_fallback}]
+    \setmonofont{Noto Sans Mono CJK JP}[RawFeature={fallback=unicode_fallback}]
+    ```
 ---
