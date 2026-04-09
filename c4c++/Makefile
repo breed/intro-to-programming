@@ -1,6 +1,6 @@
 DATE := $(shell git log -1 --format="%ad" --date=format:"%B %d, %Y")
 FILTER := --lua-filter=callout.lua
-PANDOC_OPTS := $(FILTER) --pdf-engine=latexmk --pdf-engine-opt=-lualatex --citeproc --bibliography=references.bib -M subtitle="$(DATE)" -V geometry:margin=1in
+PANDOC_OPTS := $(FILTER) --pdf-engine=latexmk --pdf-engine-opt=-lualatex --citeproc --bibliography=references.bib --csl=ieee.csl -M subtitle="$(DATE)" -V geometry:margin=1in
 
 PDFS := c4c++.pdf c4c++-answers.pdf
 
