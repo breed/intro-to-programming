@@ -554,6 +554,22 @@ bool equal_ignore_case(const std::string &x, const std::string &y)
 
 `std::string` has no built-in case-insensitive compare; you build it yourself like this.
 
+**13. What does `std::string s = "café"; s.size();` report?**
+
+It prints:
+
+```
+café 5
+```
+
+The string has 4 visible characters but takes 5 bytes in UTF-8.
+`c`, `a`, and `f` are ASCII and take one byte each (3 bytes).
+`é` is Unicode code point U+00E9, which UTF-8 encodes as the two bytes `0xC3 0xA9` (2 bytes).
+3 + 2 = 5.
+
+`std::string::size()` always reports bytes, not characters.
+For a pure-ASCII string the two would be the same, but as soon as a non-ASCII character shows up, the byte count exceeds the human "character" count.
+
 # Chapter 4: Expressions
 
 **1. What is the difference between `7 / 2` and `7.0 / 2` in C++? Why does it matter?**
