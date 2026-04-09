@@ -36,7 +36,12 @@ a collection of programming texts --- focused on C++ for the moment --- suitable
 - operators
 - c4c++ (C for C++ programmers)
 
-## formatting
+## implementing github issues
+
+when committing a change based on an issue (or set of issues)
+
+- chose the contributor that contributed the most to the text to be the author of the change
+- list everyone else who contributed to the issues and text developement as coauthors
 
 ## validating chapters
 
