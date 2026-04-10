@@ -50,7 +50,12 @@ PANDOC_OPTS := $(FILTER) \
                -V geometry:"outer=0.7in" \
                -V fontsize=11pt
 
-all: lulu-sc++c.pdf
+# Lulu Executive wraparound cover (15.123in x 10.25in with bleed).
+COVER_IMG := images/c++c-gorgo-cover.png
+
+all: lulu-sc++c.pdf sc++c/lulu-cover.pdf
+
+# --- Interior ---
 
 .lulu-ch15.md: sc++/ch15.md
 	sed '/\\printindex/d' $< > $@
@@ -70,8 +75,22 @@ $(LULU_IMG_DIR)/%.png: images/%.png | $(LULU_IMG_DIR) $(LULU_IMG_STUB)
 lulu-sc++c.pdf: $(SRCS) sc++/callout.lua c4c++/references.bib c4c++/ieee.csl $(LULU_IMG_PNGS)
 	pandoc $(SRCS) -o $@ $(PANDOC_OPTS)
 
+# --- Cover ---
+
+sc++c/.commit-date.tex: FORCE
+	@printf '\\def\\CommitDate{%s}\n' '$(DATE)' > $@
+
+sc++c/lulu-cover.pdf: sc++c/lulu-cover.tex sc++c/.commit-date.tex $(COVER_IMG)
+	cd sc++c && latexmk -lualatex -interaction=nonstopmode lulu-cover.tex
+	cd sc++c && latexmk -c lulu-cover.tex
+
+# --- Clean ---
+
 clean:
 	rm -f lulu-sc++c.pdf .lulu-ch15.md .lulu-sc-author.md .lulu-c4-author.md *.idx *.ilg *.ind
 	rm -rf .lulu-img
+	-cd sc++c && latexmk -C lulu-cover.tex
+	rm -f sc++c/.commit-date.tex sc++c/lulu-cover.aux sc++c/lulu-cover.log sc++c/lulu-cover.fls sc++c/lulu-cover.fdb_latexmk
 
-.PHONY: all clean
+.PHONY: all clean FORCE
+FORCE:
