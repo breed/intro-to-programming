@@ -17,8 +17,11 @@ local tcb = "colback=black!5, colframe=black!20, " ..
 -- width of the icon column; the rest goes to the text column. The
 -- lower separated=false option suppresses tcolorbox's default thin
 -- rule between the upper (icon) and lower (text) segments.
+-- sidebyside align=top seam aligns the icon's top with the text
+-- baseline area (accounting for box padding) so the icon sits level
+-- with the first line of text rather than floating above it.
 local tcb_icon = tcb ..
-  ", sidebyside, sidebyside align=top, sidebyside gap=8pt, " ..
+  ", sidebyside, sidebyside align=top seam, sidebyside gap=8pt, " ..
   "lefthand width=0.45in, lower separated=false"
 
 local html_style = "background-color: #f5f5f5; border: 1px solid #ccc; " ..
@@ -51,7 +54,7 @@ function Div(el)
       blocks:insert(pandoc.RawBlock("latex",
         "\\begin{tcolorbox}[" .. tcb_icon .. "]"))
       blocks:insert(pandoc.RawBlock("latex",
-        "\\includegraphics[width=\\linewidth]{../images/"
+        "\\vspace*{0.5\\baselineskip}\\includegraphics[width=\\linewidth]{../images/"
         .. kind .. "-callout.png}"))
       blocks:insert(pandoc.RawBlock("latex", "\\tcblower"))
       for _, cb in ipairs(el.content) do
