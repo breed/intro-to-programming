@@ -3,6 +3,7 @@ FILTER := --lua-filter=sc++/callout.lua
 
 FRONTMATTER := frontmatter-lulu.yaml
 
+SC_PART := lulu-part-sc.md
 SC_AUTHOR := sc++/author-intro.md
 SC_CHAPTERS_PRE15 := sc++/ch00.md sc++/ch01.md sc++/ch02.md sc++/ch03.md \
                      sc++/ch04.md sc++/ch05.md sc++/ch06.md sc++/ch07.md \
@@ -10,6 +11,7 @@ SC_CHAPTERS_PRE15 := sc++/ch00.md sc++/ch01.md sc++/ch02.md sc++/ch03.md \
                      sc++/ch12.md sc++/ch13.md sc++/ch14.md
 SC_CH15 := .lulu-ch15.md
 
+C4_PART := lulu-part-c4.md
 C4_AUTHOR := c4c++/author-intro.md
 C4_CHAPTERS := c4c++/ch00.md c4c++/ch01.md c4c++/ch02.md c4c++/ch03.md \
                c4c++/ch04.md c4c++/ch05.md c4c++/ch06.md c4c++/ch07.md \
@@ -18,8 +20,8 @@ C4_CHAPTERS := c4c++/ch00.md c4c++/ch01.md c4c++/ch02.md c4c++/ch03.md \
 C4_BIBL := c4c++/bibliography.md
 
 SRCS := $(FRONTMATTER) \
-        $(SC_AUTHOR) $(SC_CHAPTERS_PRE15) $(SC_CH15) \
-        $(C4_AUTHOR) $(C4_CHAPTERS) $(C4_BIBL)
+        $(SC_PART) $(SC_AUTHOR) $(SC_CHAPTERS_PRE15) $(SC_CH15) \
+        $(C4_PART) $(C4_AUTHOR) $(C4_CHAPTERS) $(C4_BIBL)
 
 PANDOC_OPTS := $(FILTER) \
                --pdf-engine=latexmk --pdf-engine-opt=-lualatex \
