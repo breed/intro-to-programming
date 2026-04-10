@@ -33,7 +33,7 @@ the template PDF is `lulu-cover-template.pdf`. descriptions of the parts and mea
 
 - front cover: use the `c++c-gorgo-cover.png` image (background color `#152844` matched to the cover panel). title is `Gorgo Starting C++ and C`. subtitle is the date of the last commit. no author name on the front.
 - spine: title centered, `Gorgo Book` at the base of the spine
-- back cover: a cheat sheet with tables from the sc++ and c4c++ books:
+- back cover: a cheetsheet with tables from the sc++ and c4c++ books:
     - printf format specifiers (c4c++ ch01)
     - bitwise operators (c4c++ ch04)
     - std::format specifiers (sc++ ch10)
