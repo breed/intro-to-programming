@@ -7,8 +7,8 @@ mainfont: "TeX Gyre Pagella"
 monofont: "JetBrains Mono"
 header-includes:
   - \usepackage[most]{tcolorbox}
-  - \usepackage{makeidx}
-  - \makeindex
+  - \usepackage{imakeidx}
+  - \makeindex[intoc]
   - \usepackage{titlesec}
   - \newcommand{\sectionbreak}{\clearpage}
   - \usepackage{graphicx}
