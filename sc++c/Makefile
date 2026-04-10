@@ -80,7 +80,7 @@ lulu-sc++c.pdf: $(SRCS) ../sc++/callout.lua ../c4c++/references.bib ../c4c++/iee
 # --- Cover ---
 
 $(COVER_IMG): $(COVER_BADGE)
-	convert "$<" -background '$(COVER_BG)' -alpha remove -alpha off "$@"
+	convert "$<" -fuzz 15% -fill '$(COVER_BG)' -opaque white "$@"
 
 .commit-date.tex: FORCE
 	@printf '\\def\\CommitDate{%s}\n' '$(DATE)' > $@
