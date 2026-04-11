@@ -18,7 +18,8 @@ nav_order: 1
   <img src="{{ '/images/mehc++book.png' | relative_url }}" alt="Meh C++ Book" style="width: 45%; max-width: 300px;">
 </div>
 
-There are lots of programming textbooks out there, but they're either mediocre, super advanced, or out of date.
+There are lots of programming textbooks out there, but often they're either mediocre, super advanced, or out of date.
+It's hard to find an excellent up-to-date textbook for the latest language versions that works well in our classes.
 We believe there will always be a niche for free programming textbooks that evolve with the languages.
 
 ## Books
