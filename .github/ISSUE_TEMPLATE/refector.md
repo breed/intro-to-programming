@@ -1,5 +1,5 @@
 ---
-name: Refector template
+name: Refector
 about: Reorganize or restructure text
 title: ''
 labels: refactor
