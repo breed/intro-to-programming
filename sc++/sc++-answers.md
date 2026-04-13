@@ -1266,7 +1266,35 @@ inline int double_it(int n) {
 The compiler produces a warning because `compute` is marked `[[nodiscard]]` and the return value of `compute(6, 7)` is discarded.
 The program still compiles, but the warning tells you that ignoring the result is almost certainly a bug.
 
-**13. Pass `Album` by value vs by `const &`.**
+**13. Which lines compile?**
+
+```cpp
+int a = 5;
+int &ref = a;            // (A) OK: lvalue reference binds to lvalue
+int &ref2 = 10;          // (B) ERROR: lvalue reference cannot bind to rvalue
+const int &cref = 10;    // (C) OK: const reference can bind to rvalue
+int &&rref = 10;         // (D) OK: rvalue reference binds to rvalue
+int &&rref2 = a;         // (E) ERROR: rvalue reference cannot bind to lvalue
+int &&rref3 = a + 1;     // (F) OK: a + 1 produces a temporary (rvalue)
+```
+
+- **(A)** compiles: a plain lvalue reference binds to an lvalue.
+- **(B)** does not compile: a non-const lvalue reference cannot bind to an rvalue (the literal `10`).
+- **(C)** compiles: a `const` reference can bind to both lvalues and rvalues.
+- **(D)** compiles: an rvalue reference binds to an rvalue.
+- **(E)** does not compile: an rvalue reference cannot bind to an lvalue (`a` has a name and a persistent address).
+- **(F)** compiles: `a + 1` is a temporary (rvalue), and the rvalue reference binds to it.
+
+**14. Think about it: Inside a function that takes `std::string &&s`, why do you need `std::move(s)` again?**
+
+Inside the function body, the parameter `s` is an **lvalue** --- it has a name and an address in memory.
+Even though `s` was *bound* to an rvalue by the caller, once it has a name, the language treats it as an lvalue.
+This is a safety feature: it prevents you from accidentally moving from a variable that might be used again later in the function.
+
+If you want to pass `s` to another function as an rvalue (to move from it), you must explicitly write `std::move(s)` to cast it back to an rvalue reference.
+Without `std::move(s)`, the other function would receive an lvalue reference and copy instead of move.
+
+**15. Pass `Album` by value vs by `const &`.**
 
 Both versions compile and print the same thing, but `print_album_ref(const Album &a)` is preferred for a struct like `Album`.
 
@@ -3155,6 +3183,64 @@ If it did, the `unique_ptr` would later run its own destructor and call `delete`
 The rule for raw pointers obtained via `.get()` is "look but do not delete": treat them as observers, never as owners.
 If a function genuinely needs to take ownership instead, hand it the `unique_ptr` itself with `std::move`, which transfers the ownership cleanly.
 
+**15. Think about it: What happens in memory when a `std::string` is moved?**
+
+A `std::string` typically stores three values on the stack: a pointer to a heap-allocated character buffer, the string's length, and its capacity.
+When you move a string, the move constructor copies those three stack values (the pointer, length, and capacity) from the source to the destination.
+It then sets the source's pointer to `nullptr` and its length and capacity to 0.
+
+No heap memory is allocated or freed.
+The destination now points to the same heap buffer the source used to own, and the source owns nothing.
+This is three pointer-sized assignments regardless of how long the string is --- constant time.
+
+A copy, by contrast, must allocate a new heap buffer of the same size and then copy every character from the source buffer into the new buffer.
+The time is proportional to the string's length.
+For a short string that is negligible, but for a string with millions of characters the difference between a pointer swap and a full memory copy is enormous.
+
+**16. What is wrong with `return std::move(v)`?**
+
+The function compiles and returns the correct result, but the explicit `std::move` defeats **copy elision** (also called return value optimization, or RVO).
+
+When a function returns a local variable, the compiler is allowed to construct the object directly in the caller's memory, skipping both the copy and the move entirely --- zero overhead.
+But `return std::move(v)` does not return a local variable; it returns the result of a `std::move` call, which the compiler cannot elide.
+The result is a guaranteed move instead of a potential elision.
+
+The fix is simply:
+
+```cpp
+std::vector<int> make_data() {
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    return v;
+}
+```
+
+**17. What does this print?**
+
+```cpp
+auto a = std::make_shared<std::string>("Killing Me Softly");
+std::cout << a.use_count() << std::endl;
+
+auto b = a;
+std::cout << a.use_count() << std::endl;
+
+auto c = std::move(a);
+std::cout << (a == nullptr) << std::endl;
+std::cout << b.use_count() << std::endl;
+```
+
+It prints:
+
+```
+1
+2
+1
+2
+```
+
+- After creating `a`, the reference count is 1.
+- After copying `a` to `b`, the reference count is 2.
+- After moving `a` to `c`, `a` is now `nullptr` (prints `1` for the comparison). The move transferred `a`'s ownership to `c` without changing the reference count, so `b.use_count()` is still 2 (shared between `b` and `c`).
+
 # Chapter 14: Special Members and Friends
 
 **1. Explain the difference between the Rule of Five and the Rule of Zero. Which one should you prefer and why?**
@@ -3472,6 +3558,56 @@ The cost is exactly the cost of copying instead of moving.
 For a vector of 10,000 `std::string`s, that is 10,000 heap allocations and 10,000 character-array copies on every reallocation.
 For a vector of `noexcept`-movable strings, it is 10,000 pointer swaps.
 This is why mature classes that own resources almost always mark their move operations `noexcept`.
+
+**13. What does this print?**
+
+```cpp
+Track a("Only Happy When It Rains");
+Track b = a;
+Track c = std::move(a);
+Track d = Track("Standing Outside a Broken Phone Booth");
+```
+
+Without copy elision on the last line:
+
+```
+ctor: Only Happy When It Rains
+copy: Only Happy When It Rains
+move: Only Happy When It Rains
+ctor: Standing Outside a Broken Phone Booth
+move: Standing Outside a Broken Phone Booth
+```
+
+- `Track a("Basket Case")` calls the regular constructor.
+- `Track b = a` calls the copy constructor because `a` is an lvalue.
+- `Track c = std::move(a)` calls the move constructor because `std::move(a)` casts `a` to an rvalue.
+- `Track("Standing Outside a Broken Phone Booth")` calls the regular constructor to create a temporary, then the move constructor fires to initialize `d` from that temporary.
+
+With copy elision (which modern compilers apply by default):
+
+```
+ctor: Only Happy When It Rains
+copy: Only Happy When It Rains
+move: Only Happy When It Rains
+ctor: Standing Outside a Broken Phone Booth
+```
+
+The compiler constructs `d` directly from the constructor arguments, skipping the move entirely.
+The last `Track("Standing Outside a Broken Phone Booth")` creates `d` in place --- no temporary, no move.
+
+**14. Think about it: Why does passing `unique_ptr` by value require `std::move`?**
+
+`std::unique_ptr` has a deleted copy constructor --- it cannot be copied.
+The only way to initialize the function parameter is by *moving* from the caller's `unique_ptr`.
+Since the caller's variable is an lvalue, you must write `std::move(ptr)` to cast it to an rvalue, enabling the move constructor.
+
+After the call, the caller's `unique_ptr` is `nullptr` --- it no longer owns the resource.
+The function now has sole ownership, and the resource will be destroyed when the function's parameter goes out of scope (or when the function explicitly moves it elsewhere).
+
+This pattern is useful because it makes ownership transfer **explicit and visible at the call site**.
+When you see `take_widget(std::move(widget))`, both the reader and the compiler know that `widget` is being given away.
+The caller cannot accidentally use `widget` after the call expecting it to still hold something --- it is obviously empty.
+This is much clearer than passing a raw pointer, where it is ambiguous whether the function takes ownership or just borrows the pointer.
 
 # Chapter 15: Odds and Ends
 

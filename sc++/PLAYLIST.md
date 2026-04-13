@@ -34,6 +34,9 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Semi-Charmed Life --- Third Eye Blind
 - Fly --- Sugar Ray
 - Intergalactic --- Beastie Boys
+- Lovefool --- The Cardigans (rvalue reference example)
+- 6 Underground --- Sneaker Pimps (rvalue reference example)
+- Steal My Sunshine --- Len (rvalue reference example)
 
 ## Chapter 7: Numbers
 - (none --- Spanish phrases only)
@@ -75,12 +78,17 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Nothing Compares 2 U --- Sinead O'Connor
 - Don't Speak --- No Doubt
 - Popular --- Nada Surf
+- Glycerine --- Bush (unique_ptr move example)
+- Ready to Go --- Republica (shared_ptr move example)
+- Killing Me Softly --- Fugees (shared_ptr exercise)
 
 ## Chapter 14: Special Members and Friends
 - Torn --- Natalie Imbruglia
 - Kiss from a Rose --- Seal
 - I'll Be There for You --- The Rembrandts
 - Vogue --- Madonna
+- Only Happy When It Rains --- Garbage (move constructor exercise)
+- Standing Outside a Broken Phone Booth --- Primitive Radio Gods (move constructor exercise)
 
 ## Chapter 15: Odds and Ends
 - La Copa de la Vida --- Ricky Martin
