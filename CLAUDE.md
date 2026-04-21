@@ -31,6 +31,11 @@ a collection of programming texts --- focused on C++ for the moment --- suitable
 - refer to the reader as `you`
 - do not wrap sentences in the markdown. every sentence gets its own line
 
+## code examples
+
+- opening `{` of a function goes on the same line as the function head (K&R style), including constructors with initializer lists and `requires`-constrained templates
+- this applies to all code examples across books, answer keys, and lecture notes --- the only exceptions are intentional bug demos and scope-limiting blocks (e.g. RAII lock guards)
+
 ## extra content
 
 - operators
