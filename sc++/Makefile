@@ -1,6 +1,7 @@
 DATE := $(shell git log -1 --format="%ad" --date=format:"%B %d, %Y")
 FILTER := --lua-filter=callout.lua
-PANDOC_OPTS := $(FILTER) --pdf-engine=latexmk --pdf-engine-opt=-lualatex --citeproc --bibliography=references.bib --csl=ieee.csl -M subtitle="$(DATE)" -V geometry:margin=1in
+PANDOC_OPTS_BASE := $(FILTER) --pdf-engine=latexmk --pdf-engine-opt=-lualatex --citeproc --bibliography=references.bib --csl=ieee.csl -M subtitle="$(DATE)" -V geometry:margin=1in
+PANDOC_OPTS := $(PANDOC_OPTS_BASE) --top-level-division=chapter -V documentclass=book
 
 PDFS := sc++.pdf sc++-answers.pdf
 
@@ -20,10 +21,13 @@ sc++.pdf: $(CHAPTERS) callout.lua
 	pandoc $(CHAPTERS) -o $@ $(PANDOC_OPTS)
 
 sc++-answers.pdf: sc++-answers.md callout.lua
-	pandoc $< -o $@ $(PANDOC_OPTS)
+	pandoc $< -o $@ $(PANDOC_OPTS_BASE)
 
 ch%.pdf: frontmatter.yaml ch%.md callout.lua
-	pandoc frontmatter.yaml ch$*.md -o $@ $(PANDOC_OPTS)
+	@NUM=$$(echo $* | sed 's/^0*//'); [ -z "$$NUM" ] && NUM=0; \
+	OFFSET=$$((NUM - 1)); \
+	{ printf '\\setcounter{chapter}{%d}\n\n' $$OFFSET; cat ch$*.md; } \
+	  | pandoc frontmatter.yaml - -o $@ $(PANDOC_OPTS)
 
 clean:
 	rm -f $(PDFS) $(CH_PDFS) *.idx *.ilg *.ind

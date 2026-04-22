@@ -1,6 +1,6 @@
 \newpage
 
-# Author Intro
+# Author Intro {.unnumbered}
 
 C was the first programming language i truly loved!
 i had taught myself BASIC and Z80 assembly, and later i learned Pascal and VAX assembly for college.

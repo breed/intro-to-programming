@@ -1,6 +1,7 @@
-\newpage
 
-# Appendix A: Build Systems and Tooling
+\appendix
+
+# Build Systems and Tooling
 
 \index{build system}
 

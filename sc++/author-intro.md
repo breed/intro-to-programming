@@ -1,6 +1,5 @@
-\newpage
 
-# Author Intro
+# Author Intro {.unnumbered}
 
 C++ is probably the most complicated, powerful, and confusing language you will ever learn.
 It is the language of choice for developers looking for power and efficiency in embedded systems and well as large scale backend systems.

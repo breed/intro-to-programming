@@ -5,7 +5,8 @@ a collection of programming texts --- focused on C++ for the moment --- suitable
 ## chapters
 
 - DO NOT MODIFY THE AUTHOR INTRO section
-- each numbered element in `content` represents a chapter
+- each markdown file starting with `ch` or `app` represents a chapter
+- the chapter should start with a chapter title. the chapters are numbered automatically when formatted into a single PDF or into webpages
 - each chapter starts with an introducton to the topics covered. motivation for the topics highlighting things that are hard to do without know    ledge of the topics, and a brief overview of the section
 - each chapter ends with a brief highlight of key points
 - each chapter has some exercises to test reader's comprehesion of the topics covered. there should be a mix of the following types of questions:
