@@ -22,6 +22,7 @@ get_slide_topic() {
 
 convert_chapter() {
     local src_dir="$1" md_base="$2" dest="$3" title="$4" parent="$5" nav_order="$6"
+    local extra_opts="${7:-}"
 
     mkdir -p "$(dirname "$dest")"
 
@@ -36,7 +37,7 @@ convert_chapter() {
         printf 'nav_order: %s\n' "$nav_order"
         printf '%s\n\n' "---"
         printf '{%% raw %%}\n'
-        (cd "$src_dir" && pandoc "$md_base" $PANDOC_OPTS $filter_opt)
+        (cd "$src_dir" && pandoc "$md_base" $PANDOC_OPTS $filter_opt $extra_opts)
         printf '\n{%% endraw %%}\n'
     } > "$dest"
 }
@@ -170,14 +171,19 @@ build_book() {
         fi
 
         for md in "$src_dir"/ch*.md; do
-            local base num title html_dest pdf_src pdf_dst include_pdf
+            local base num chapnum title html_dest pdf_src pdf_dst include_pdf number_opts
             base=$(basename "$md")
             num=${base%.md}
             num=${num#ch}
+            chapnum=$((10#$num))
             title=$(get_heading "$md")
             html_dest="$DOCS/$dest_subdir/${base%.md}.html"
 
-            convert_chapter "$src_dir" "$base" "$html_dest" "$title" "$parent" "$((10#$num))"
+            # Auto-number chapter headings to match the PDF: offset N-1 so pandoc
+            # renders the first h1 as N (ch00 gets "0", ch12 gets "12").
+            number_opts="--number-sections --number-offset=$((chapnum - 1))"
+
+            convert_chapter "$src_dir" "$base" "$html_dest" "$title" "$parent" "$chapnum" "$number_opts"
 
             pdf_src="$src_dir/${base%.md}.pdf"
             pdf_dst="$DOCS/$dest_subdir/${base%.md}.pdf"
@@ -193,9 +199,11 @@ build_book() {
             letter=${base%.md}
             letter=${letter#app}
             order=$((100 + $(printf '%d' "'$letter") - $(printf '%d' "'A")))
-            title=$(get_heading "$md")
+            title="Appendix ${letter}: $(get_heading "$md")"
             html_dest="$DOCS/$dest_subdir/${base%.md}.html"
 
+            # Appendices don't use --number-sections (pandoc numbers with digits,
+            # not letters); the "Appendix X: " prefix is baked into the title.
             convert_chapter "$src_dir" "$base" "$html_dest" "$title" "$parent" "$order"
 
             pdf_src="$src_dir/${base%.md}.pdf"

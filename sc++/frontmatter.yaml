@@ -3,12 +3,16 @@ title: "Gorgo Starting C++"
 toc: true
 toc-depth: 2
 colorlinks: true
+numbersections: true
+secnumdepth: 0
 mainfont: "TeX Gyre Pagella"
 monofont: "JetBrains Mono"
 header-includes:
   - \usepackage[most]{tcolorbox}
   - \usepackage{makeidx}
   - \makeindex
+  - \setcounter{chapter}{-1}
+  - \pagestyle{plain}
   - \usepackage{titling}
   - \pretitle{\begin{center}\includegraphics[width=0.35\textwidth]{../images/c++-gorgo-with-badge.png}\par\vspace{1em}\LARGE}
   - \posttitle{\par\end{center}\vskip 0.5em}

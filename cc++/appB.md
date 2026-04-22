@@ -1,6 +1,5 @@
-\newpage
 
-# Appendix B: Testing
+# Testing
 
 \index{testing}
 

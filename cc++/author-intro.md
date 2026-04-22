@@ -1,6 +1,5 @@
-\newpage
 
-# Author Intro
+# Author Intro {.unnumbered}
 
 if you're reading this, you have already survived *Gorgo Starting C++*.
 congratulations!
