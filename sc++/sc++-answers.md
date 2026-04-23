@@ -2788,7 +2788,7 @@ int main() {
 
     a.reset();
     std::cout << "a after reset: " << a.value() << std::endl;  // 0
-    std::cout << "a == b: " << (a == b) << std::endl;  // 0 (false)
+    std::cout << "a == b: " << (a == b) << std::endl;          // 0 (false)
 
     return 0;
 }
