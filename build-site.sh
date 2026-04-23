@@ -176,11 +176,16 @@ build_book() {
             num=${base%.md}
             num=${num#ch}
             chapnum=$((10#$num))
-            title=$(get_heading "$md")
+            # Prefix the chapter number on the Jekyll title so the sidebar,
+            # browser tab, and breadcrumb all show "N. Chapter Name". The h1 in
+            # the rendered content is numbered separately by pandoc below.
+            title="${chapnum}. $(get_heading "$md")"
             html_dest="$DOCS/$dest_subdir/${base%.md}.html"
 
             # Auto-number chapter headings to match the PDF: offset N-1 so pandoc
-            # renders the first h1 as N (ch00 gets "0", ch12 gets "12").
+            # renders the first h1 as N (ch00 gets "0", ch12 gets "12"). h2 and
+            # below also pick up "N.x" subsection numbers --- custom.scss hides
+            # those so only the top-level chapter number renders.
             number_opts="--number-sections --number-offset=$((chapnum - 1))"
 
             convert_chapter "$src_dir" "$base" "$html_dest" "$title" "$parent" "$chapnum" "$number_opts"
