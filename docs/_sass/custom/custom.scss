@@ -49,6 +49,16 @@ h3 .pdf-icon,
     opacity: 1;
 }
 
+// Only show pandoc's section-number on the chapter h1; hide the "N.x" /
+// "N.x.y" numbers that --number-sections adds to subsection headings.
+h2 > .header-section-number,
+h3 > .header-section-number,
+h4 > .header-section-number,
+h5 > .header-section-number,
+h6 > .header-section-number {
+    display: none;
+}
+
 // pandoc syntax highlighting (pygments)
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
