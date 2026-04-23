@@ -7,6 +7,21 @@ header-includes:
   - \usepackage[most]{tcolorbox}
   - \usepackage{makeidx}
   - \makeindex
+  - |
+    ```{=latex}
+    \usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyfoot[LE,RO]{\thepage}
+    \fancyfoot[CE,CO]{\nouppercase{\leftmark}}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancypagestyle{plain}{%
+      \fancyhf{}%
+      \fancyfoot[LE,RO]{\thepage}%
+      \fancyfoot[CE,CO]{\nouppercase{\leftmark}}%
+      \renewcommand{\headrulewidth}{0pt}%
+    }
+    ```
   - \usepackage{titling}
   - \pretitle{\begin{center}\includegraphics[width=0.35\textwidth]{../images/c++-gorgo-with-badge.png}\par\vspace{1em}\LARGE}
   - \posttitle{\par\end{center}\vskip 0.5em}
