@@ -1260,6 +1260,7 @@ Negated:  -2 -4 -6 -8 -10
 **Answer:** `calloc` combines allocation and zeroing in a single call, which is simpler and less error-prone.
 It also takes the element count and size as separate arguments (`calloc(n, sizeof(int))`), which protects against integer overflow --- `calloc` checks whether `n * size` overflows before allocating, while `malloc(n * sizeof(int))` silently overflows if `n` is very large.
 Using `calloc` is also clearer about intent: "I want `n` zero-initialized elements."
+On systems with demand-paged virtual memory (Linux, macOS, and others), `calloc` can also be measurably faster for large allocations: the kernel hands out pages that are already zero-filled, so `calloc` returns them without writing a byte, while `malloc` + `memset` forces every page to be touched.
 
 ---
 
