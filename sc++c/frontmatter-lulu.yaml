@@ -17,6 +17,21 @@ header-includes:
   - \renewcommand{\sectionbreak}{\ifskipnextsectionbreak\skipnextsectionbreakfalse\else\origsectionbreak\fi}
   - '\newcommand{\bookpart}[2]{\clearpage\phantomsection\addcontentsline{toc}{part}{#1}\begin{center}\includegraphics[width=0.35\textwidth]{#2}\par\vspace{1em}{\Huge\bfseries #1\par}\end{center}\vspace{2em}\skipnextsectionbreaktrue}'
   - \AtBeginDocument{\pagenumbering{gobble}}
+  - |
+    ```{=latex}
+    \usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyfoot[LE,RO]{\thepage}
+    \fancyfoot[CE,CO]{\nouppercase{\leftmark}}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancypagestyle{plain}{%
+      \fancyhf{}%
+      \fancyfoot[LE,RO]{\thepage}%
+      \fancyfoot[CE,CO]{\nouppercase{\leftmark}}%
+      \renewcommand{\headrulewidth}{0pt}%
+    }
+    ```
   - \usepackage{graphicx}
   - \graphicspath{{./}{../sc++/}{../c4c++/}}
   - \usepackage{titling}
