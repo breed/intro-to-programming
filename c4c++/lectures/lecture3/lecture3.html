@@ -220,27 +220,6 @@ increment(&score);
 ]
 
 ---
-# swap: the Classic
-.lc[
-```c
-void swap(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
-
-int x = 10, y = 20;
-swap(&x, &y);
-// x == 20, y == 10
-```
-]
-.rc[
-- Without pointers, `swap(x, y)` does nothing to the caller
-- `&` to pass the address
-- `*a` to read and write through it
-]
-
----
 # Common Bug
 
 ```c

@@ -98,12 +98,25 @@ int get_score();       // UNSPECIFIED params
 - Upside: when you see `add(x, y)`, there's only one `add`.
 
 ---
-# Pass by Value
+# swap: the Classic
+.lc[
+```c
+void swap(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
 
-- Every parameter is copied.
-- A "swap" that takes `int a, int b` cannot affect the caller.
-- Use pointers for output parameters.
-- Already covered in lecture 3.
+int x = 10, y = 20;
+swap(&x, &y);
+// x == 20, y == 10
+```
+]
+.rc[
+- Without pointers, `swap(x, y)` does nothing to the caller
+- `&` to pass the address
+- `*a` to read and write through it
+]
 
 ---
 # const Parameters
