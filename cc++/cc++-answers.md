@@ -1026,6 +1026,32 @@ Sanitizers instrument every access and catch the bug deterministically, regardle
 **10.** (Program exercise --- no single answer.
 The program should have CMakeLists.txt, main.cpp, math_utils.cpp/h with factorial, build with CMake, and run with ASan.)
 
+**11. Why no built-in C++ package manager?**
+
+The combinatorial space.
+A package manager has to pick a *single* answer for: which compiler is canonical, which standard library, which version of the language, which ABI, which build system, which platform conventions for headers and libraries.
+C++ deliberately does not pick: GCC, Clang, MSVC, libstdc++, libc++, MS STL, Make, CMake, Bazel, Meson, and a dozen other combinations are all valid targets, and the language committee has been reluctant to anoint one as "the" tooling.
+
+A built-in package manager would have to either pick (alienating the rest) or model the cross-product (which is what `vcpkg` and `Conan` already do, with config files describing each binary).
+Other languages with built-in tooling --- Rust, Go, Python --- effectively legislate one of these choices, which C++ is structurally unable to do without forking the ecosystem.
+
+The current state ("two community-driven options, both supported, neither blessed") is a compromise that lets C++ be the lingua franca of every platform without picking sides.
+
+**12. Doxygen project: what does the generated HTML contain that you did not type?**
+
+Quite a lot:
+
+- **Inheritance and collaboration diagrams** for each class (auto-generated from the `: public Base` lines).
+- **File lists** organized by directory, with one page per file showing every declaration in that file.
+- **Class index** alphabetized, plus a hierarchy view.
+- **Member function index** alphabetized, with a "called by / calls" graph if you enable Graphviz support.
+- **Cross-references**: every mention of `Track` in another comment becomes a hyperlink to the `Track` class page.
+- **Source code browser** that links from declarations to definitions and back.
+- **Search box** indexed across the whole project.
+
+You typed a few `///` lines per class; Doxygen turned them into a fully-navigable mini-website plus a complete API index.
+That is the value proposition: write documentation where the code is, get a browseable structure for free.
+
 # Appendix B: Testing
 
 **1.** Shared state means one test can affect another --- a test that modifies a global variable can cause the next test to fail (or pass incorrectly).

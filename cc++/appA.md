@@ -331,6 +331,136 @@ Its commands are similar:
 A debugger shows you exactly what is happening, where, and why.
 :::
 
+## Package Managers
+
+\index{package manager}
+\index{vcpkg}
+\index{conan}
+
+For most languages, "install dependency X" is one command.
+C++ historically had no equivalent --- you found the source, built it yourself, hoped it interoperated with your toolchain, and remembered to update it later.
+Two modern package managers, **vcpkg** and **Conan**, make it almost as smooth as `pip` or `cargo`.
+
+### vcpkg
+
+\index{vcpkg}
+
+`vcpkg` (from Microsoft) builds dependencies from source and integrates with CMake.
+A typical workflow:
+
+```
+# one-time setup
+git clone https://github.com/microsoft/vcpkg.git
+./vcpkg/bootstrap-vcpkg.sh
+
+# install a package
+./vcpkg/vcpkg install fmt boost-asio
+
+# point CMake at vcpkg's toolchain file
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
+```
+
+In your `CMakeLists.txt`, you then `find_package` and `target_link_libraries` as if the dependency had been installed system-wide:
+
+```cmake
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(myapp PRIVATE fmt::fmt)
+```
+
+`vcpkg` shines when you want a consistent toolchain across Windows, Linux, and macOS, and when you are already using CMake.
+
+### Conan
+
+\index{conan}
+
+`conan` is a Python-based package manager that downloads pre-built binaries when available and falls back to source builds when not.
+It is more language-neutral and predates the C++ Modules era, so you will see it in cross-platform projects that already use Python tooling:
+
+```
+# install
+pip install conan
+
+# declare your dependencies in a conanfile.txt
+[requires]
+fmt/10.2.1
+boost/1.84.0
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+# fetch them
+conan install . --output-folder=build --build=missing
+```
+
+Both tools generate the CMake glue you need; the choice usually comes down to which one your team already uses.
+
+::: {.tip}
+**Tip:** If you are starting a new project today, pick one package manager and document it in your README.
+"Just install Boost yourself" is the answer that wastes hours of every new contributor's first day.
+:::
+
+::: {.tip}
+**Wut:** C++ standardization has not adopted a single package manager.
+Both `vcpkg` and `Conan` work fine; C++20 modules were supposed to make distribution simpler but have not yet replaced either.
+:::
+
+## Documentation with Doxygen
+
+\index{Doxygen}
+
+Doxygen reads specially-formatted comments in your code and generates HTML / PDF / man-page documentation.
+You write the comments where the code is; Doxygen extracts function signatures, class hierarchies, file lists, and inheritance graphs automatically.
+
+The basic comment style is `///` (or `/** ... */`) directly above the entity you are documenting:
+
+```cpp
+/// Add two integers.
+///
+/// \param a The first addend.
+/// \param b The second addend.
+/// \return  The sum of \p a and \p b.
+int add(int a, int b);
+
+/// A music track in a playlist.
+///
+/// Tracks remember their title, artist, and release year.
+class Track {
+public:
+    /// Construct a track.
+    /// \param title  The song's title.
+    /// \param artist The performer.
+    /// \param year   The release year.
+    Track(std::string title, std::string artist, int year);
+
+    /// \return `true` if the track was released in the 2000s.
+    bool is_2000s() const noexcept;
+};
+```
+
+To generate docs, run `doxygen -g` once to create a default `Doxyfile`, edit it (set `PROJECT_NAME`, `INPUT`, `OUTPUT_DIRECTORY`, and `RECURSIVE = YES`), then run `doxygen` --- the HTML lands in the `OUTPUT_DIRECTORY` you configured.
+
+Useful Doxygen commands:
+
+- `\param name description`
+- `\return description`
+- `\throws ExceptionType description`
+- `\see other_function`
+- `\note ...` and `\warning ...`
+- `\code ... \endcode` for embedded examples
+- `\brief one-line summary` (some teams prefer brief-only over full prose)
+
+::: {.tip}
+**Tip:** Doxygen is most valuable for *library* code that other people will call.
+Application code that only your team reads is usually better served by a `README.md` and well-named identifiers.
+The marginal value of Doxygen drops fast when no one looks at the generated HTML.
+:::
+
+::: {.tip}
+**Wut:** Doxygen will *parse* a project even if you have not written any documentation comments --- it generates pages for every class and function based on declarations alone.
+The output is mostly empty pages, which is not very useful, but it is a fast way to verify your build is producing the right symbols.
+:::
+
 ## Key Points
 
 - **CMake** is the standard C++ build system.
@@ -342,6 +472,8 @@ A debugger shows you exactly what is happening, where, and why.
 - **Static analysis** tools like `clang-tidy` and `cppcheck` catch bugs without running the code.
 - **gdb/lldb** let you step through code, set breakpoints, and inspect variables.
   Compile with `-g -O0` for best results.
+- **Package managers** (vcpkg, Conan) make C++ dependencies installable in one command and integrate with CMake; pick one per project and document it in the README.
+- **Doxygen** turns specially-formatted `///` comments into browseable HTML / PDF docs; valuable for library code, less useful for application code.
 
 ## Exercises
 
@@ -386,3 +518,11 @@ What kinds of bugs do sanitizers catch that tests alone miss?
 10. **Set up a project** with CMake that has a `main.cpp` and a `math_utils.cpp`/`math_utils.h` library.
 The library should have a function `int factorial(int n)`.
 Build it with CMake, run it, and then compile with AddressSanitizer enabled and verify it runs cleanly.
+
+11. **Think about it:** Why does C++ rely on third-party package managers (vcpkg, Conan) instead of having a built-in one like Python's `pip` or Rust's `cargo`?
+What problem would a built-in package manager have to solve that the language committee has so far avoided?
+
+12. **Write a small project** with one header `track.h` and one source `track.cpp` defining a `Track` class.
+Document the class and its public methods with `///` Doxygen comments.
+Run `doxygen -g` to generate a `Doxyfile`, edit `INPUT` and `RECURSIVE`, run `doxygen`, and open the generated `html/index.html`.
+What does the generated documentation contain that was not literally typed in the comments?
