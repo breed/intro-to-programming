@@ -130,7 +130,7 @@ and a suggested textbook mapping:
 | perfect forwarding   | `std::forward`, forwarding references (`T&&` in template context), preserving value category                             | [A]   | mc++ |
 | copy elision and RVO | compiler optimization that eliminates copies, guaranteed in C++17 (prvalues)                                             | [I]   | cc++ |
 | `std::optional`      | nullable value type (C++17), replaces sentinel values and output parameters                                              | [I]   | cc++ |
-| `std::variant`       | type-safe union (C++17), `std::visit`, `std::holds_alternative`                                                          | [I]   | sc++ |
+| `std::variant`       | type-safe union (C++17), `std::visit`, `std::holds_alternative`                                                          | [I]   | cc++ |
 | `std::any`           | type-safe container for single values of any type (C++17)                                                                | [A]   | mc++ |
 | `std::span`          | non-owning view over contiguous data (C++20), replaces `(pointer, size)` pairs                                           | [I]   | cc++ |
 | placement new        | constructing objects at specific memory addresses, used by allocators and containers                                     | [E]   | mc++ |
