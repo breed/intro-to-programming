@@ -85,6 +85,10 @@ Songs, movies, and cultural references appearing in the text, organized by chapt
 - Glycerine --- Bush (unique_ptr move example)
 - Ready to Go --- Republica (shared_ptr move example)
 - Killing Me Softly --- Fugees (shared_ptr exercise)
+- Today --- The Smashing Pumpkins (weak_ptr cycle example)
+- Black --- Pearl Jam (weak_ptr cycle example)
+- Karma Police --- Radiohead (weak_ptr lock example)
+- Doll Parts --- Hole (weak_ptr exercise)
 
 ## Chapter 14: Special Members and Friends
 - Torn --- Natalie Imbruglia

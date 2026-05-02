@@ -3390,6 +3390,26 @@ It prints:
 - After copying `a` to `b`, the reference count is 2.
 - After moving `a` to `c`, `a` is now `nullptr` (prints `1` for the comparison). The move transferred `a`'s ownership to `c` without changing the reference count, so `b.use_count()` is still 2 (shared between `b` and `c`).
 
+**18. What does the `weak_ptr` "Doll Parts" example print?**
+
+```
+before: count=1 expired=0
+alive: Doll Parts
+after:  count=0 expired=1
+expired
+```
+
+Initially `song` owns the string and `watcher` is a weak observer.
+The reference count is `1`; `watcher.expired()` is `false` (printed as `0`).
+The first `lock()` succeeds and gives us a temporary `shared_ptr` we can dereference.
+
+After `song.reset()` releases the only `shared_ptr`, the count drops to `0` and the string is destroyed.
+`watcher.expired()` is now `true`, and `lock()` returns an empty `shared_ptr` --- so the second `if` falls into the `else` branch.
+
+Trying to dereference `watcher` directly is not even an option: `weak_ptr` does not have `operator*` or `operator->`.
+The library forces you through `.lock()` so the check-then-use pattern is unavoidable.
+If you somehow had a raw pointer to the destroyed object, dereferencing it would be undefined behavior --- which is exactly the bug `weak_ptr` exists to prevent.
+
 # Chapter 14: Special Members and Friends
 
 **1. Explain the difference between the Rule of Five and the Rule of Zero. Which one should you prefer and why?**
