@@ -362,26 +362,7 @@ For the three initializations of `int x` from `3.7`:
 - `int x(3.7);` --- compiles. Same truncation; same warning behavior.
 - `int x{3.7};` --- ERROR. Brace initialization rejects the narrowing conversion at compile time, which catches the data loss before it can hide a bug.
 
-**16. Where is the bug in the `enum class Direction` program?**
-
-`Direction` is a *scoped* enumeration (`enum class`), so its enumerators do not leak into the surrounding scope.
-You must qualify the name: `Direction d = Direction::North;`.
-`North` by itself is not a name the compiler can find.
-
-The fixed program:
-
-```cpp
-enum class Direction { North, South, East, West };
-
-int main() {
-    Direction d = Direction::North;
-    return static_cast<int>(d);
-}
-```
-
-The `static_cast<int>(d)` is also necessary --- a scoped enum does not implicitly convert to `int`, even when returning from `main`.
-
-**17. Designated-initializer form for `Album smash`:**
+**16. Designated-initializer form for `Album smash`:**
 
 ```cpp
 Album smash = {
@@ -394,7 +375,7 @@ Album smash = {
 
 For `Album partial = {.artist = "Hanson"};`, the omitted members are value-initialized --- `title` becomes the empty string `""`, and `year` and `tracks` become `0`.
 
-**18. Why does the lazy initialization of function-local `static` matter?**
+**17. Why does the lazy initialization of function-local `static` matter?**
 
 Two practical reasons:
 
