@@ -789,6 +789,33 @@ The explicit version is preferable because it costs nothing to read (no preceden
 You may remember the precedence rules today; the next reader of the code (including future-you) might not.
 The CLAUDE.md style guide for this book even has a tip recommending parentheses whenever you mix logical operators for exactly this reason.
 
+**11. What does the `char a + char b` example print?**
+
+It prints `131 4` on a typical system.
+
+`a` is `'A'` (65) and `b` is `'B'` (66).
+Before `+` runs, both operands are widened to `int` by **integer promotion** --- arithmetic on anything narrower than `int` always promotes first.
+The result is therefore `int`, with value `65 + 66 = 131`.
+That is why `auto sum` deduces `int` and `sizeof(sum)` is `4` (or whatever an `int` is on your system), not `1`.
+
+If you actually wanted a `char` back, you would have to write `char sum = a + b;` and accept the truncation --- and on most systems `131` does fit in a signed `char`, but `'A' + 100` would not.
+
+**12. Where is the bug in the `temperature < threshold` program?**
+
+It prints `warm`, which is the wrong branch.
+
+`temperature` is `int` and `threshold` is `unsigned int`.
+The two operands have the same width but different signedness, so the **usual arithmetic conversions** convert `temperature` to `unsigned int`.
+`-5` reinterpreted as a 32-bit unsigned value is `4'294'967'291`, which is *not* less than `0`, so the `else` branch runs.
+
+Two fixes:
+
+- Make both operands signed: declare `threshold` as `int`, or
+- Convert explicitly so the reader sees the conversion: `if (temperature < static_cast<int>(threshold))`.
+
+The deeper lesson is to avoid mixing signed and unsigned arithmetic.
+Modern compilers will warn (`-Wsign-compare`); listen to that warning.
+
 # Chapter 5: Control Flow
 
 **1. Think about it: When would you choose a `do-while` loop over a `while` loop?**
