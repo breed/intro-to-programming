@@ -176,6 +176,77 @@ The set contains {1, 2, 3, 3, 4, 5, 5, 5, 6, 9}.
 **10.** (Program exercise --- no single answer.
 The program should read words in a loop, store counts in a map, and print sorted results.)
 
+**11. Output: `4 3 2 1`**.
+
+`d` after the two pushes is `{1, 2, 3, 4}`.
+`crbegin` is a const reverse iterator pointing at the *last* element (`4`).
+Incrementing it walks toward the front, so the loop prints `4 3 2 1`.
+
+**12. Where is the bug in the erase loop?**
+
+`v.erase(it)` invalidates `it`, so the next `++it` in the `for` header reads a dangling iterator --- undefined behavior, and on most implementations it skips the element right after the one you erased *and* may eventually walk off the end.
+
+Fix #1, use the iterator that `erase` returns:
+
+```cpp
+for (auto it = v.begin(); it != v.end(); ) {
+    if (*it % 2 == 0) {
+        it = v.erase(it);
+    } else {
+        ++it;
+    }
+}
+```
+
+Fix #2, let the algorithm do it (C++20):
+
+```cpp
+std::erase_if(v, [](int n) { return n % 2 == 0; });
+```
+
+The algorithm form is preferred --- one line, hard to misuse, no chance of leaking the invalidated iterator.
+
+**13. Iterator category of `std::map<std::string, int>::iterator`.**
+
+It is a **bidirectional** iterator: you can `++it`, `--it`, and dereference, but you cannot do `it + 5` or compute distances in O(1).
+`std::sort` requires *random-access* iterators, so the call does not even compile on a `map`.
+
+The conceptual reason is deeper: a `map` is *already* sorted by key, by definition.
+What people usually mean by "sort a map" is "sort the entries by *value*."
+The standard answer is to copy the entries into a `std::vector<std::pair<Key, Value>>`, then sort *that* with a custom comparator:
+
+```cpp
+std::vector<std::pair<std::string, int>> rows(m.begin(), m.end());
+std::sort(rows.begin(), rows.end(),
+          [](const auto& a, const auto& b) { return a.second < b.second; });
+```
+
+**14. Where is the bug in the `unordered_set<Point>` example?**
+
+Two missing pieces:
+
+- `Point` has no `operator==`, so `unordered_set` cannot tell two `Point`s apart in a bucket.
+- `Point` has no `std::hash` specialization, so the container does not know how to bucket a `Point` in the first place.
+
+The smallest fix:
+
+```cpp
+struct Point {
+    int x, y;
+    bool operator==(const Point&) const = default;
+};
+
+template<>
+struct std::hash<Point> {
+    std::size_t operator()(const Point& p) const noexcept {
+        return std::hash<int>{}(p.x) ^ (std::hash<int>{}(p.y) << 1);
+    }
+};
+```
+
+Defaulting `operator==` is the C++20 shortcut that compares both members.
+The combined hash is naive but adequate for an example; a real codebase would use a proper hash-combine helper.
+
 # Chapter 4: Ranges, Algorithms, and Lambdas
 
 **1.** The iterator version is kept for backward compatibility and because it supports subranges (sorting only part of a container).
