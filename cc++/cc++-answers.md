@@ -826,6 +826,52 @@ Prefer a mutex when you need to protect multiple variables or a complex data str
 **10.** (Program exercise --- no single answer.
 The program should split a vector into quarters, use `async` to sum each quarter, collect results with `future::get()`, and print the total.)
 
+**11. Where is the bug in the polling worker?**
+
+The conceptual bug is the worker sleeps for 60 seconds at a time and only checks the flag *between* sleeps.
+When `main` flips `stop_flag`, the worker is in the middle of a 60-second `sleep_for` and does not notice until the sleep ends.
+
+Two fixes:
+
+- **Shorter polling interval**: `sleep_for(std::chrono::milliseconds(100))` and check between each --- still polling, but with a bounded latency.
+- **`std::jthread` with a stop token**: the worker never sleeps for a long time without a wakeable wait.
+
+```cpp
+#include <chrono>
+#include <thread>
+
+void worker(std::stop_token token) {
+    while (!token.stop_requested()) {
+        // do a small chunk of work, then yield
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
+int main() {
+    std::jthread t(worker);                  // stop token wired up by jthread
+    // ...
+    return 0;                                 // jthread destructor calls request_stop() and join()
+}
+```
+
+The cleanest version uses `std::condition_variable_any::wait_for` with the stop token, so the wait is interrupted immediately when `request_stop()` is called.
+For everyday code, the short-sleep loop above is good enough.
+
+**12. Why `scoped_lock(mtx1, mtx2)` cannot deadlock.**
+
+The classic two-mutex deadlock:
+
+- Thread A acquires `mtx1`, then tries to acquire `mtx2`.
+- Thread B acquires `mtx2`, then tries to acquire `mtx1`.
+- Each thread holds one mutex and waits for the other. Neither can proceed --- deadlock.
+
+`scoped_lock` avoids this by *trying* to lock all the mutexes and, if any of them is already held, releasing the ones it already holds and starting over.
+The exact algorithm (`std::lock`) iterates until it can grab them all simultaneously.
+That backoff turns the deadlock window into a brief pause: at most one thread is making no progress at any moment, and progress always resumes once the other thread releases its mutex.
+
+The trade-off: when both threads contend on the same pair of mutexes, you can do more work than a strict ordering would.
+For low-contention workloads the cost is negligible; for high-contention workloads, the right answer is usually to redesign so you do not need two locks at once.
+
 # Chapter 11: The Filesystem Library
 
 **1.** `+` on strings just concatenates characters.
