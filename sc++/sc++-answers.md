@@ -1864,6 +1864,66 @@ The 9th `push_back` is the only one that reallocates: capacity was full at 8, an
 That is also the only call where existing iterators, pointers, and references into the vector are invalidated.
 The 1st through 8th calls only write into already-reserved storage, and the 10th through 12th only fill in the freshly-allocated space, so iterators obtained *after* the reallocation are still valid.
 
+**16. What does the sort + count program print?**
+
+It prints `1 9 2`.
+
+After `std::sort`, `v` becomes `{1, 1, 2, 4, 5, 5, 6, 9}`.
+`v.front()` is `1`, `v.back()` is `9`.
+`std::count(v.begin(), v.end(), 5)` returns the number of elements equal to `5`, which is `2`.
+
+**17. Where is the bug in the find example?**
+
+`std::find(v.begin(), v.end(), 99)` searches for `99`.
+There is no `99` in `v`, so `find` returns `v.end()` --- the iterator one *past* the last element, which does not point to a valid element.
+Dereferencing it with `*it` is undefined behavior.
+
+The fix is to compare against `end()` first:
+
+```cpp
+auto it = std::find(v.begin(), v.end(), 99);
+if (it != v.end()) {
+    std::cout << *it << "\n";
+} else {
+    std::cout << "not found\n";
+}
+```
+
+Every search algorithm in `<algorithm>` follows the same convention --- the "not found" result is the sentinel `end()` iterator.
+
+**18. Min/max/average program.**
+
+```cpp
+#include <algorithm>
+#include <iostream>
+#include <numeric>
+#include <vector>
+
+int main() {
+    std::vector<int> nums;
+    int x;
+    while (std::cin >> x) {
+        nums.push_back(x);
+    }
+    if (nums.empty()) {
+        std::cout << "no input\n";
+        return 0;
+    }
+    auto lo = *std::min_element(nums.begin(), nums.end());
+    auto hi = *std::max_element(nums.begin(), nums.end());
+    auto sum = std::accumulate(nums.begin(), nums.end(), 0);
+    double avg = static_cast<double>(sum) / nums.size();
+    std::cout << "min: " << lo << "\n";
+    std::cout << "max: " << hi << "\n";
+    std::cout << "avg: " << avg << "\n";
+    return 0;
+}
+```
+
+`std::accumulate` (from `<numeric>`) takes a starting value (`0` here) and folds `+` over the range.
+The cast to `double` is what turns `sum / nums.size()` into a floating-point division instead of integer division.
+`std::min_element` and `std::max_element` return *iterators*, so they need a `*` to extract the value.
+
 # Chapter 9: I/O Streams
 
 **1. What does the following program print?**
