@@ -536,6 +536,71 @@ For larger returns or for types used across multiple functions, a named struct i
 **10.** (Program exercise --- no single answer.
 The program should parse "rgb(r,g,b)" and return `optional<tuple<int,int,int>>`.)
 
+**11. Output: `10 5`**.
+
+Read inside-out.
+The inner `std::exchange(a, 10)` writes `10` into `a` and returns the old value `5`.
+The outer `std::exchange(a, 5)` then writes the inner result (which is `5`) into `a` --- but the outer call also reads `a`'s value *before* its write to return, and that value is the `10` the inner `exchange` had just put there.
+So `a` ends up `5` and `prev` ends up `10`.
+
+That is exactly the kind of micro-puzzle `exchange` exists to make readable: it is two atomic-feeling "swap a value, hand me the old one" operations composed in one line.
+Real code uses it for move-assignment cleanups, where the shape is `this->ptr_ = std::exchange(other.ptr_, nullptr);` and there is no nesting.
+
+**12. The thread copies the int.**
+
+Output: `0`.
+
+`std::thread`'s constructor is a *template* that deduces every parameter type by value.
+Even though `inc` takes `int&`, the thread template stores its arguments as values --- so `count` is *copied* into the thread, the worker increments its own private copy, and `main`'s `count` is never touched.
+
+The one-character fix is to wrap `count` with `std::ref`:
+
+```cpp
+std::thread t(inc, std::ref(count));
+```
+
+`std::ref` produces a `std::reference_wrapper<int>`, which the thread template stores by value but which forwards into the function call as the original reference.
+The same fix applies to `std::async`, `std::bind`, and any other template that captures arguments by value when you actually want a reference.
+
+**13. Output: `3 2`**.
+
+`std::vector<int> a(3, 5);` calls the (size, value) constructor: a vector of size 3, each element `5`.
+`std::vector<int> b{3, 5};` calls the `std::initializer_list<int>` constructor: a vector with the elements `3` and `5`, size 2.
+
+The braces flip the choice because *any* constructor that takes `std::initializer_list<T>` is preferred over other constructors when the call site uses `{}` --- a deliberate language rule, but a frequent source of surprise.
+The lesson: if you mean "n copies of x," use parentheses; if you mean "these specific elements," use braces.
+
+**14. `Track` with custom `operator<<`.**
+
+```cpp
+#include <iostream>
+#include <string>
+
+class Track {
+    std::string title_;
+    int         year_;
+public:
+    Track(std::string title, int year) : title_(std::move(title)), year_(year) {}
+
+    friend std::ostream& operator<<(std::ostream& os, const Track& t) {
+        return os << t.title_ << " (" << t.year_ << ")";
+    }
+};
+
+int main() {
+    Track t{"Crazy in Love", 2003};
+    std::cout << t << "\n";
+    return 0;
+}
+```
+
+The `friend` declaration *inside* the class is what lets the non-member `operator<<` see the private `title_` and `year_`.
+Without it, you would have to expose getters or make `title_` / `year_` public --- both leak information the rest of the program does not need.
+
+The Chapter 8 hidden-friends idiom takes the same `friend` declaration but places the function definition *inline* inside the class.
+That keeps the function out of the surrounding namespace's lookup until ADL needs it (when someone writes `std::cout << t`), which dramatically improves overload-resolution times in big codebases.
+For new code, prefer hidden friends; the standalone non-member form is fine for textbooks and small programs.
+
 # Chapter 8: Namespaces and the Preprocessor
 
 **1.** `using namespace std;` in a header makes all of `std`'s names visible in every file that includes the header.
