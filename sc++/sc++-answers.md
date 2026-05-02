@@ -3049,6 +3049,26 @@ That avoids the classic "safe bool" footgun where a bool conversion accidentally
 
 So `explicit operator bool()` lets you write `if (v)`, `while (v)`, `!v`, and so on, while preventing the conversion from sneaking in where you didn't ask for it.
 
+**17. Where is the bug in the delegating-constructor `Album` example?**
+
+The default constructor `Album()` tries to mix a member initializer (`artist("Unknown")`) with a delegating call to another constructor (`Album("Unknown", 0)`).
+That is not allowed: when one constructor delegates to another, the delegated-to call must be the *only* entry in the initializer list.
+The other constructor handles all member initialization.
+
+The fix is to keep just the delegation:
+
+```cpp
+class Album {
+    std::string artist;
+    int year;
+public:
+    Album(const std::string &a, int y) : artist(a), year(y) {}
+    Album() : Album("Unknown", 0) {}     // only the delegation
+};
+```
+
+The parameterized constructor runs first --- initializing both members --- and only then does the default constructor's body run (it is empty here).
+
 # Chapter 13: Memory Management
 
 **1. What is the difference between stack and heap memory? Give one situation where you would need to use the heap.**
