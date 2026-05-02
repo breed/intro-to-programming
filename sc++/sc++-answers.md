@@ -4194,3 +4194,99 @@ std::mt19937 rng(42);
 then the engine starts in exactly the same state every run, and **the two runs print exactly the same 10 numbers**.
 That is a feature, not a bug: it makes randomized programs reproducible (useful for tests and for debugging a problem you only see "sometimes") at the cost of being predictable.
 For anything where unpredictability matters (games, simulations, anything user-facing), seed from `random_device`; for tests and reproducible experiments, seed from a known constant.
+
+**20. Calculation: area and circumference of a circle with `r = 4.0`.**
+
+```cpp
+#include <cmath>
+#include <iostream>
+#include <numbers>
+
+int main() {
+    double r = 4.0;
+    double area = std::numbers::pi * std::pow(r, 2);
+    double circ = 2.0 * std::numbers::pi * r;
+    std::cout << "area: "          << area << "\n";
+    std::cout << "circumference: " << circ << "\n";
+    return 0;
+}
+```
+
+Output:
+
+```
+area: 50.2655
+circumference: 25.1327
+```
+
+`std::numbers::pi` is precise to the full width of `double` (the same digits the library would round its internal value to).
+A hand-typed literal like `3.14159265` is harder to verify, easy to typo, and still less precise than the library constant.
+On top of that, the named constant signals intent: a future reader sees "the value is pi" rather than having to mentally compare a row of digits to one they remember.
+
+**21. Predict the output of the floor/ceil/round/fmod example.**
+
+It prints `-2 -1 -2 1.5`.
+
+- `std::floor(-1.5)` rounds toward negative infinity, so down to `-2`.
+- `std::ceil(-1.5)` rounds toward positive infinity, so up to `-1`.
+- `std::round(-1.5)` rounds to nearest, halves *away from zero*, so `-2` (not `-1`).
+- `std::fmod(7.5, 2.0)` returns the floating-point remainder of `7.5 / 2.0`, which is `1.5` (since `7.5 = 3 * 2.0 + 1.5`).
+
+The asymmetry between `floor` and `round` for negative halves is the most common surprise here.
+
+**22. Think about it: uninitialized `int x` reads.**
+
+The program is **not** correct.
+Reading an uninitialized non-static local variable is undefined behavior.
+The standard does not guarantee that `x` is `0`, `32767`, or anything else --- the value is whatever bits happened to be at that stack location, which depends on the OS, the compiler, optimization flags, what other code ran first, and even the time of day.
+That is exactly why two consecutive runs gave different answers.
+
+The fix is to initialize:
+
+```cpp
+int x{};        // value-initialized to 0
+int x = 0;      // explicit
+int x{0};       // explicit, narrowing-checked
+```
+
+The first form, brace-initialization with empty braces, is sometimes called "value initialization" --- it guarantees zero for built-in types and the default-constructed value for class types.
+Get into the habit of doing this for every local variable: even if today's compiler appears to give you `0`, tomorrow's compiler is allowed to give you garbage.
+
+**23. Debugger session for the off-by-one vector loop.**
+
+Compile with debug info and no optimization:
+
+```
+c++ -std=c++23 -g -O0 -o off off.cpp
+```
+
+`-g` embeds line numbers and variable names; `-O0` keeps the program close to the source so single-stepping is meaningful.
+
+A pseudo-gdb session:
+
+```
+$ gdb ./off
+(gdb) break 9              # the second for-loop header
+(gdb) run
+...stops at line 9...
+(gdb) print v.size()
+$1 = 5
+(gdb) print i
+$2 = 0
+(gdb) next
+(gdb) print v[i]
+$3 = 0
+(gdb) continue
+...repeat until...
+(gdb) print i
+$N = 5
+(gdb) print v[i]
+$M = <garbage or zero or anything>
+```
+
+When `i` reaches `5`, the loop body still runs because the condition is `i <= v.size()` instead of `<`.
+At that point `v[5]` reads past the last valid element, which is undefined behavior.
+The debugger session catches it because you can see `i == 5` while `v.size() == 5` --- the indices that came out of `v[i]` for `i = 0..4` are valid, and the `i = 5` access is the off-by-one bug.
+Fix is to write `i < v.size()` (or, better, switch the loop to `for (int n : v)`).
+
+In lldb, the equivalent commands are `b 9`, `run`, `p v.size()`, `p i`, `n`, `c`.
