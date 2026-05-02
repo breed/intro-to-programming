@@ -88,6 +88,16 @@ Use `PUBLIC` if the dependency is also needed by consumers of the target.
 target_compile_options(myapp PRIVATE -Wall -Wextra -pedantic)
 ```
 
+The flags above are GCC and Clang spellings.
+MSVC uses `/W4` for the same general "everyday warnings" level (and does not have a direct equivalent of `-pedantic`).
+For a portable CMakeLists.txt that picks the right flags per compiler, use a generator expression:
+
+```cmake
+target_compile_options(myapp PRIVATE
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra -pedantic>
+    $<$<CXX_COMPILER_ID:MSVC>:/W4>)
+```
+
 ### Including Headers
 
 ```cmake
